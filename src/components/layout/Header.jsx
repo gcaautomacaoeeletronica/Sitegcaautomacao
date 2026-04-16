@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail } from 'lucide-react';
+import { useAdminStore } from '../../store/adminStore';
 
 const Header = () => {
+  const global = useAdminStore((state) => state.siteContent.global);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -41,11 +43,11 @@ const Header = () => {
           <div className="flex items-center space-x-6 tracking-wider">
             <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                <Phone size={12} className="text-accent" />
-               <span>+55 19 3012-6360</span>
+               <span>{global.phone}</span>
             </div>
             <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                <Mail size={12} className="text-accent" />
-               <span>comercial@servicedrive.com.br</span>
+               <span>{global.email}</span>
             </div>
           </div>
           <NavLink to="/admin" className="hidden sm:block text-[10px] text-gray-500 hover:text-accent uppercase tracking-widest font-mono transition-colors cursor-pointer">

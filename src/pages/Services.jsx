@@ -40,6 +40,7 @@ const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
 
 const Services = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
+  const servicesContent = useAdminStore((state) => state.siteContent.services);
 
   const generalEquipments = [
     "Inversores de frequência", "Servodrives", "Conversores CA/CC", "Retificadores comuns ou regenerativos",
@@ -69,14 +70,14 @@ const Services = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <SlideIn direction="up">
           <span className="inline-block py-1.5 px-4 rounded-full bg-accent/20 border border-accent/30 text-accent font-bold tracking-widest uppercase mb-6 text-xs">
-            Especialistas em Manutenção
+            {servicesContent.hero.badge}
           </span>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight uppercase leading-[1.1]">
-            Reparos Eletrônicos <br/>
-            <span className="text-gray-300">Industriais</span>
+            {servicesContent.hero.title} <br/>
+            <span className="text-gray-300">{servicesContent.hero.highlight}</span>
           </h1>
           <p className="text-xl text-gray-400 font-light max-w-2xl leading-relaxed">
-            Manutenção Eletrônica Industrial avançada. Da adequação de painéis à reconstrução de inversores e servodrives das maiores marcas do mundo.
+            {servicesContent.hero.desc}
           </p>
         </SlideIn>
       </div>
@@ -125,20 +126,19 @@ const Services = () => {
                
                <FadeIn>
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    Laboratório de <br/>
-                    <span className="text-primary">Reparos Eletrônicos</span>
+                    {servicesContent.laboratoryMini.title} <br/>
+                    <span className="text-primary">{servicesContent.laboratoryMini.highlight}</span>
                   </h2>
                   <p className="text-lg text-gray-600 mb-6 leading-relaxed font-light">
-                    Ambiente climatizado limpo e organizado, equipado com bancadas e equipamentos especializados. <strong className="font-bold text-gray-900">Equipe técnica altamente treinada</strong> e especializada em reparos eletrônicos a nível de componentes.
+                    {servicesContent.laboratoryMini.desc}
                   </p>
                   
                   <div className="bg-slate-50 p-6 rounded-2xl border border-gray-100 mb-8">
                      <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2"><Zap size={18} className="text-accent" /> Gigas de teste para CLP e IHM</h4>
                      <ul className="space-y-2 text-sm text-gray-600">
-                        <li>• Rack de Testes Contrologix, Compactologix, SLC500, micrologix 1200 / 1400</li>
-                        <li>• Rack de Testes para S7-200, S7-300, ET200L, ET200S</li>
-                        <li>• Rack Atos 4004 e Rack OMRON</li>
-                        <li>• Rack para servodrive Allen-Bradley Kinetix 6000 / 6500, 5500, Ultra 3000...</li>
+                        {servicesContent.laboratoryMini.items.map((item, idx) => (
+                           <li key={idx}>• {item}</li>
+                        ))}
                      </ul>
                   </div>
 

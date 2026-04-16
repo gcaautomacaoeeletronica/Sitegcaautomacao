@@ -18,11 +18,10 @@ const About = () => {
             Nossa História
           </span>
           <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
-            A Engenharia <br />
-            <span className="text-accent">Por Trás da Máquina</span>
+            {aboutContent.heroTitle.split(' ').map((word, i) => i === aboutContent.heroTitle.split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed">
-            Descubra por que a GCA Automação é o parceiro invisível garantindo que a indústria nunca pare.
+            {aboutContent.heroSubtitle}
           </p>
         </SlideIn>
       </div>
@@ -48,7 +47,7 @@ const About = () => {
               <FadeIn>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-px bg-accent"></div>
-                  <h2 className="text-sm font-bold text-accent tracking-widest uppercase">Fundação 2013</h2>
+                  <h2 className="text-sm font-bold text-accent tracking-widest uppercase">{aboutContent.foundationBadge}</h2>
                 </div>
                 <h3 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-8 leading-tight">
                   {aboutContent.historyTitle.split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}

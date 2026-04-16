@@ -5,6 +5,7 @@ import { useAdminStore } from '../store/adminStore';
 
 const Contact = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
+  const global = useAdminStore((state) => state.siteContent.global);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -94,15 +95,15 @@ const Contact = () => {
                            <div className="flex items-center gap-3 mb-2 font-mono text-xs text-accent tracking-widest uppercase">
                               <Phone size={14} /> Plantão Direto
                            </div>
-                           <p className="text-2xl font-light tracking-tight">(19) 3012-6360</p>
-                           <p className="text-xl font-medium tracking-tight text-gray-300">Whatsapp: (19) 97120-6717</p>
+                           <p className="text-2xl font-light tracking-tight">{global.phone}</p>
+                           <p className="text-xl font-medium tracking-tight text-gray-300">Whatsapp: {global.whatsapp}</p>
                         </div>
                         
                         <div className="group">
                            <div className="flex items-center gap-3 mb-2 font-mono text-xs text-blue-400 tracking-widest uppercase">
                               <Mail size={14} /> E-mail Geral
                            </div>
-                           <p className="text-lg font-light tracking-tight">comercial@servicedrive.com.br</p>
+                           <p className="text-lg font-light tracking-tight">{global.email}</p>
                         </div>
                         
                         <div className="group">
@@ -110,9 +111,8 @@ const Contact = () => {
                               <MapPin size={14} /> Laboratório Central
                            </div>
                            <p className="text-base font-light tracking-wide leading-relaxed text-gray-300">
-                              Rua São Bento, Nº 44<br/>
-                              Cariobinha, Americana - SP<br/>
-                              CEP 13472-370
+                              {global.address}<br/>
+                              CEP {global.cep}
                            </p>
                         </div>
 

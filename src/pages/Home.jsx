@@ -6,27 +6,12 @@ import { useAdminStore } from '../store/adminStore';
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
+  const homeContent = useAdminStore((state) => state.siteContent.home);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    { 
-      title: "Automação e", 
-      highlight: "Controle",
-      desc: "Desenvolvemos o coração inteligente da sua indústria.",
-      bg: "bg-primary-dark" 
-    },
-    { 
-      title: "Manutenção", 
-      highlight: "Industrial",
-      desc: "Eficiência e precisão na recuperação dos seus equipamentos vitais.",
-      bg: "bg-blue-900" 
-    },
-    { 
-      title: "Máquinas e", 
-      highlight: "Sistemas CNC",
-      desc: "Restore o fluxo perfeito da sua linha de montagem e usinagem.",
-      bg: "bg-gray-900" 
-    },
-  ];
+  const slides = homeContent.slides.map((s, i) => ({
+    ...s,
+    bg: i === 0 ? "bg-primary-dark" : i === 1 ? "bg-blue-900" : "bg-gray-900"
+  }));
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -103,17 +88,17 @@ const Home = () => {
                   <SlideIn>
                      <div className="flex items-center gap-4 mb-6">
                        <span className="w-12 h-px bg-accent block"></span>
-                       <span className="text-xs font-bold text-accent tracking-widest uppercase">Expertise Absoluta</span>
+                       <span className="text-xs font-bold text-accent tracking-widest uppercase">{homeContent.expertise.badge}</span>
                      </div>
                      <h2 className="text-3xl md:text-5xl font-extrabold text-primary leading-tight mb-8">
-                       Há 10 anos oferecendo o que há de <span className="text-accent">melhor em tecnologia</span>.
+                       {homeContent.expertise.title}
                      </h2>
                   </SlideIn>
                </div>
                <div className="md:w-1/2">
                   <FadeIn delay={0.2}>
                      <p className="text-gray-600 text-lg leading-relaxed border-l-2 border-gray-200 pl-6">
-                       Nós reduzimos o tempo de máquina parada através de um diagnóstico rápido, manutenção de altíssimo padrão com simulações de carga reais, e transparência técnica ponta a ponta. Sua planta industrial não pode parar.
+                       {homeContent.expertise.text}
                      </p>
                   </FadeIn>
                </div>
@@ -127,9 +112,9 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <FadeIn className="text-center mb-20">
-            <h2 className="text-sm font-bold text-gray-400 tracking-widest uppercase mb-4">Portfólio de Intervenção</h2>
+            <h2 className="text-sm font-bold text-gray-400 tracking-widest uppercase mb-4">{homeContent.portfolio.badge}</h2>
             <h3 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-              Sistemas que <span className="text-accent underline decoration-4 underline-offset-4">Recuperamos</span>
+              {homeContent.portfolio.title} <span className="text-accent underline decoration-4 underline-offset-4">{homeContent.portfolio.highlight}</span>
             </h3>
           </FadeIn>
 

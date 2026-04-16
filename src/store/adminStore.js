@@ -169,14 +169,78 @@ export const useAdminStore = create(
         }));
       },
 
-      // Sistema de Conteúdo Dinâmico (CMS)
+      // Sistema de Conteúdo Dinâmico (CMS Total)
       siteContent: {
+        global: {
+          phone: "(19) 3012-6360",
+          whatsapp: "(19) 97120-6717",
+          email: "comercial@servicedrive.com.br",
+          address: "Rua São Bento, Nº 44, Cariobinha, Americana - SP",
+          cep: "13472-370"
+        },
+        home: {
+          slides: [
+            { title: "Automação e", highlight: "Controle", desc: "Desenvolvemos o coração inteligente da sua indústria." },
+            { title: "Manutenção", highlight: "Industrial", desc: "Eficiência e precisão na recuperação dos seus equipamentos vitais." },
+            { title: "Máquinas e", highlight: "Sistemas CNC", desc: "Restore o fluxo perfeito da sua linha de montagem e usinagem." }
+          ],
+          expertise: {
+            badge: "Expertise Absoluta",
+            title: "Há 10 anos oferecendo o que há de melhor em tecnologia.",
+            text: "Nós reduzimos o tempo de máquina parada através de um diagnóstico rápido, manutenção de altíssimo padrão com simulações de carga reais, e transparência técnica ponta a ponta. Sua planta industrial não pode parar."
+          },
+          portfolio: {
+            badge: "Portfólio de Intervenção",
+            title: "Sistemas que",
+            highlight: "Recuperamos"
+          }
+        },
         about: {
-          historyTitle: "Há mais de 10 anos Liderando o Mercado",
-          historyText: "A GCA Automação e Eletrônica Industrial iniciou suas atividades com o objetivo de oferecer prestação de serviços de alta engenharia e manutenção eletrônica corporativa.",
-          quote: "Nós não apenas consertamos placas. Nós entendemos o processo do cliente, reduzimos o tempo de máquina parada e entregamos soluções definitivas, baseadas na máxima transparência técnica.",
-          mission: "Oferecer soluções inovadoras e eficazes em manutenção eletrônica industrial, garantindo alta produtividade e máxima restrição de custos não planejados.",
-          vision: "Ser reconhecida definitivamente como a parceria estratégica de longo prazo mais confiável nacionalmente focado em gestão e manutenção de ativos eletrônicos.",
+          heroTitle: "A Engenharia Por Trás da Máquina",
+          heroSubtitle: "Descubra por que a GCA Automação é o parceiro invisível garantindo que a indústria nunca pare.",
+          foundationBadge: "Fundação 2013",
+          historyTitle: "Uma trajetória marcada por precisão industrial",
+          historyText: "Desde a nossa fundação, focamos em resolver o que outros consideram impossível. A GCA Automação nasceu da necessidade do mercado por uma manutenção eletrônica que fosse além da troca de peças.",
+          quote: "Excelência técnica não é um diferencial, é a nossa estrutura básica de sobrevivência industrial.",
+          mission: "Prover soluções em manutenção e automação industrial com máxima agilidade e transparência, garantindo a continuidade operacional de nossos clientes através de engenharia de ponta.",
+          vision: "Ser a referência absoluta em reparos eletrônicos industriais complexos na América Latina, reconhecida pela infraestrutura laboratorial e precisão de diagnóstico."
+        },
+        services: {
+          hero: {
+            badge: "Especialistas em Manutenção",
+            title: "Reparos Eletrônicos",
+            highlight: "Industriais",
+            desc: "Manutenção Eletrônica Industrial avançada. Da adequação de painéis à reconstrução de inversores e servodrives das maiores marcas do mundo."
+          },
+          catalog: {
+            title: "Catálogo de",
+            highlight: "Especialidades",
+            subtitle: "Navegue pelas nossas frentes de reparo técnico abaixo."
+          },
+          laboratoryMini: {
+            title: "Laboratório de",
+            highlight: "Reparos Eletrônicos",
+            desc: "Ambiente climatizado limpo e organizado, equipado com bancadas e equipamentos especializados. Equipe técnica altamente treinada e especializada em reparos eletrônicos a nível de componentes.",
+            items: [
+               "Rack de Testes Contrologix, Compactologix, SLC500, micrologix 1200 / 1400",
+               "Rack de Testes para S7-200, S7-300, ET200L, ET200S",
+               "Rack Atos 4004 e Rack OMRON",
+               "Rack para servodrive Allen-Bradley Kinetix 6000 / 6500, 5500, Ultra 3000..."
+            ]
+          }
+        },
+        laboratory: {
+          hero: {
+            title: "Infraestrutura",
+            highlight: "Laboratorial",
+            desc: "Equipamentos calibrados e ambiente rigorosamente controlado. O coração tecnológico da nossa manutenção."
+          },
+          performance: {
+            title: "Performance Testada",
+            highlight: "Em Carga Real.",
+            text1: "A diferença entre um conserto comum e uma Engenharia de Reparo está nos testes em bancada. Nossas gigas dedicadas simulam servomotores acoplados, CLPs atuando, e a tração real de uma máquina.",
+            text2: "Garantimos que o módulo saia do nosso laboratório validado a 100%, pronto para instalação 'Plug & Play', eliminando falhas de campo."
+          }
         }
       },
 
@@ -190,10 +254,31 @@ export const useAdminStore = create(
             }
           }
         }));
+      },
+
+      // Helper para atualizar arrays (como slides ou itens de lista)
+      atualizarArrayConteudo: (pagina, chave, index, subChave, valor) => {
+        set((state) => {
+          const novoArray = [...state.siteContent[pagina][chave]];
+          if (subChave) {
+            novoArray[index] = { ...novoArray[index], [subChave]: valor };
+          } else {
+            novoArray[index] = valor;
+          }
+          return {
+            siteContent: {
+              ...state.siteContent,
+              [pagina]: {
+                ...state.siteContent[pagina],
+                [chave]: novoArray
+              }
+            }
+          };
+        });
       }
     }),
     {
-      name: 'gca-admin-storage-v6', // Versão 6 para incluir posts do blog
+      name: 'gca-admin-storage-v7', // Versão 7 para CMS Total
       onRehydrateStorage: () => (state) => {
         window.addEventListener('storage', (event) => {
           if (event.key === 'gca-admin-storage-v6') {
