@@ -235,7 +235,7 @@ export const useAdminStore = create(
           email: "comercial@servicedrive.com.br",
           address: "Rua São Bento, Nº 44, Cariobinha, Americana - SP",
           cep: "13472-370",
-          googleVerificationCode: ""
+          googleVerificationCode: "LBGMiyIPvQXnIf50DfR8DxPoJQQwKMUgE7Wcf_qpoaE"
         },
         home: {
           slides: [
