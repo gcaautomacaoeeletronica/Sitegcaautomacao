@@ -24,7 +24,7 @@ const Footer = () => {
               GCA <br/><span className="text-xl font-light text-accent">Automação</span>
             </h3>
             <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
-              {homeContent.expertise.text.substring(0, 150)}...
+              {homeContent?.expertise?.text?.substring(0, 150) || ''}...
             </p>
           </div>
 
@@ -36,8 +36,8 @@ const Footer = () => {
             <div className="flex gap-4">
               <MapPin className="text-accent flex-shrink-0 mt-1" size={20} />
               <p className="text-sm text-gray-400 leading-loose">
-                {global.address}<br />
-                <span className="text-gray-500 font-mono text-xs mt-1 block">CEP: {global.cep}</span>
+                {global?.address || ''}<br />
+                <span className="text-gray-500 font-mono text-xs mt-1 block">CEP: {global?.cep || ''}</span>
               </p>
             </div>
           </div>
@@ -75,7 +75,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Fixo Industrial</p>
-                  <p className="text-sm text-white">{global.phone}</p>
+                  <p className="text-sm text-white">{global?.phone || ''}</p>
                 </div>
               </li>
               <li className="flex items-center gap-4 group cursor-pointer bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors border border-white/5">
@@ -84,12 +84,12 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">WhatsApp / Plantão</p>
-                  <p className="text-sm text-white">{global.whatsapp}</p>
+                  <p className="text-sm text-white">{global?.whatsapp || ''}</p>
                 </div>
               </li>
               <li className="flex items-center gap-4 group cursor-pointer mt-4">
                 <Mail size={16} className="text-gray-500 group-hover:text-white transition-colors" />
-                <span className="text-xs text-gray-400 hover:text-white transition-colors">{global.email}</span>
+                <span className="text-xs text-gray-400 hover:text-white transition-colors">{global?.email || ''}</span>
               </li>
             </ul>
           </div>

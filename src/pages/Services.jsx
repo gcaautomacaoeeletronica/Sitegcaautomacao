@@ -41,7 +41,7 @@ const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
 
 const Services = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
-  const servicesContent = useAdminStore((state) => state.siteContent.services);
+  const servicesContent = useAdminStore((state) => state.siteContent?.services);
 
   const generalEquipments = [
     "Inversores de frequência", "Servodrives", "Conversores CA/CC", "Retificadores comuns ou regenerativos",
@@ -71,14 +71,14 @@ const Services = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <SlideIn direction="up">
           <span className="inline-block py-1.5 px-4 rounded-full bg-accent/20 border border-accent/30 text-accent font-bold tracking-widest uppercase mb-6 text-xs">
-            {servicesContent.hero.badge}
+            {servicesContent?.hero?.badge || ''}
           </span>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight uppercase leading-[1.1]">
-            {servicesContent.hero.title} <br/>
-            <span className="text-gray-300">{servicesContent.hero.highlight}</span>
+            {servicesContent?.hero?.title || ''} <br/>
+            <span className="text-gray-300">{servicesContent?.hero?.highlight || ''}</span>
           </h1>
           <p className="text-xl text-gray-400 font-light max-w-2xl leading-relaxed">
-            {servicesContent.hero.desc}
+            {servicesContent?.hero?.desc || ''}
           </p>
         </SlideIn>
       </div>
@@ -132,17 +132,17 @@ const Services = () => {
                
                <FadeIn>
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    {servicesContent.laboratoryMini.title} <br/>
-                    <span className="text-primary">{servicesContent.laboratoryMini.highlight}</span>
+                    {servicesContent?.laboratoryMini?.title || ''} <br/>
+                    <span className="text-primary">{servicesContent?.laboratoryMini?.highlight || ''}</span>
                   </h2>
                   <p className="text-lg text-gray-600 mb-6 leading-relaxed font-light">
-                    {servicesContent.laboratoryMini.desc}
+                    {servicesContent?.laboratoryMini?.desc || ''}
                   </p>
                   
                   <div className="bg-slate-50 p-6 rounded-2xl border border-gray-100 mb-8">
                      <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2"><Zap size={18} className="text-accent" /> Gigas de teste para CLP e IHM</h4>
                      <ul className="space-y-2 text-sm text-gray-600">
-                        {servicesContent.laboratoryMini.items.map((item, idx) => (
+                        {(servicesContent?.laboratoryMini?.items || []).map((item, idx) => (
                            <li key={idx}>• {item}</li>
                         ))}
                      </ul>

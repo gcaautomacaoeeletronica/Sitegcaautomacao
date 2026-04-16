@@ -44,11 +44,11 @@ const Header = () => {
           <div className="flex items-center space-x-6 tracking-wider">
             <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                <Phone size={12} className="text-accent" />
-               <span>{global.phone}</span>
+               <span>{global?.phone || ''}</span>
             </div>
             <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                <Mail size={12} className="text-accent" />
-               <span>{global.email}</span>
+               <span>{global?.email || ''}</span>
             </div>
           </div>
           <NavLink to="/admin" className="hidden sm:block text-[10px] text-gray-500 hover:text-accent uppercase tracking-widest font-mono transition-colors cursor-pointer">

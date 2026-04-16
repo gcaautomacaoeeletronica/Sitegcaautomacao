@@ -6,7 +6,7 @@ import { useAdminStore } from '../store/adminStore';
 
 const About = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
-  const aboutContent = useAdminStore((state) => state.siteContent.about);
+  const aboutContent = useAdminStore((state) => state.siteContent?.about);
   
   const bannerContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">
@@ -19,10 +19,10 @@ const About = () => {
             Nossa História
           </span>
           <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
-            {aboutContent.heroTitle.split(' ').map((word, i) => i === aboutContent.heroTitle.split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
+            {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed">
-            {aboutContent.heroSubtitle}
+            {aboutContent?.heroSubtitle || ''}
           </p>
         </SlideIn>
       </div>
@@ -53,17 +53,17 @@ const About = () => {
               <FadeIn>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-px bg-accent"></div>
-                  <h2 className="text-sm font-bold text-accent tracking-widest uppercase">{aboutContent.foundationBadge}</h2>
+                  <h2 className="text-sm font-bold text-accent tracking-widest uppercase">{aboutContent?.foundationBadge || ''}</h2>
                 </div>
                 <h3 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-8 leading-tight">
-                  {aboutContent.historyTitle.split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}
+                  {(aboutContent?.historyTitle || '').split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}
                 </h3>
                 <p className="text-gray-600 mb-6 leading-relaxed text-lg">
-                  {aboutContent.historyText}
+                  {aboutContent?.historyText || ''}
                 </p>
                 <div className="relative pl-8 py-4 my-10 bg-white border border-gray-200 shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-1.5 before:bg-accent">
                   <p className="text-gray-800 italic text-lg leading-relaxed font-medium">
-                    "{aboutContent.quote}"
+                    "{aboutContent?.quote || ''}"
                   </p>
                 </div>
               </FadeIn>
@@ -120,7 +120,7 @@ const About = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Missão</h3>
               <p className="text-gray-600 leading-relaxed relative z-10">
-                {aboutContent.mission}
+                {aboutContent?.mission || ''}
               </p>
             </StaggerItem>
 
@@ -131,7 +131,7 @@ const About = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Visão</h3>
               <p className="text-gray-600 leading-relaxed relative z-10">
-                {aboutContent.vision}
+                {aboutContent?.vision || ''}
               </p>
             </StaggerItem>
 

@@ -6,7 +6,7 @@ import { useAdminStore } from '../store/adminStore';
 
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
-  const labContent = useAdminStore((state) => state.siteContent.laboratory);
+  const labContent = useAdminStore((state) => state.siteContent?.laboratory);
 
   const heroContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-primary overflow-hidden">
@@ -16,10 +16,10 @@ const Laboratory = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SlideIn>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter">
-            {labContent.hero.title} <br/><span className="font-light">{labContent.hero.highlight}</span>
+            {labContent?.hero?.title || ''} <br/><span className="font-light">{labContent?.hero?.highlight || ''}</span>
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl font-light">
-            {labContent.hero.desc}
+            {labContent?.hero?.desc || ''}
           </p>
         </SlideIn>
       </div>
@@ -45,13 +45,13 @@ const Laboratory = () => {
                
                <FadeIn className="order-2 lg:order-1">
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    {labContent.performance.title} <br/><span className="text-accent underline decoration-4 underline-offset-4">{labContent.performance.highlight}</span>
+                    {labContent?.performance?.title || ''} <br/><span className="text-accent underline decoration-4 underline-offset-4">{labContent?.performance?.highlight || ''}</span>
                   </h2>
                   <p className="text-lg text-gray-600 leading-relaxed mb-6 font-light">
-                    {labContent.performance.text1}
+                    {labContent?.performance?.text1 || ''}
                   </p>
                   <p className="text-lg text-gray-600 leading-relaxed font-light">
-                    {labContent.performance.text2}
+                    {labContent?.performance?.text2 || ''}
                   </p>
                </FadeIn>
                

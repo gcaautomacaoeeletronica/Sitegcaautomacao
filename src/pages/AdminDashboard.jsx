@@ -670,37 +670,42 @@ const AdminDashboard = () => {
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Telefone Fixo</label>
-                                                    <input type="text" value={siteContent.global.phone} 
+                                                    <input type="text" value={siteContent?.global?.phone || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'phone', e.target.value)}
+                                                        placeholder="(19) 3462-8501"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
                                                 <div>
-                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">WhatsApp de Plantão</label>
-                                                    <input type="text" value={siteContent.global.whatsapp} 
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Plantão WhatsApp</label>
+                                                    <input type="text" value={siteContent?.global?.whatsapp || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'whatsapp', e.target.value)}
+                                                        placeholder="(19) 99876-5432"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
-                                                <div className="md:col-span-2">
-                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">E-mail Comercial</label>
-                                                    <input type="email" value={siteContent.global.email} 
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">E-mail Corporativo</label>
+                                                    <input type="email" value={siteContent?.global?.email || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'email', e.target.value)}
+                                                        placeholder="contato@gcaautomacao.com.br"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
                                                 <div className="md:col-span-2">
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Endereço Completo</label>
-                                                    <input type="text" value={siteContent.global.address} 
+                                                    <input type="text" value={siteContent?.global?.address || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'address', e.target.value)}
+                                                        placeholder="Rua Exemplo, 123 - Americana/SP"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">CEP</label>
-                                                    <input type="text" value={siteContent.global.cep} 
+                                                    <input type="text" value={siteContent?.global?.cep || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'cep', e.target.value)}
+                                                        placeholder="13470-000"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">N° WhatsApp (com código país, sem +)</label>
-                                                    <input type="text" value={siteContent.global.whatsappNumber || ''} 
+                                                    <input type="text" value={siteContent?.global?.whatsappNumber || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'whatsappNumber', e.target.value)}
                                                         placeholder="5519971206717"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
@@ -718,11 +723,11 @@ const AdminDashboard = () => {
                                                 </div>
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Código de Verificação do Google</label>
-                                                    <input type="text" value={siteContent.global.googleVerificationCode || ''} 
+                                                    <input type="text" value={siteContent?.global?.googleVerificationCode || ''} 
                                                         onChange={(e) => atualizarConteudo('global', 'googleVerificationCode', e.target.value)}
                                                         placeholder="Cole aqui: Ex: abc123xyz..."
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 font-mono text-sm" />
-                                                    {siteContent.global.googleVerificationCode && (
+                                                    {siteContent?.global?.googleVerificationCode && (
                                                         <p className="mt-2 text-xs text-green-600 font-bold flex items-center gap-1">
                                                             <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
                                                             Código ativo. Deploy o site para que o Google possa verificar.
@@ -739,7 +744,7 @@ const AdminDashboard = () => {
                                             {/* Slides */}
                                             <div className="space-y-6">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Slides Principais (Hero)</h4>
-                                                {siteContent.home.slides.map((slide, idx) => (
+                                                {(siteContent?.home?.slides || []).map((slide, idx) => (
                                                     <div key={idx} className="p-6 bg-gray-50 rounded-2xl border border-gray-200 space-y-4">
                                                         <span className="text-[10px] font-black text-primary uppercase">Slide {idx + 1}</span>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -770,16 +775,16 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Seção: Expertise Absoluta</h4>
                                                 <div className="grid grid-cols-1 gap-4">
-                                                    <input type="text" value={siteContent.home.expertise.badge} 
-                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent.home.expertise, badge: e.target.value })}
+                                                    <input type="text" value={siteContent?.home?.expertise?.badge || ''} 
+                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent?.home?.expertise, badge: e.target.value })}
                                                         placeholder="Badge superior"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
-                                                    <input type="text" value={siteContent.home.expertise.title} 
-                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent.home.expertise, title: e.target.value })}
+                                                    <input type="text" value={siteContent?.home?.expertise?.title || ''} 
+                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent?.home?.expertise, title: e.target.value })}
                                                         placeholder="Título principal"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 font-bold" />
-                                                    <textarea rows={3} value={siteContent.home.expertise.text} 
-                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent.home.expertise, text: e.target.value })}
+                                                    <textarea rows={3} value={siteContent?.home?.expertise?.text || ''} 
+                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent?.home?.expertise, text: e.target.value })}
                                                         placeholder="Texto de descrição"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
@@ -793,19 +798,19 @@ const AdminDashboard = () => {
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-gray-100 pb-6">
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Título do Hero</label>
-                                                    <input type="text" value={siteContent.about.heroTitle} 
+                                                    <input type="text" value={siteContent?.about?.heroTitle || ''} 
                                                         onChange={(e) => atualizarConteudo('about', 'heroTitle', e.target.value)}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold" />
                                                 </div>
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Selo de Fundação (Badge)</label>
-                                                    <input type="text" value={siteContent.about.foundationBadge} 
+                                                    <input type="text" value={siteContent?.about?.foundationBadge || ''} 
                                                         onChange={(e) => atualizarConteudo('about', 'foundationBadge', e.target.value)}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
                                                 </div>
                                                 <div className="md:col-span-2">
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Subtítulo do Hero</label>
-                                                    <textarea rows={2} value={siteContent.about.heroSubtitle} 
+                                                    <textarea rows={2} value={siteContent?.about?.heroSubtitle || ''} 
                                                         onChange={(e) => atualizarConteudo('about', 'heroSubtitle', e.target.value)}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
                                                 </div>
@@ -813,32 +818,32 @@ const AdminDashboard = () => {
 
                                             <div>
                                                 <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Título da História</label>
-                                                <input type="text" value={siteContent.about.historyTitle} 
+                                                <input type="text" value={siteContent?.about?.historyTitle || ''} 
                                                     onChange={(e) => atualizarConteudo('about', 'historyTitle', e.target.value)}
                                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                             </div>
                                             <div>
                                                 <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto Institucional (Descrição)</label>
-                                                <textarea rows={4} value={siteContent.about.historyText} 
+                                                <textarea rows={4} value={siteContent?.about?.historyText || ''} 
                                                     onChange={(e) => atualizarConteudo('about', 'historyText', e.target.value)}
                                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                             </div>
                                             <div>
                                                 <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Frase em Destaque (Citação)</label>
-                                                <textarea rows={2} value={siteContent.about.quote} 
+                                                <textarea rows={2} value={siteContent?.about?.quote || ''} 
                                                     onChange={(e) => atualizarConteudo('about', 'quote', e.target.value)}
                                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 italic focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                             </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Nossa Missão</label>
-                                                    <textarea rows={3} value={siteContent.about.mission} 
+                                                    <textarea rows={3} value={siteContent?.about?.mission || ''} 
                                                         onChange={(e) => atualizarConteudo('about', 'mission', e.target.value)}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Nossa Visão</label>
-                                                    <textarea rows={3} value={siteContent.about.vision} 
+                                                    <textarea rows={3} value={siteContent?.about?.vision || ''} 
                                                         onChange={(e) => atualizarConteudo('about', 'vision', e.target.value)}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
@@ -852,17 +857,17 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Cabeçalho de Serviços</h4>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <input type="text" value={siteContent.services.hero.badge} 
-                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent.services.hero, badge: e.target.value })}
+                                                    <input type="text" value={siteContent?.services?.hero?.badge || ''} 
+                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, badge: e.target.value })}
                                                         placeholder="Badge" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
-                                                    <input type="text" value={siteContent.services.hero.title} 
-                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent.services.hero, title: e.target.value })}
+                                                    <input type="text" value={siteContent?.services?.hero?.title || ''} 
+                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, title: e.target.value })}
                                                         placeholder="Título" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold" />
-                                                    <input type="text" value={siteContent.services.hero.highlight} 
-                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent.services.hero, highlight: e.target.value })}
+                                                    <input type="text" value={siteContent?.services?.hero?.highlight || ''} 
+                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, highlight: e.target.value })}
                                                         placeholder="Destaque" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
-                                                    <textarea rows={2} value={siteContent.services.hero.desc} 
-                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent.services.hero, desc: e.target.value })}
+                                                    <textarea rows={2} value={siteContent?.services?.hero?.desc || ''} 
+                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, desc: e.target.value })}
                                                         placeholder="Descrição" className="w-full md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
                                                 </div>
                                             </div>
@@ -870,16 +875,16 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Laboratórios Mini (Rodapé da página)</h4>
                                                 <div className="grid grid-cols-1 gap-4 p-6 bg-gray-50 rounded-2xl border border-gray-200">
-                                                    <input type="text" value={siteContent.services.laboratoryMini.title} 
-                                                        onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent.services.laboratoryMini, title: e.target.value })}
+                                                    <input type="text" value={siteContent?.services?.laboratoryMini?.title || ''} 
+                                                        onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, title: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-bold" />
-                                                    <textarea rows={2} value={siteContent.services.laboratoryMini.desc} 
-                                                        onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent.services.laboratoryMini, desc: e.target.value })}
+                                                    <textarea rows={2} value={siteContent?.services?.laboratoryMini?.desc || ''} 
+                                                        onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, desc: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
                                                     
                                                     <div className="space-y-2 mt-4">
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase">Itens de Rack (Lista)</label>
-                                                        {siteContent.services.laboratoryMini.items.map((item, id) => (
+                                                        {(siteContent?.services?.laboratoryMini?.items || []).map((item, id) => (
                                                             <input key={id} type="text" value={item} 
                                                                 onChange={(e) => atualizarArrayConteudo('services', 'laboratoryMini', id, null, e.target.value)}
                                                                 className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-xs" />
@@ -896,14 +901,14 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Textos do Hero</h4>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <input type="text" value={siteContent.laboratory.hero.title} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent.laboratory.hero, title: e.target.value })}
+                                                    <input type="text" value={siteContent?.laboratory?.hero?.title || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent?.laboratory?.hero, title: e.target.value })}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold" />
-                                                    <input type="text" value={siteContent.laboratory.hero.highlight} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent.laboratory.hero, highlight: e.target.value })}
+                                                    <input type="text" value={siteContent?.laboratory?.hero?.highlight || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent?.laboratory?.hero, highlight: e.target.value })}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
-                                                    <textarea rows={2} value={siteContent.laboratory.hero.desc} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent.laboratory.hero, desc: e.target.value })}
+                                                    <textarea rows={2} value={siteContent?.laboratory?.hero?.desc || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent?.laboratory?.hero, desc: e.target.value })}
                                                         className="w-full md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
                                                 </div>
                                             </div>
@@ -911,17 +916,17 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Seção: Performance em Carga</h4>
                                                 <div className="grid grid-cols-1 gap-4 bg-gray-50 p-6 rounded-2xl border border-gray-200">
-                                                    <input type="text" value={siteContent.laboratory.performance.title} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent.laboratory.performance, title: e.target.value })}
+                                                    <input type="text" value={siteContent?.laboratory?.performance?.title || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, title: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-bold" />
-                                                    <input type="text" value={siteContent.laboratory.performance.highlight} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent.laboratory.performance, highlight: e.target.value })}
+                                                    <input type="text" value={siteContent?.laboratory?.performance?.highlight || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, highlight: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
-                                                    <textarea rows={2} value={siteContent.laboratory.performance.text1} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent.laboratory.performance, text1: e.target.value })}
+                                                    <textarea rows={2} value={siteContent?.laboratory?.performance?.text1 || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, text1: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
-                                                    <textarea rows={2} value={siteContent.laboratory.performance.text2} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent.laboratory.performance, text2: e.target.value })}
+                                                    <textarea rows={2} value={siteContent?.laboratory?.performance?.text2 || ''} 
+                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, text2: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
                                                 </div>
                                             </div>

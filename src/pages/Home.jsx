@@ -7,10 +7,10 @@ import { useAdminStore } from '../store/adminStore';
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
-  const homeContent = useAdminStore((state) => state.siteContent.home);
-  const googleVerificationCode = useAdminStore((state) => state.siteContent.global.googleVerificationCode);
+  const homeContent = useAdminStore((state) => state.siteContent?.home);
+  const googleVerificationCode = useAdminStore((state) => state.siteContent?.global?.googleVerificationCode);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = homeContent.slides.map((s, i) => ({
+  const slides = (homeContent?.slides || []).map((s, i) => ({
     ...s,
     bg: i === 0 ? "bg-primary-dark" : i === 1 ? "bg-blue-900" : "bg-gray-900"
   }));
@@ -96,17 +96,17 @@ const Home = () => {
                   <SlideIn>
                      <div className="flex items-center gap-4 mb-6">
                        <span className="w-12 h-px bg-accent block"></span>
-                       <span className="text-xs font-bold text-accent tracking-widest uppercase">{homeContent.expertise.badge}</span>
+                       <span className="text-xs font-bold text-accent tracking-widest uppercase">{homeContent?.expertise?.badge || ''}</span>
                      </div>
                      <h2 className="text-3xl md:text-5xl font-extrabold text-primary leading-tight mb-8">
-                       {homeContent.expertise.title}
+                       {homeContent?.expertise?.title || ''}
                      </h2>
                   </SlideIn>
                </div>
                <div className="md:w-1/2">
                   <FadeIn delay={0.2}>
                      <p className="text-gray-600 text-lg leading-relaxed border-l-2 border-gray-200 pl-6">
-                       {homeContent.expertise.text}
+                       {homeContent?.expertise?.text || ''}
                      </p>
                   </FadeIn>
                </div>
@@ -120,9 +120,9 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <FadeIn className="text-center mb-20">
-            <h2 className="text-sm font-bold text-gray-400 tracking-widest uppercase mb-4">{homeContent.portfolio.badge}</h2>
+            <h2 className="text-sm font-bold text-gray-400 tracking-widest uppercase mb-4">{homeContent?.portfolio?.badge || ''}</h2>
             <h3 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-              {homeContent.portfolio.title} <span className="text-accent underline decoration-4 underline-offset-4">{homeContent.portfolio.highlight}</span>
+              {homeContent?.portfolio?.title || ''} <span className="text-accent underline decoration-4 underline-offset-4">{homeContent?.portfolio?.highlight || ''}</span>
             </h3>
           </FadeIn>
 

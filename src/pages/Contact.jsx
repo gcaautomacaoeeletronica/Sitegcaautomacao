@@ -6,9 +6,9 @@ import { useAdminStore } from '../store/adminStore';
 
 const Contact = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
-  const global = useAdminStore((state) => state.siteContent.global);
+  const global = useAdminStore((state) => state.siteContent?.global);
   const adicionarLead = useAdminStore((state) => state.adicionarLead);
-  const whatsappNumber = useAdminStore((state) => state.siteContent.global.whatsappNumber) || '5519971206717';
+  const whatsappNumber = useAdminStore((state) => state.siteContent?.global?.whatsappNumber) || '5519971206717';
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [contactMode, setContactMode] = useState('message'); // 'message' | 'whatsapp'
@@ -175,15 +175,15 @@ const Contact = () => {
                     <div className="flex items-center gap-3 mb-2 font-mono text-xs text-accent tracking-widest uppercase">
                       <Phone size={14} /> Plantão Direto
                     </div>
-                    <p className="text-2xl font-light tracking-tight">{global.phone}</p>
-                    <p className="text-xl font-medium tracking-tight text-gray-300">Whatsapp: {global.whatsapp}</p>
+                    <p className="text-2xl font-light tracking-tight">{global?.phone || ''}</p>
+                    <p className="text-xl font-medium tracking-tight text-gray-300">Whatsapp: {global?.whatsapp || ''}</p>
                   </div>
 
                   <div className="group">
                     <div className="flex items-center gap-3 mb-2 font-mono text-xs text-blue-400 tracking-widest uppercase">
                       <Mail size={14} /> E-mail Geral
                     </div>
-                    <p className="text-lg font-light tracking-tight">{global.email}</p>
+                    <p className="text-lg font-light tracking-tight">{global?.email || ''}</p>
                   </div>
 
                   <div className="group">
@@ -191,8 +191,8 @@ const Contact = () => {
                       <MapPin size={14} /> Laboratório Central
                     </div>
                     <p className="text-base font-light tracking-wide leading-relaxed text-gray-300">
-                      {global.address}<br />
-                      CEP {global.cep}
+                      {global?.address || ''}<br />
+                      CEP {global?.cep || ''}
                     </p>
                   </div>
                 </div>
