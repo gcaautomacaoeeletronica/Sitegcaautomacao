@@ -11,18 +11,23 @@ const Contact = () => {
   const whatsappNumber = useAdminStore((state) => state.siteContent.global.whatsappNumber) || '5519971206717';
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [contactMode, setContactMode] = useState('message'); // 'message' | 'whatsapp'
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    adicionarLead(formData);
+
+    if (contactMode === 'whatsapp') {
+      // Modo WhatsApp: abre wa.me com dados preenchidos
+      const txt = `Nova Mensagem no Site GCA%0A%0ACliente: ${encodeURIComponent(formData.name)}%0ATelefone/WhatsApp: ${encodeURIComponent(formData.phone)}%0AEmail: ${encodeURIComponent(formData.email)}%0AAssunto: ${encodeURIComponent(formData.subject)}%0A%0AMensagem: ${encodeURIComponent(formData.message)}`;
+      window.open(`https://wa.me/${whatsappNumber}?text=${txt}`, '_blank');
+    } else {
+      // Modo Mensagem: apenas salva no painel de leads (sem forcar abertura do WhatsApp)
+      adicionarLead(formData);
+    }
+
     setSubmitted(true);
-
-    // Notificacao automatica via WhatsApp
-    const txt = `Nova Mensagem no Site GCA%0A%0ACliente: ${encodeURIComponent(formData.name)}%0ATelefone/WhatsApp: ${encodeURIComponent(formData.phone)}%0AEmail: ${encodeURIComponent(formData.email)}%0AAssunto: ${encodeURIComponent(formData.subject)}%0A%0AMensagem: ${encodeURIComponent(formData.message)}`;
-    window.open(`https://wa.me/${whatsappNumber}?text=${txt}`, '_blank');
-
     setFormData({ name: '', phone: '', email: '', subject: '', message: '' });
     setTimeout(() => setSubmitted(false), 5000);
   };
@@ -70,6 +75,24 @@ const Contact = () => {
                     <ShieldAlert size={14} /> Atendimento Ágil
                   </div>
                   <h2 className="text-3xl font-black text-gray-900 tracking-tight">Abra um Chamado de Orçamento</h2>
+                </div>
+
+                {/* Seletor de Modo de Contato */}
+                <div className="flex gap-3 mb-8 p-1 bg-gray-100 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setContactMode('message')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${contactMode === 'message' ? 'bg-white text-gray-900 shadow-md' : 'text-gray-400 hover:text-gray-600'}`}
+                  >
+                    <Mail size={16} /> Enviar Mensagem
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContactMode('whatsapp')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${contactMode === 'whatsapp' ? 'bg-[#25D366] text-white shadow-md' : 'text-gray-400 hover:text-gray-600'}`}
+                  >
+                    <Phone size={16} /> Via WhatsApp
+                  </button>
                 </div>
 
                 {submitted ? (
@@ -124,9 +147,19 @@ const Contact = () => {
                         placeholder="Qual a falha apresentada?"></textarea>
                     </div>
 
-                    <button type="submit" className="group flex items-center justify-center w-full sm:w-auto px-10 py-5 bg-gray-900 hover:bg-accent text-white font-black uppercase tracking-widest text-sm rounded-xl transition-all duration-300 hover:shadow-[0_10px_20px_rgba(215,25,32,0.3)] hover:-translate-y-1">
-                      <Send size={18} className="mr-3 group-hover:animate-bounce" />
-                      Submeter Pedido
+                    <button
+                      type="submit"
+                      className={`group flex items-center justify-center w-full sm:w-auto px-10 py-5 font-black uppercase tracking-widest text-sm rounded-xl transition-all duration-300 hover:-translate-y-1 text-white ${
+                        contactMode === 'whatsapp'
+                          ? 'bg-[#25D366] hover:bg-[#1ebc59] hover:shadow-[0_10px_20px_rgba(37,211,102,0.35)]'
+                          : 'bg-gray-900 hover:bg-accent hover:shadow-[0_10px_20px_rgba(215,25,32,0.3)]'
+                      }`}
+                    >
+                      {contactMode === 'whatsapp' ? (
+                        <><Phone size={18} className="mr-3 group-hover:animate-bounce" /> Abrir WhatsApp</>
+                      ) : (
+                        <><Send size={18} className="mr-3 group-hover:animate-bounce" /> Enviar Mensagem</>
+                      )}
                     </button>
                   </form>
                 )}
