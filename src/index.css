@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #002D5B;
+  --color-primary-light: #0d4485;
+  --color-primary-dark: #001a36;
+  --color-accent: #D71920;
+  --color-accent-light: #ff333a;
+  --color-accent-dark: #a30d13;
+  --color-neutral-light: #F8F9FA;
+  --color-neutral-dark: #121415;
+  --font-inter: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  body {
+    @apply font-inter bg-slate-50 text-neutral-dark m-0 p-0 overflow-x-hidden antialiased selection:bg-accent selection:text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white border border-gray-100 shadow-sm;
+  }
+  
+  .glass-dark {
+    @apply bg-[#0a0f18] border border-gray-800 shadow-sm;
+  }
+
+  .text-gradient {
+    @apply text-primary;
+  }
+
+  /* Fundo de Padrão Isométrico Sutil para painéis técnicos */
+  .pattern-grid {
+    background-image: linear-gradient(to right, #002D5B0a 1px, transparent 1px),
+      linear-gradient(to bottom, #002D5B0a 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .pattern-dots {
+    background-image: radial-gradient(#002D5B15 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}

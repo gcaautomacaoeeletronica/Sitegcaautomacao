@@ -1,0 +1,372 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAdminStore } from '../store/adminStore';
+import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp } from 'lucide-react';
+
+const AdminDashboard = () => {
+    const navigate = useNavigate();
+    const { isAuthenticated, logout, marcas, siteMedia, adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia } = useAdminStore();
+    
+    // States gerais
+    const [activeTab, setActiveTab] = useState('manuais');
+    
+    // States de Formulario de Marca
+    const [novaMarcaLoading, setNovaMarcaLoading] = useState(false);
+    const [novaMarcaInput, setNovaMarcaInput] = useState('');
+
+    // States do Modal de Upload de Manual
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMarca, setSelectedMarca] = useState(null);
+    const [manualTitle, setManualTitle] = useState('');
+    const [manualLink, setManualLink] = useState('');
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [expandedMarcaId, setExpandedMarcaId] = useState(null);
+    const [editingManualId, setEditingManualId] = useState(null);
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/admin');
+        }
+    }, [isAuthenticated, navigate]);
+
+    if (!isAuthenticated) return null;
+
+    // Handlers Manuais
+    const handleAdicionarMarca = (e) => {
+        e.preventDefault();
+        if(!novaMarcaInput.trim()) return;
+        setNovaMarcaLoading(true);
+        setTimeout(() => {
+            adicionarMarca(novaMarcaInput);
+            setNovaMarcaInput('');
+            setNovaMarcaLoading(false);
+        }, 600);
+    };
+
+    const openUploadModal = (marca, manual = null) => {
+        setSelectedMarca(marca);
+        if (manual) {
+            setManualTitle(manual.titulo);
+            setManualLink(manual.link);
+            setEditingManualId(manual.id);
+        } else {
+            setManualTitle('');
+            setManualLink('');
+            setEditingManualId(null);
+        }
+        setIsModalOpen(true);
+    };
+
+    const handleSaveManual = (e) => {
+        e.preventDefault();
+        if(!manualTitle || !manualLink) return;
+        
+        if (editingManualId) {
+            editarManual(selectedMarca.id, editingManualId, manualTitle, manualLink);
+        } else {
+            adicionarManual(selectedMarca.id, manualTitle, manualLink);
+        }
+        
+        setSaveSuccess(true);
+        setTimeout(() => {
+            setSaveSuccess(false);
+            setIsModalOpen(false);
+        }, 1000);
+    };
+
+    const toggleMarcaExpand = (id) => {
+        setExpandedMarcaId(prev => prev === id ? null : id);
+    };
+
+    const totalManuais = marcas.reduce((acc, curr) => acc + (Array.isArray(curr.manuais) ? curr.manuais.length : 0), 0);
+
+    const renderMediaInput = (label, chave, placeholderImg = '') => (
+        <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
+            <h4 className="font-bold text-gray-900 border-l-4 border-primary pl-3 mb-4">{label}</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL da Imagem</label>
+                    <div className="relative">
+                        <ImageIcon className="absolute left-3 top-3 text-gray-400" size={16} />
+                        <input 
+                            type="url" 
+                            placeholder="https://exemplo.com/foto.jpg"
+                            value={siteMedia[chave]?.url || ''} 
+                            onChange={(e) => atualizarMedia(chave, 'url', e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Link de Destino (Clique)</label>
+                    <div className="relative">
+                        <Link2 className="absolute left-3 top-3 text-gray-400" size={16} />
+                        <input 
+                            type="text" 
+                            placeholder="Ex: /servicos ou https://google.com"
+                            value={siteMedia[chave]?.link || ''} 
+                            onChange={(e) => atualizarMedia(chave, 'link', e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                    </div>
+                </div>
+            </div>
+            {siteMedia[chave]?.url && (
+                <div className="mt-2 w-full h-24 rounded-lg bg-cover bg-center border border-gray-200 shadow-inner" 
+                     style={{ backgroundImage: `url(${siteMedia[chave].url})` }}></div>
+            )}
+        </div>
+    );
+
+    return (
+        <div className="min-h-screen bg-[#f3f4f6] flex flex-col md:flex-row relative">
+            
+            {/* Modal de Upload de Links PDF */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <FadeIn delay={0}>
+                        <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl">
+                            <div className="bg-gray-50 border-b border-gray-100 p-6 flex justify-between items-center">
+                                <div>
+                                   <h3 className="font-black text-gray-900 text-lg">{editingManualId ? 'Editar Arquivo / Manual' : 'Vincular Novo Documento'}</h3>
+                                   <p className="text-gray-500 text-sm">Na pasta de: <strong className="text-primary">{selectedMarca?.nome}</strong></p>
+                                </div>
+                                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors bg-white p-2 border border-gray-200 rounded-full shadow-sm"><X size={20}/></button>
+                            </div>
+                            <form onSubmit={handleSaveManual} className="p-6 space-y-4">
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Nome do Manual / Arquivo PDF</label>
+                                    <input type="text" placeholder="Ex: Manual Técnico WEG CFW700 PDF" required
+                                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                        value={manualTitle} onChange={e => setManualTitle(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Link do PDF (Google Drive / Link Direto)</label>
+                                    <div className="relative">
+                                       <Link2 className="absolute left-4 top-3.5 text-gray-400" size={18}/>
+                                       <input type="url" placeholder="https://drive.google.com/..." required
+                                           className="w-full pl-11 bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                           value={manualLink} onChange={e => setManualLink(e.target.value)} />
+                                    </div>
+                                </div>
+                                <button type="submit" className="w-full mt-4 bg-primary hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-red-500/20 flex items-center justify-center gap-2">
+                                    <UploadCloud size={20} /> {editingManualId ? 'Atualizar Vínculo' : 'Salvar Vínculo'}
+                                </button>
+                            </form>
+                        </div>
+                    </FadeIn>
+                </div>
+            )}
+
+            {/* Sidebar Cockpit */}
+            <aside className="w-full md:w-64 bg-[#0a0f18] text-white flex flex-col shrink-0">
+                <div className="p-6 border-b border-white/10">
+                    <h2 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 uppercase tracking-widest flex items-center gap-2">
+                        <Database size={20} className="text-primary" /> Painel GCA
+                    </h2>
+                </div>
+                <nav className="flex-1 p-4 space-y-2">
+                    <button 
+                        onClick={() => setActiveTab('manuais')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'manuais' ? 'bg-primary text-white shadow-lg shadow-red-500/20' : 'bg-transparent text-gray-400 hover:bg-white/5'}`}
+                    >
+                        <LayoutDashboard size={18} /> Acervo Digital
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('midia')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'midia' ? 'bg-primary text-white shadow-lg shadow-red-500/20' : 'bg-transparent text-gray-400 hover:bg-white/5'}`}
+                    >
+                        <ImageIcon size={18} /> Mídias do Site
+                    </button>
+                </nav>
+                <div className="p-4 border-t border-white/10">
+                    <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg cursor-pointer hover:bg-red-500/20 transition-colors" onClick={logout}>
+                        <LogOut size={18} /> Encerrar Sessão
+                    </div>
+                </div>
+            </aside>
+
+            {/* Main Content */}
+            <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+                <FadeIn>
+                    <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h1 className="text-3xl font-black text-gray-900 truncate">
+                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : 'Imagens & Links Dinâmicos'}
+                            </h1>
+                            <p className="text-gray-500 mt-1">Configurações globais com salvamento automático.</p>
+                        </div>
+                        
+                        {activeTab === 'manuais' && (
+                           <div className="flex bg-white rounded-xl shadow-sm border border-gray-100 p-2 shrink-0">
+                               <div className="px-4 py-2 border-r border-gray-100">
+                                   <span className="block text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Marcas ativas</span>
+                                   <span className="text-xl font-black text-gray-800">{marcas.length}</span>
+                               </div>
+                               <div className="px-4 py-2">
+                                   <span className="block text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Blinks Totais</span>
+                                   <span className="text-xl font-black text-primary flex items-center gap-1">
+                                       <BarChart3 size={16} /> {totalManuais}
+                                   </span>
+                               </div>
+                           </div>
+                        )}
+                    </header>
+                </FadeIn>
+
+                {/* TAB: ACERVO / MANUAIS */}
+                {activeTab === 'manuais' && (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Coluna Esquerda: Adicionar Marca */}
+                        <div className="lg:col-span-1">
+                            <FadeIn delay={0.1}>
+                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-6">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                        <FolderPlus size={20} className="text-primary" /> Adicionar Categoria
+                                    </h3>
+                                    <form onSubmit={handleAdicionarMarca} className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Fabricante / Marca</label>
+                                            <input type="text" value={novaMarcaInput} onChange={(e) => setNovaMarcaInput(e.target.value)} placeholder="Ex: ALLEN-BRADLEY"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                        </div>
+                                        <button type="submit" disabled={novaMarcaLoading || !novaMarcaInput.trim()}
+                                            className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-xl transition-all disabled:opacity-50">
+                                            {novaMarcaLoading ? 'Criando Pasta...' : 'Salvar no Banco'}
+                                        </button>
+                                    </form>
+                                </div>
+                            </FadeIn>
+                        </div>
+
+                        {/* Coluna Direita: Tabela */}
+                        <div className="lg:col-span-2">
+                            <StaggerContainer className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                                    <h3 className="text-lg font-bold text-gray-900">Diretórios Ativos ({marcas.length})</h3>
+                                </div>
+                                <div className="divide-y divide-gray-100 h-[600px] overflow-y-auto">
+                                    {marcas.map((marca) => (
+                                        <StaggerItem key={marca.id} className="p-4 hover:bg-gray-50/80 transition-colors flex flex-col gap-4 group">
+                                           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-12 h-12 rounded-xl ${marca.iconColor} text-white flex items-center justify-center font-black text-xl shadow-inner shrink-0`}>
+                                                        {marca.nome.charAt(0)}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-900 uppercase tracking-wide cursor-pointer flex items-center gap-2 hover:text-primary transition-colors select-none" onClick={() => toggleMarcaExpand(marca.id)} title="Clique para ver os arquivos">
+                                                            {marca.nome}
+                                                            {expandedMarcaId === marca.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                                        </h4>
+                                                        <p className="text-xs text-gray-500 font-medium cursor-pointer select-none" onClick={() => toggleMarcaExpand(marca.id)}>
+                                                           {Array.isArray(marca.manuais) ? marca.manuais.length : 0} Documentos Anexados
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <button onClick={() => openUploadModal(marca)} className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors border border-primary/20">
+                                                        <Link2 size={16} /> Inserir Link de Documento
+                                                    </button>
+                                                    <button onClick={() => removerMarca(marca.id)} className="text-gray-400 hover:text-red-500 p-2 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg transition-all" title="Deletar Marca e seus Arquivos">
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
+                                           </div>
+
+                                            {/* Sub-lista de Manuais Expandida */}
+                                            {expandedMarcaId === marca.id && marca.manuais && marca.manuais.length > 0 && (
+                                                <div className="w-full mt-2 bg-white border border-gray-100 rounded-xl overflow-hidden shadow-inner">
+                                                    <div className="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Arquivos Salvos nesta Categoria</span>
+                                                    </div>
+                                                    <ul className="divide-y divide-gray-50">
+                                                        {marca.manuais.map(manual => (
+                                                            <li key={manual.id} className="p-3 hover:bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-2 group/item transition-colors break-all">
+                                                                <div className="flex flex-col md:flex-row md:items-center gap-3">
+                                                                    <div className="bg-blue-50 text-blue-500 p-2 rounded-lg shrink-0 w-fit">
+                                                                        <Link2 size={14} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <a href={manual.link} target="_blank" rel="noreferrer" className="text-sm font-bold text-gray-800 hover:text-primary transition-colors block leading-tight mb-1">
+                                                                            {manual.titulo}
+                                                                        </a>
+                                                                        <span className="text-[10px] text-gray-400 font-mono block hover:text-gray-600 transition-colors">{manual.link}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover/item:opacity-100 transition-opacity">
+                                                                    <button onClick={() => openUploadModal(marca, manual)} className="text-gray-400 hover:text-blue-500 p-2 hover:bg-blue-50 rounded-lg transition-all" title="Editar">
+                                                                        <Edit size={16} />
+                                                                    </button>
+                                                                    <button onClick={() => removerManual(marca.id, manual.id)} className="text-gray-400 hover:text-red-500 p-2 hover:bg-red-50 rounded-lg transition-all" title="Excluir">
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </div>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </StaggerItem>
+                                    ))}
+                                </div>
+                            </StaggerContainer>
+                        </div>
+                    </div>
+                )}
+
+                {/* TAB: MíDIAS SITE */}
+                {activeTab === 'midia' && (
+                    <FadeIn>
+                        <div className="space-y-6">
+                            {/* Sessão Global */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                    <Globe size={20} className="text-primary"/> Configurações Globais (SEO)
+                                </h3>
+                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL do Favicon (.ico / .png)</label>
+                                        <div className="relative">
+                                            <Globe className="absolute left-3 top-3 text-gray-400" size={16} />
+                                            <input 
+                                                type="url" 
+                                                placeholder="https://exemplo.com/favicon.png"
+                                                value={siteMedia.favicon?.url || ''} 
+                                                onChange={(e) => atualizarMedia('favicon', 'url', e.target.value)}
+                                                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                                        </div>
+                                    </div>
+                                    {siteMedia.favicon?.url && (
+                                        <div className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl w-fit">
+                                            <img src={siteMedia.favicon.url} alt="Favicon Preview" className="w-8 h-8 object-contain" />
+                                            <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Prévia Ícone Aba</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Sessão Imagens por Página */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                                <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-2">
+                                    <ImageIcon size={20} className="text-primary"/> Gerenciador de Banners e Imagens
+                                </h3>
+                                
+                                <div className="space-y-8">
+                                    {renderMediaInput("Página Inicial (Hero Principal)", "home")}
+                                    {renderMediaInput("Sobre Nós (Banner Superior)", "about")}
+                                    {renderMediaInput("Sobre Nós (Imagem Lateral)", "aboutSide")}
+                                    {renderMediaInput("Serviços (Banner Superior)", "services")}
+                                    {renderMediaInput("Serviços (Seção Laboratório)", "servicesLab")}
+                                    {renderMediaInput("Laboratório (Banner Superior)", "laboratory")}
+                                    {renderMediaInput("Contato (Banner Superior)", "contact")}
+                                </div>
+                            </div>
+                        </div>
+                    </FadeIn>
+                )}
+
+            </main>
+        </div>
+    );
+};
+
+export default AdminDashboard;
