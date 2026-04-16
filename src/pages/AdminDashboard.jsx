@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const { 
-        isAuthenticated, logout, marcas, siteMedia, blogPosts,
+        isAuthenticated, logout, marcas, siteMedia, blogPosts, siteContent,
         adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
-        adicionarPost, editarPost, removerPost 
+        adicionarPost, editarPost, removerPost, atualizarConteudo
     } = useAdminStore();
     
     // States gerais
@@ -279,6 +279,12 @@ const AdminDashboard = () => {
                     >
                         <Newspaper size={18} /> Gerenciar Blog
                     </button>
+                    <button 
+                        onClick={() => setActiveTab('textos')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'textos' ? 'bg-primary text-white shadow-lg shadow-red-500/20' : 'bg-transparent text-gray-400 hover:bg-white/5'}`}
+                    >
+                        <Type size={18} /> Textos do Site
+                    </button>
                 </nav>
                 <div className="p-4 border-t border-white/10">
                     <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg cursor-pointer hover:bg-red-500/20 transition-colors" onClick={logout}>
@@ -293,7 +299,7 @@ const AdminDashboard = () => {
                     <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <h1 className="text-3xl font-black text-gray-900 truncate">
-                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : activeTab === 'blog' ? 'Editor de Blog' : 'Imagens & Links Dinâmicos'}
+                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : activeTab === 'blog' ? 'Editor de Blog' : activeTab === 'textos' ? 'Textos & Institucional' : 'Imagens & Links Dinâmicos'}
                             </h1>
                             <p className="text-gray-500 mt-1">Configurações globais com salvamento automático.</p>
                         </div>
@@ -519,6 +525,58 @@ const AdminDashboard = () => {
                                         <p className="text-gray-400 font-bold uppercase tracking-widest">Nenhum post encontrado.</p>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    </FadeIn>
+                )}
+
+                {/* TAB: TEXTOS DO SITE (CMS) */}
+                {activeTab === 'textos' && (
+                    <FadeIn>
+                        <div className="space-y-8">
+                            {/* Sessão Sobre Nós */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                                <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-2">
+                                    <Edit size={20} className="text-primary"/> Página: Sobre Nós (Institucional)
+                                </h3>
+                                
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Título da História</label>
+                                        <input type="text" value={siteContent.about.historyTitle} 
+                                            onChange={(e) => atualizarConteudo('about', 'historyTitle', e.target.value)}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto Institucional (Descrição)</label>
+                                        <textarea rows={4} value={siteContent.about.historyText} 
+                                            onChange={(e) => atualizarConteudo('about', 'historyText', e.target.value)}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Frase em Destaque (Citação)</label>
+                                        <textarea rows={3} value={siteContent.about.quote} 
+                                            onChange={(e) => atualizarConteudo('about', 'quote', e.target.value)}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 italic font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                                        <div>
+                                            <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Nossa Missão</label>
+                                            <textarea rows={4} value={siteContent.about.mission} 
+                                                onChange={(e) => atualizarConteudo('about', 'mission', e.target.value)}
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Nossa Visão</label>
+                                            <textarea rows={4} value={siteContent.about.vision} 
+                                                onChange={(e) => atualizarConteudo('about', 'vision', e.target.value)}
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </FadeIn>

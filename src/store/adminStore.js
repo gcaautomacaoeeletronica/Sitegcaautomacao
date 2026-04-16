@@ -167,6 +167,29 @@ export const useAdminStore = create(
         set((state) => ({
           blogPosts: state.blogPosts.map(p => p.id === id ? { ...p, ...updatedPost } : p)
         }));
+      },
+
+      // Sistema de Conteúdo Dinâmico (CMS)
+      siteContent: {
+        about: {
+          historyTitle: "Há mais de 10 anos Liderando o Mercado",
+          historyText: "A GCA Automação e Eletrônica Industrial iniciou suas atividades com o objetivo de oferecer prestação de serviços de alta engenharia e manutenção eletrônica corporativa.",
+          quote: "Nós não apenas consertamos placas. Nós entendemos o processo do cliente, reduzimos o tempo de máquina parada e entregamos soluções definitivas, baseadas na máxima transparência técnica.",
+          mission: "Oferecer soluções inovadoras e eficazes em manutenção eletrônica industrial, garantindo alta produtividade e máxima restrição de custos não planejados.",
+          vision: "Ser reconhecida definitivamente como a parceria estratégica de longo prazo mais confiável nacionalmente focado em gestão e manutenção de ativos eletrônicos.",
+        }
+      },
+
+      atualizarConteudo: (pagina, chave, valor) => {
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            [pagina]: {
+              ...state.siteContent[pagina],
+              [chave]: valor
+            }
+          }
+        }));
       }
     }),
     {

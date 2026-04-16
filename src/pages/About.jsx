@@ -5,6 +5,7 @@ import { useAdminStore } from '../store/adminStore';
 
 const About = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
+  const aboutContent = useAdminStore((state) => state.siteContent.about);
   
   const bannerContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">
@@ -50,14 +51,14 @@ const About = () => {
                   <h2 className="text-sm font-bold text-accent tracking-widest uppercase">Fundação 2013</h2>
                 </div>
                 <h3 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-8 leading-tight">
-                  Há mais de 10 anos <br/><span className="text-primary font-light">Liderando o Mercado</span>
+                  {aboutContent.historyTitle.split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}
                 </h3>
                 <p className="text-gray-600 mb-6 leading-relaxed text-lg">
-                  A GCA Automação e Eletrônica Industrial iniciou suas atividades com o objetivo de oferecer prestação de serviços de <strong className="font-bold text-gray-900">alta engenharia e manutenção eletrônica</strong> corporativa.
+                  {aboutContent.historyText}
                 </p>
                 <div className="relative pl-8 py-4 my-10 bg-white border border-gray-200 shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-1.5 before:bg-accent">
                   <p className="text-gray-800 italic text-lg leading-relaxed font-medium">
-                    "Nós não apenas consertamos placas. Nós entendemos o processo do cliente, reduzimos o tempo de máquina parada e entregamos soluções definitivas, baseadas na máxima transparência técnica."
+                    "{aboutContent.quote}"
                   </p>
                 </div>
               </FadeIn>
@@ -114,7 +115,7 @@ const About = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Missão</h3>
               <p className="text-gray-600 leading-relaxed relative z-10">
-                Oferecer soluções inovadoras e eficazes em manutenção eletrônica industrial, garantindo alta produtividade e máxima restrição de custos não planejados.
+                {aboutContent.mission}
               </p>
             </StaggerItem>
 
@@ -125,7 +126,7 @@ const About = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Visão</h3>
               <p className="text-gray-600 leading-relaxed relative z-10">
-                Ser reconhecida definitivamente como a parceria estratégica de longo prazo mais confiável nacionalmente focado em gestão e manutenção de ativos eletrônicos.
+                {aboutContent.vision}
               </p>
             </StaggerItem>
 
