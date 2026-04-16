@@ -8,6 +8,7 @@ const Contact = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const global = useAdminStore((state) => state.siteContent.global);
   const adicionarLead = useAdminStore((state) => state.adicionarLead);
+  const whatsappNumber = useAdminStore((state) => state.siteContent.global.whatsappNumber) || '5519971206717';
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
@@ -17,9 +18,12 @@ const Contact = () => {
     e.preventDefault();
     adicionarLead(formData);
     setSubmitted(true);
+
+    // Notificacao automatica via WhatsApp
+    const txt = `Nova Mensagem no Site GCA%0A%0ACliente: ${encodeURIComponent(formData.name)}%0AEmail: ${encodeURIComponent(formData.email)}%0AAssunto: ${encodeURIComponent(formData.subject)}%0A%0AMensagem: ${encodeURIComponent(formData.message)}`;
+    window.open(`https://wa.me/${whatsappNumber}?text=${txt}`, '_blank');
+
     setFormData({ name: '', email: '', subject: '', message: '' });
-    
-    // Volta ao estado normal após 5 segundos
     setTimeout(() => setSubmitted(false), 5000);
   };
 

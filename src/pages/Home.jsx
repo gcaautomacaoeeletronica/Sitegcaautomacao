@@ -8,6 +8,7 @@ import { useAdminStore } from '../store/adminStore';
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const homeContent = useAdminStore((state) => state.siteContent.home);
+  const googleVerificationCode = useAdminStore((state) => state.siteContent.global.googleVerificationCode);
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = homeContent.slides.map((s, i) => ({
     ...s,
@@ -27,6 +28,7 @@ const Home = () => {
         title="Automação Industrial e Manutenção Eletrônica"
         description="Especialistas em manutenção de servodrives, inversores Bosch Rexroth, Indramat e sistemas CNC. Precisão e agilidade em Americana-SP."
         canonical="/"
+        googleVerification={googleVerificationCode}
       />
       
       {/* Hero Slider Section Premium */}

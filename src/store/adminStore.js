@@ -16,24 +16,51 @@ const MARCAS_DEFAULT = [
   iconColor: ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500'][Math.floor(Math.random() * 5)]
 }));
 
-// Posts Iniciais do Blog
+// Posts Iniciais do Blog (SEO Otimizado para termos industriais)
 const BLOG_POSTS_DEFAULT = [
   {
     id: "1",
-    titulo: "O Impacto da Automação 4.0 na Produtividade Industrial",
-    resumo: "Descubra como a integração de sistemas e a análise de dados estão revolucionando o chão de fábrica moderno.",
-    conteudo: "A Indústria 4.0 não é mais uma promessa do futuro, mas uma realidade que define a competitividade das empresas hoje. Através da automação 4.0, equipamentos antes isolados agora se comunicam em tempo real, permitindo uma tomada de decisão muito mais ágil e baseada em dados concretos. \n\nNa GCA Automação, vemos diariamente como a implementação de sensoriamento inteligente e sistemas de controle avançados podem reduzir custos operacionais em até 30% e aumentar a disponibilidade das máquinas. A chave para o sucesso nesta nova era é a interoperabilidade: a capacidade de fazer com que diferentes tecnologias falem a mesma língua em prol da eficiência máxima.",
-    imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+    titulo: "Erro F0001 no Inversor WEG CFW500: Causa, Diagnóstico e Solução",
+    resumo: "O código F0001 indica sobrecorrente no inversor WEG CFW500. Entenda as principais causas e como nosso laboratório resolve este defeito em 48h.",
+    conteudo: "O código de falha F0001 no inversor WEG CFW500 é um dos chamados mais frequentes que recebemos em nosso laboratório em Americana-SP. Ele indica uma condição de sobrecorrente detectada pelo firmware do equipamento, e pode ter diversas origens.\n\n**Principais Causas do F0001:**\n- Curto-circuito no motor ou no cabeamento de potência\n- IGBT de potência danificado (desgaste térmico ou elétrico)\n- Driver de gate com falha, aplicando tensão incorreta nos IGBTs\n- Parãmetros incorretos (corrente nominal do motor acima da capacidade do inversor)\n\n**Como Diagnosticamos:**\nEm nosso laboratório, conectamos o equipamento ao rack de testes dedicado para inversores WEG. Realizamos a leitura de corrente em cada fase de saída, medimos a resistência dos IGBTs fora do circuito e testamos o driver de gate com osciloscópio de alta resolução.\n\n**Tempo de Reparo:**\nNa maioria dos casos, o reparo do F0001 leva de 24 a 48 horas. Após o conserto, o equipamento passa por teste de carga real na nossa bancada, simulando a operação em campo, garantindo que sairá do nosso laboratório com a mesma confiabilidade de um novo. Entre em contato para um orçamento sem compromisso.",
+    imageUrl: "https://images.unsplash.com/photo-1565153907400-7e01a9ab25f3?auto=format&fit=crop&w=1200&q=80",
     data: "16 Abr 2026",
-    autor: "Engenharia GCA"
+    autor: "Laboratório GCA"
   },
   {
     id: "2",
-    titulo: "Manutenção vs. Troca: Os Benefícios do Conserto de Inversores",
-    resumo: "Recuperar um inversor de frequência pode custar até 60% menos do que adquirir um novo. Veja quando vale a pena.",
-    conteudo: "Inversores de frequência são o coração do controle de motores na indústria. Quando um equipamento desse porte falha, o impacto na produção é imediato. Muitos gestores acreditam que a única solução segura é a substituição por um novo, mas a realidade técnica mostra que o reparo especializado é, em muitos casos, a melhor escolha financeira e técnica.\n\nAlém da economia direta (um reparo costuma custar entre 20% a 40% do valor de um novo), existe a vantagem do tempo de setup: consertar o equipamento original mantém as parametrizações e o hardware já compatível com seu painel, evitando gastos extras com adaptações físicas ou de software. Em nosso laboratório, utilizamos equipamentos de ponta para garantir que o inversor reparado tenha a mesma confiabilidade de um novo, com garantia e suporte técnico dedicado.",
-    imageUrl: "https://images.unsplash.com/photo-1565153907400-7e01a9ab25f3?auto=format&fit=crop&w=1200&q=80",
+    titulo: "Conserto de Servo Drive Indramat Rexroth: Vale a Pena Reparar?",
+    resumo: "Servo drives Indramat e Bosch Rexroth são equipamentos de alto valor. Descubra por que o reparo especializado pode economizar até 70% em relação à compra de um novo.",
+    conteudo: "Os servo drives da linha Indramat e Bosch Rexroth – modelos como DKC, HDS, DDS e KDA – são equipamentos de altissima precisão e igualmente alto custo. Um modelo HDS02.2 novo pode ultrapassar R$ 15.000,00 no mercado brasileiro, e a demora na importação pode paralisar uma linha de produção por semanas.\n\n**Por Que Reparar em vez de Comprar?**\nO reparo especializado de um servo drive Rexroth/Indramat custa, em média, entre 25% e 45% do valor de um equipamento novo. Além da economia direta, não é necessário aguardar prazo de importação e o equipamento reparado já está calibrado para o seu sistema.\n\n**Nossa Infraestrutura:**\nA GCA Automação conta com racks de teste específicos para servodrives Rexroth, com alimentação trifásica controlada e simulância de servomotor acoplado. Isso nos permite testar o equipamento em condições reais antes da entrega, com garantia de 6 meses. Entre em contato e receba um diagnóstico gratuito.",
+    imageUrl: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80",
     data: "15 Abr 2026",
+    autor: "Engenharia GCA"
+  },
+  {
+    id: "3",
+    titulo: "Alarme no CLP Siemens S7-300: Como Diagnosticar e Resolver",
+    resumo: "Falhas no CLP Siemens S7-300 podem parar toda uma linha de produção. Conheça os alarmes mais comuns e como o laboratório da GCA resolve em 24h.",
+    conteudo: "O CLP Siemens S7-300 é um dos controladores lógicos programáveis mais utilizados na indústria brasileira. Sua robustez é reconhecida mundialmente, mas módulos de CPU, módulos de I/O digitais e analógicos e fontes de alimentação estão sujeitos a desgaste natural.\n\n**Alarmes e Falhas Mais Comuns:**\n- LED SF (System Fault) vermelho piscando na CPU\n- Módulo de saída digital não ativando (canal preso em 0)\n- Fonte PS307 sem tensão de saída\n- BATF (Battery Fault) – bateria da CPU descarregada\n- Módulo de comunicação Profibus DP em falha\n\n**Nosso Processo:**\nA GCA Automação possui racks de teste dedicados para CLPs Siemens S7-300, S7-200 e ET200. Cada módulo recebido é testado individualmente, mapeando o canal específico com defeito, e então submetido à reparação a nível de componente.\n\nEnviamos laudos técnicos com a descrição completa da falha encontrada e da intervenção realizada. Atendemos toda a região de Americana, Campinas, São Paulo e interior do estado.",
+    imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+    data: "14 Abr 2026",
+    autor: "Laboratório GCA"
+  },
+  {
+    id: "4",
+    titulo: "Manutenção Preventiva de Inversores de Frequência: Guia Completo",
+    resumo: "A manutenção preventiva correta pode triplicar a vida útil do seu inversor de frequência. Descubra o checklist completo utilizado pelos nossos técnicos.",
+    conteudo: "Em nosso laboratório, recebemos diariamente inversores de frequência das mais diversas marcas – WEG, Siemens, ABB, Danfoss, Yaskawa – com defeitos que poderiam ter sido evitados com manutenção preventiva adequada. A boa notícia é que um programa de manutenção simples pode multiplicar a vida útil destes equipamentos.\n\n**Checklist de Manutenção Preventiva Anual:**\n1. Limpeza interna com ar comprimido filtrado (nunca jato d\'agua)\n2. Inspeção visual dos capacitores do barramento DC (verificar abaulamento)\n3. Substituição dos capacitores eletrolíticos a cada 5-7 anos preventivamente\n4. Lubrificação ou substituição dos ventiladores internos\n5. Verificação dos terminais de potência (aperto e oxidação)\n6. Leitura e registro dos parãmetros principais\n7. Teste de carga com analisador de qualidade de energia\n\n**Atenção com os Capacitores:**\nCapacitores eletrolíticos são os componentes com maior índice de falha em inversores com mais de 8 anos. A substituição preventiva, antes do defeito manifesto, é o investimento mais inteligente que um gestor de manutenção pode fazer. A GCA Automacao realiza essa avaliação gratuitamente para equipamentos que chegam ao nosso laboratório.",
+    imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+    data: "13 Abr 2026",
+    autor: "Engenharia GCA"
+  },
+  {
+    id: "5",
+    titulo: "Allen-Bradley PowerFlex 753: Falhas Comuns e Soluções",
+    resumo: "O PowerFlex 753 da Allen-Bradley é um inversor robusto mas com falhas típicas após anos de uso. Veja os defeitos mais comuns e como os resolvemos.",
+    conteudo: "O inversor Allen-Bradley PowerFlex 753 é amplamente utilizado na indústria automotiva, química e alimentícia. Sua eletrônica de alta precisão o torna muito eficiente em campo, porém também mais delicado que inversores orientais quando exposto a ambientes agressivos.\n\n**Falhas Mais Frequentes:**\n- Fault 12 (Hardware Overtemperature) – Superaquecimento\n- Fault 71 (Power Loss) – Queda de alimentação trifásica\n- Fault 33 (Auto-Tune Fail) – Falha na autossintonia\n- Faults 70-72 relacionados ao módulo de comunicação EtherNet/IP\n- Barramento DC em curto (igbts danificados)\n\n**O Que Nos Diferencia:**\nA GCA Automacao possui racks de teste específicos para inversores Allen-Bradley da linha PowerFlex (700, 753, 755). Isso nos permite validar não apenas a potência do equipamento, mas também os módulos de I/O e de comunicação (DeviceNet, EtherNet/IP, Profibus). Atendemos fábricas em todo o interior paulista com coleta e entrega inclusa.",
+    imageUrl: "https://images.unsplash.com/photo-1565153907400-7e01a9ab25f3?auto=format&fit=crop&w=1200&q=80",
+    data: "12 Abr 2026",
     autor: "Laboratório GCA"
   }
 ];
@@ -204,9 +231,11 @@ export const useAdminStore = create(
         global: {
           phone: "(19) 3012-6360",
           whatsapp: "(19) 97120-6717",
+          whatsappNumber: "5519971206717",
           email: "comercial@servicedrive.com.br",
           address: "Rua São Bento, Nº 44, Cariobinha, Americana - SP",
-          cep: "13472-370"
+          cep: "13472-370",
+          googleVerificationCode: ""
         },
         home: {
           slides: [
@@ -308,7 +337,7 @@ export const useAdminStore = create(
       }
     }),
     {
-      name: 'gca-admin-storage-v8', // Versão 8 para Gerenciador de Leads
+      name: 'gca-admin-storage-v9', // Versão 9 para Blog SEO + WhatsApp + GSC
       onRehydrateStorage: () => (state) => {
         window.addEventListener('storage', (event) => {
           if (event.key === 'gca-admin-storage-v6') {

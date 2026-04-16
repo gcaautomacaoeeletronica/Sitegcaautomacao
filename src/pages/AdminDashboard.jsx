@@ -698,6 +698,37 @@ const AdminDashboard = () => {
                                                         onChange={(e) => atualizarConteudo('global', 'cep', e.target.value)}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">N° WhatsApp (com código país, sem +)</label>
+                                                    <input type="text" value={siteContent.global.whatsappNumber || ''} 
+                                                        onChange={(e) => atualizarConteudo('global', 'whatsappNumber', e.target.value)}
+                                                        placeholder="5519971206717"
+                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                </div>
+                                            </div>
+
+                                            {/* Google Search Console */}
+                                            <div className="pt-6 border-t border-gray-100 space-y-4">
+                                                <div className="flex items-start gap-4 p-5 bg-blue-50 rounded-2xl border border-blue-100">
+                                                    <Globe size={22} className="text-blue-500 shrink-0 mt-0.5" />
+                                                    <div>
+                                                        <h4 className="font-black text-gray-900 text-sm mb-1">Google Search Console</h4>
+                                                        <p className="text-xs text-gray-500 leading-relaxed">Cole aqui o código de verificação que o Google fornece. Acesse <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="text-blue-600 font-bold underline">search.google.com/search-console</a>, adicione seu domínio, escolha o método "Tag HTML" e copie apenas o valor do atributo <code className="bg-blue-100 px-1 rounded">content="..."</code>.</p>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Código de Verificação do Google</label>
+                                                    <input type="text" value={siteContent.global.googleVerificationCode || ''} 
+                                                        onChange={(e) => atualizarConteudo('global', 'googleVerificationCode', e.target.value)}
+                                                        placeholder="Cole aqui: Ex: abc123xyz..."
+                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 font-mono text-sm" />
+                                                    {siteContent.global.googleVerificationCode && (
+                                                        <p className="mt-2 text-xs text-green-600 font-bold flex items-center gap-1">
+                                                            <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
+                                                            Código ativo. Deploy o site para que o Google possa verificar.
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     )}

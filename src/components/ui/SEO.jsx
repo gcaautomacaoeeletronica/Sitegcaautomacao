@@ -7,7 +7,8 @@ const SEO = ({
   canonical, 
   ogImage, 
   ogType = 'website',
-  keywords = 'automação industrial, manutenção eletrônica, conserto de inversores, americana sp, indramat, bosch rexroth, reparo industrial'
+  keywords = 'automação industrial, manutenção eletrônica, conserto de inversores, americana sp, indramat, bosch rexroth, reparo industrial',
+  googleVerification
 }) => {
   const siteName = 'GCA Automação';
   const fullTitle = `${title} | ${siteName}`;
@@ -20,6 +21,7 @@ const SEO = ({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <link rel="canonical" href={canonical ? `${siteUrl}${canonical}` : siteUrl} />
+      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
 
       {/* Open Graph / Facebook / LinkedIn */}
       <meta property="og:type" content={ogType} />
