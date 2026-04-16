@@ -16,6 +16,28 @@ const MARCAS_DEFAULT = [
   iconColor: ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500'][Math.floor(Math.random() * 5)]
 }));
 
+// Posts Iniciais do Blog
+const BLOG_POSTS_DEFAULT = [
+  {
+    id: "1",
+    titulo: "O Impacto da Automação 4.0 na Produtividade Industrial",
+    resumo: "Descubra como a integração de sistemas e a análise de dados estão revolucionando o chão de fábrica moderno.",
+    conteudo: "A Indústria 4.0 não é mais uma promessa do futuro, mas uma realidade que define a competitividade das empresas hoje. Através da automação 4.0, equipamentos antes isolados agora se comunicam em tempo real, permitindo uma tomada de decisão muito mais ágil e baseada em dados concretos. \n\nNa GCA Automação, vemos diariamente como a implementação de sensoriamento inteligente e sistemas de controle avançados podem reduzir custos operacionais em até 30% e aumentar a disponibilidade das máquinas. A chave para o sucesso nesta nova era é a interoperabilidade: a capacidade de fazer com que diferentes tecnologias falem a mesma língua em prol da eficiência máxima.",
+    imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+    data: "16 Abr 2026",
+    autor: "Engenharia GCA"
+  },
+  {
+    id: "2",
+    titulo: "Manutenção vs. Troca: Os Benefícios do Conserto de Inversores",
+    resumo: "Recuperar um inversor de frequência pode custar até 60% menos do que adquirir um novo. Veja quando vale a pena.",
+    conteudo: "Inversores de frequência são o coração do controle de motores na indústria. Quando um equipamento desse porte falha, o impacto na produção é imediato. Muitos gestores acreditam que a única solução segura é a substituição por um novo, mas a realidade técnica mostra que o reparo especializado é, em muitos casos, a melhor escolha financeira e técnica.\n\nAlém da economia direta (um reparo costuma custar entre 20% a 40% do valor de um novo), existe a vantagem do tempo de setup: consertar o equipamento original mantém as parametrizações e o hardware já compatível com seu painel, evitando gastos extras com adaptações físicas ou de software. Em nosso laboratório, utilizamos equipamentos de ponta para garantir que o inversor reparado tenha a mesma confiabilidade de um novo, com garantia e suporte técnico dedicado.",
+    imageUrl: "https://images.unsplash.com/photo-1565153907400-7e01a9ab25f3?auto=format&fit=crop&w=1200&q=80",
+    data: "15 Abr 2026",
+    autor: "Laboratório GCA"
+  }
+];
+
 export const useAdminStore = create(
   persist(
     (set, get) => ({
@@ -121,15 +143,39 @@ export const useAdminStore = create(
             return m;
           })
         }));
+      },
+
+      // Blog Logic
+      blogPosts: BLOG_POSTS_DEFAULT,
+      
+      adicionarPost: (post) => {
+        const novoPost = {
+          ...post,
+          id: Date.now().toString(),
+          data: new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })
+        };
+        set((state) => ({ blogPosts: [novoPost, ...state.blogPosts] }));
+      },
+
+      removerPost: (id) => {
+        set((state) => ({ 
+          blogPosts: state.blogPosts.filter(p => p.id !== id) 
+        }));
+      },
+
+      editarPost: (id, updatedPost) => {
+        set((state) => ({
+          blogPosts: state.blogPosts.map(p => p.id === id ? { ...p, ...updatedPost } : p)
+        }));
       }
     }),
     {
-      name: 'gca-admin-storage-v5', // Atualizado para v5 para forçar sincronização total
+      name: 'gca-admin-storage-v6', // Versão 6 para incluir posts do blog
       onRehydrateStorage: () => (state) => {
         window.addEventListener('storage', (event) => {
-          if (event.key === 'gca-admin-storage-v5') {
+          if (event.key === 'gca-admin-storage-v6') {
             console.log('Sincronização externa detectada. Recarregando banco de dados...');
-            window.location.reload(); // Recarrega para garantir que o estado do React reflita o disco
+            window.location.reload();
           }
         });
       }

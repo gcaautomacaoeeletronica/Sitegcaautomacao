@@ -29,6 +29,7 @@ const Header = () => {
     { name: 'SERVIÇOS', path: '/manutencao-e-automacao-industrial' },
     { name: 'Laboratório', path: '/estrutura' },
     { name: 'DOWNLOAD', path: '/download-de-manuais' },
+    { name: 'BLOG', path: '/blog' },
     { name: 'CONTATO', path: '/entre-em-contato' },
   ];
 

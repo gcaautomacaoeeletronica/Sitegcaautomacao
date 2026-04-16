@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
-    const { isAuthenticated, logout, marcas, siteMedia, adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia } = useAdminStore();
+    const { 
+        isAuthenticated, logout, marcas, siteMedia, blogPosts,
+        adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
+        adicionarPost, editarPost, removerPost 
+    } = useAdminStore();
     
     // States gerais
     const [activeTab, setActiveTab] = useState('manuais');
@@ -23,6 +27,14 @@ const AdminDashboard = () => {
     const [saveSuccess, setSaveSuccess] = useState(false);
     const [expandedMarcaId, setExpandedMarcaId] = useState(null);
     const [editingManualId, setEditingManualId] = useState(null);
+
+    // States do Blog
+    const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
+    const [editingPostId, setEditingPostId] = useState(null);
+    const [postTitle, setPostTitle] = useState('');
+    const [postResumo, setPostResumo] = useState('');
+    const [postConteudo, setPostConteudo] = useState('');
+    const [postImage, setPostImage] = useState('');
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -73,6 +85,43 @@ const AdminDashboard = () => {
             setSaveSuccess(false);
             setIsModalOpen(false);
         }, 1000);
+    };
+
+    // Handlers Blog
+    const openBlogModal = (post = null) => {
+        if (post) {
+            setPostTitle(post.titulo);
+            setPostResumo(post.resumo);
+            setPostConteudo(post.conteudo);
+            setPostImage(post.imageUrl);
+            setEditingPostId(post.id);
+        } else {
+            setPostTitle('');
+            setPostResumo('');
+            setPostConteudo('');
+            setPostImage('');
+            setEditingPostId(null);
+        }
+        setIsBlogModalOpen(true);
+    };
+
+    const handleSavePost = (e) => {
+        e.preventDefault();
+        const postData = {
+            titulo: postTitle,
+            resumo: postResumo,
+            conteudo: postConteudo,
+            imageUrl: postImage,
+            autor: 'GCA Admin'
+        };
+
+        if (editingPostId) {
+            editarPost(editingPostId, postData);
+        } else {
+            adicionarPost(postData);
+        }
+        
+        setIsBlogModalOpen(false);
     };
 
     const toggleMarcaExpand = (id) => {
@@ -157,6 +206,53 @@ const AdminDashboard = () => {
                 </div>
             )}
 
+            {/* Modal de Blog (Novo/Editar Post) */}
+            {isBlogModalOpen && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <FadeIn delay={0}>
+                        <div className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                            <div className="bg-gray-50 border-b border-gray-100 p-6 flex justify-between items-center shrink-0">
+                                <h3 className="font-black text-gray-900 text-lg uppercase tracking-tight">
+                                    {editingPostId ? 'Editar Artigo' : 'Nova Publicação no Blog'}
+                                </h3>
+                                <button onClick={() => setIsBlogModalOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors bg-white p-2 border border-gray-200 rounded-full shadow-sm"><X size={20}/></button>
+                            </div>
+                            <form onSubmit={handleSavePost} className="p-8 space-y-6 overflow-y-auto">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="md:col-span-2">
+                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Título do Artigo</label>
+                                        <input type="text" placeholder="Ex: O futuro da robótica industrial..." required
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                            value={postTitle} onChange={e => setPostTitle(e.target.value)} />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Resumo (Chamada rápida)</label>
+                                        <input type="text" placeholder="Uma frase curta para atrair o leitor..." required
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                            value={postResumo} onChange={e => setPostResumo(e.target.value)} />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">URL da Imagem de Destaque</label>
+                                        <input type="url" placeholder="https://unsplash.com/foto..." required
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                            value={postImage} onChange={e => setPostImage(e.target.value)} />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Conteúdo do Artigo</label>
+                                        <textarea rows={8} placeholder="Escreva o texto completo do blog aqui..." required
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 font-light leading-relaxed"
+                                            value={postConteudo} onChange={e => setPostConteudo(e.target.value)} />
+                                    </div>
+                                </div>
+                                <button type="submit" className="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 uppercase tracking-widest text-xs">
+                                    {editingPostId ? 'Salvar Alterações' : 'Publicar Agora'}
+                                </button>
+                            </form>
+                        </div>
+                    </FadeIn>
+                </div>
+            )}
+
             {/* Sidebar Cockpit */}
             <aside className="w-full md:w-64 bg-[#0a0f18] text-white flex flex-col shrink-0">
                 <div className="p-6 border-b border-white/10">
@@ -177,6 +273,12 @@ const AdminDashboard = () => {
                     >
                         <ImageIcon size={18} /> Mídias do Site
                     </button>
+                    <button 
+                        onClick={() => setActiveTab('blog')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'blog' ? 'bg-primary text-white shadow-lg shadow-red-500/20' : 'bg-transparent text-gray-400 hover:bg-white/5'}`}
+                    >
+                        <Newspaper size={18} /> Gerenciar Blog
+                    </button>
                 </nav>
                 <div className="p-4 border-t border-white/10">
                     <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg cursor-pointer hover:bg-red-500/20 transition-colors" onClick={logout}>
@@ -191,7 +293,7 @@ const AdminDashboard = () => {
                     <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <h1 className="text-3xl font-black text-gray-900 truncate">
-                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : 'Imagens & Links Dinâmicos'}
+                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : activeTab === 'blog' ? 'Editor de Blog' : 'Imagens & Links Dinâmicos'}
                             </h1>
                             <p className="text-gray-500 mt-1">Configurações globais com salvamento automático.</p>
                         </div>
@@ -206,6 +308,17 @@ const AdminDashboard = () => {
                                    <span className="block text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Blinks Totais</span>
                                    <span className="text-xl font-black text-primary flex items-center gap-1">
                                        <BarChart3 size={16} /> {totalManuais}
+                                   </span>
+                               </div>
+                           </div>
+                        )}
+
+                        {activeTab === 'blog' && (
+                           <div className="flex bg-white rounded-xl shadow-sm border border-gray-100 p-2 shrink-0">
+                               <div className="px-4 py-2">
+                                   <span className="block text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Total de Artigos</span>
+                                   <span className="text-xl font-black text-primary flex items-center gap-1">
+                                       <Newspaper size={16} /> {blogPosts.length}
                                    </span>
                                </div>
                            </div>
@@ -359,6 +472,53 @@ const AdminDashboard = () => {
                                     {renderMediaInput("Laboratório (Banner Superior)", "laboratory")}
                                     {renderMediaInput("Contato (Banner Superior)", "contact")}
                                 </div>
+                            </div>
+                        </div>
+                    </FadeIn>
+                )}
+
+                {/* TAB: GERENCIAR BLOG */}
+                {activeTab === 'blog' && (
+                    <FadeIn>
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    <Newspaper size={22} className="text-primary"/> Postagens Publicadas
+                                </h3>
+                                <button onClick={() => openBlogModal()} className="bg-primary hover:bg-accent text-white font-bold px-6 py-3 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center gap-2 text-xs uppercase tracking-widest">
+                                    <Plus size={16}/> Novo Artigo
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4">
+                                {blogPosts.map(post => (
+                                    <div key={post.id} className="bg-white p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center gap-6 group hover:shadow-lg transition-all">
+                                        <div className="w-full md:w-32 h-24 rounded-lg overflow-hidden shrink-0 border border-gray-100">
+                                            <img src={post.imageUrl} alt="" className="w-full h-full object-cover" />
+                                        </div>
+                                        <div className="flex-1 text-center md:text-left">
+                                            <h4 className="font-bold text-gray-900 text-lg mb-1">{post.titulo}</h4>
+                                            <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs text-gray-400 font-bold uppercase tracking-wider">
+                                                <span className="flex items-center gap-1"><Calendar size={12}/> {post.data}</span>
+                                                <span className="flex items-center gap-1"><User size={12}/> {post.autor}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <button onClick={() => openBlogModal(post)} className="p-3 bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white rounded-xl transition-all border border-blue-100">
+                                                <Edit size={18} />
+                                            </button>
+                                            <button onClick={() => removerPost(post.id)} className="p-3 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all border border-red-100">
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {blogPosts.length === 0 && (
+                                    <div className="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                                        <p className="text-gray-400 font-bold uppercase tracking-widest">Nenhum post encontrado.</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </FadeIn>

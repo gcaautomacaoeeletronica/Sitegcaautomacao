@@ -7,6 +7,8 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Laboratory from './pages/Laboratory';
 import Downloads from './pages/Downloads';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 
 // Admin Routes
@@ -25,6 +27,8 @@ function App() {
           <Route path="manutencao-e-automacao-industrial" element={<Services />} />
           <Route path="estrutura" element={<Laboratory />} />
           <Route path="download-de-manuais" element={<Downloads />} />
+          <Route path="blog" element={<Blog />} />
+          <Route path="blog/:id" element={<BlogPost />} />
           <Route path="entre-em-contato" element={<Contact />} />
         </Route>
         
