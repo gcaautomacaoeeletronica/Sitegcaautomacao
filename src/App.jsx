@@ -11,6 +11,7 @@ import Downloads from './pages/Downloads';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
+import IoT from './pages/IoT';
 
 // Admin Routes
 import AdminAuth from './pages/AdminAuth';
@@ -32,6 +33,7 @@ function App() {
             <Route path="blog" element={<Blog />} />
             <Route path="blog/:id" element={<BlogPost />} />
             <Route path="entre-em-contato" element={<Contact />} />
+            <Route path="iot" element={<IoT />} />
           </Route>
           
           {/* Rotas Administrativas fora do Layout Padrão do Site */}
@@ -44,6 +46,7 @@ function App() {
           <Route path="/laboratorio" element={<Navigate to="/estrutura" replace />} />
           <Route path="/downloads" element={<Navigate to="/download-de-manuais" replace />} />
           <Route path="/contato" element={<Navigate to="/entre-em-contato" replace />} />
+          <Route path="/iotconects" element={<Navigate to="/iot" replace />} />
         </Routes>
       </Router>
     </HelmetProvider>

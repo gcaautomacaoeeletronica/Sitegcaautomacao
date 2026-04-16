@@ -32,6 +32,7 @@ const Header = () => {
     { name: 'Laboratório', path: '/estrutura' },
     { name: 'DOWNLOAD', path: '/download-de-manuais' },
     { name: 'BLOG', path: '/blog' },
+    { name: 'IOT', path: '/iot', badge: 'NEW' },
     { name: 'CONTATO', path: '/entre-em-contato' },
   ];
 
@@ -84,6 +85,9 @@ const Header = () => {
                   {({ isActive }) => (
                     <>
                       {link.name}
+                      {link.badge && (
+                        <span className="ml-1.5 text-[8px] font-black bg-cyan-500 text-white px-1.5 py-0.5 rounded-full tracking-widest">{link.badge}</span>
+                      )}
                       <span className={`absolute bottom-0 left-0 h-1 transition-all duration-300 ease-out bg-primary ${
                         isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`}></span>
@@ -128,6 +132,9 @@ const Header = () => {
                 {({ isActive }) => (
                   <div className="flex items-center gap-3">
                      {link.name}
+                     {link.badge && (
+                       <span className="ml-auto text-[8px] font-black bg-cyan-500 text-white px-2 py-1 rounded-md tracking-widest">{link.badge}</span>
+                     )}
                   </div>
                 )}
               </NavLink>
