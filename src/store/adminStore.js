@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { 
   collection, 
   addDoc, 
@@ -64,6 +65,35 @@ export const useAdminStore = create((set, get) => ({
   logout: () => {
     localStorage.removeItem('gca_auth');
     set({ isAuthenticated: false });
+  },
+
+  // Storage Actions
+  uploadFileToStorage: (file, pathFolder = 'uploads') => {
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        reject('Nenhum arquivo providenciado.');
+        return;
+      }
+      const uniqueName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const storageRef = ref(storage, `${pathFolder}/${uniqueName}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Progress can be monitored here if needed
+        },
+        (error) => reject(error),
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          } catch (err) {
+            reject(err);
+          }
+        }
+      );
+    });
   },
 
   // Leads Actions

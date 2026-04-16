@@ -10,12 +10,13 @@ const AdminDashboard = () => {
         isAuthenticated, logout, marcas, siteMedia, blogPosts, siteContent, leads,
         adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
         adicionarPost, editarPost, removerPost, atualizarConteudo, atualizarArrayConteudo,
-        removerLead, marcarLeadLido, marcarTodosLidos
+        removerLead, marcarLeadLido, marcarTodosLidos, uploadFileToStorage
     } = useAdminStore();
     
     // States gerais
     const [activeTab, setActiveTab] = useState('manuais');
     const [activeTextSection, setActiveTextSection] = useState('global');
+    const [uploadingKeys, setUploadingKeys] = useState({});
     
     // States de Formulario de Marca
     const [novaMarcaLoading, setNovaMarcaLoading] = useState(false);
@@ -143,6 +144,56 @@ const AdminDashboard = () => {
         setExpandedMarcaId(prev => prev === id ? null : id);
     };
 
+    const handleFileUpload = async (e, chave, type, pathFolder = 'uploads') => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadingKeys(prev => ({ ...prev, [chave]: true }));
+        try {
+            const downloadUrl = await uploadFileToStorage(file, pathFolder);
+            if(type === 'media') {
+                 atualizarMedia(chave, 'url', downloadUrl);
+            } else if (type === 'favicon') {
+                 atualizarMedia('favicon', 'url', downloadUrl);
+            }
+        } catch (error) {
+            console.error('Erro no upload:', error);
+            alert('Falha ao enviar arquivo. Verifique sua conexão ou regras do Firebase.');
+        } finally {
+            setUploadingKeys(prev => ({ ...prev, [chave]: false }));
+        }
+    };
+
+    const handleModalFileUpload = async (e, type) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (type === 'manual') {
+            setUploadingKeys(prev => ({ ...prev, manualRef: true }));
+            try {
+                const downloadUrl = await uploadFileToStorage(file, 'manuais');
+                setManualLink(downloadUrl);
+                if (!manualTitle) setManualTitle(file.name.replace(/\.[^/.]+$/, ""));
+            } catch (error) {
+                console.error(error);
+                alert('Falha ao subir documento PDF.');
+            } finally {
+                setUploadingKeys(prev => ({ ...prev, manualRef: false }));
+            }
+        } else if (type === 'blog') {
+            setUploadingKeys(prev => ({ ...prev, blogRef: true }));
+            try {
+                const downloadUrl = await uploadFileToStorage(file, 'blog');
+                setPostImage(downloadUrl);
+            } catch (error) {
+                console.error(error);
+                alert('Falha ao subir imagem do blog.');
+            } finally {
+                setUploadingKeys(prev => ({ ...prev, blogRef: false }));
+            }
+        }
+    };
+
     const totalManuais = marcas.reduce((acc, curr) => acc + (Array.isArray(curr.manuais) ? curr.manuais.length : 0), 0);
     const unreadLeadsCount = (leads || []).filter(l => !l.lido).length;
 
@@ -151,7 +202,21 @@ const AdminDashboard = () => {
             <h4 className="font-bold text-gray-900 border-l-4 border-primary pl-3 mb-4">{label}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL da Imagem</label>
+                    <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL da Imagem</label>
+                        <div className="relative overflow-hidden cursor-pointer">
+                            <span className="text-[10px] font-bold text-primary flex items-center gap-1 cursor-pointer hover:underline">
+                                {uploadingKeys[chave] ? 'Enviando...' : <><UploadCloud size={12}/> Enviar do PC</>}
+                            </span>
+                            <input 
+                                type="file" 
+                                accept="image/*"
+                                disabled={uploadingKeys[chave]}
+                                onChange={(e) => handleFileUpload(e, chave, 'media', 'banners')}
+                                className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                            />
+                        </div>
+                    </div>
                     <div className="relative">
                         <ImageIcon className="absolute left-3 top-3 text-gray-400" size={16} />
                         <input 
@@ -159,7 +224,8 @@ const AdminDashboard = () => {
                             placeholder="https://exemplo.com/foto.jpg"
                             value={siteMedia[chave]?.url || ''} 
                             onChange={(e) => atualizarMedia(chave, 'url', e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                            disabled={uploadingKeys[chave]}
+                            className={`w-full pl-10 pr-4 py-2 border rounded-lg outline-none text-sm transition-all ${uploadingKeys[chave] ? 'bg-gray-100 border-gray-200 text-gray-400' : 'bg-white border-gray-200 focus:ring-2 focus:ring-primary/20'}`} />
                     </div>
                 </div>
                 <div className="space-y-2">
@@ -176,8 +242,10 @@ const AdminDashboard = () => {
                 </div>
             </div>
             {siteMedia[chave]?.url && (
-                <div className="mt-2 w-full h-24 rounded-lg bg-cover bg-center border border-gray-200 shadow-inner" 
-                     style={{ backgroundImage: `url(${siteMedia[chave].url})` }}></div>
+                <div className="mt-2 w-full h-24 rounded-lg bg-cover bg-center border border-gray-200 shadow-inner relative" 
+                     style={{ backgroundImage: `url(${siteMedia[chave].url})` }}>
+                     {uploadingKeys[chave] && <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg"><span className="text-white text-xs font-bold animate-pulse">Carregando...</span></div>}
+                </div>
             )}
         </div>
     );
@@ -205,11 +273,26 @@ const AdminDashboard = () => {
                                         value={manualTitle} onChange={e => setManualTitle(e.target.value)} />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">Link do PDF (Google Drive / Link Direto)</label>
+                                    <div className="flex justify-between items-end mb-2">
+                                        <label className="block text-sm font-bold text-gray-700">Link do PDF ou Upload</label>
+                                        <div className="relative overflow-hidden">
+                                            <button type="button" className="text-xs font-bold bg-primary text-white px-3 py-1.5 rounded-lg flex items-center gap-1 hover:bg-red-700 transition-colors shadow-sm disabled:opacity-50" disabled={uploadingKeys['manualRef']}>
+                                                {uploadingKeys['manualRef'] ? 'Enviando PDF...' : <><UploadCloud size={14} /> Fazer Upload de PDF</>}
+                                            </button>
+                                            <input 
+                                                type="file" 
+                                                accept=".pdf"
+                                                onChange={(e) => handleModalFileUpload(e, 'manual')}
+                                                disabled={uploadingKeys['manualRef']}
+                                                className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                                            />
+                                        </div>
+                                    </div>
                                     <div className="relative">
                                        <Link2 className="absolute left-4 top-3.5 text-gray-400" size={18}/>
-                                       <input type="url" placeholder="https://drive.google.com/..." required
-                                           className="w-full pl-11 bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                       <input type="url" placeholder="https://drive.google.com/... ou Upload Automático" required
+                                           disabled={uploadingKeys['manualRef']}
+                                           className="w-full pl-11 bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:bg-gray-100 disabled:text-gray-400"
                                            value={manualLink} onChange={e => setManualLink(e.target.value)} />
                                     </div>
                                 </div>
@@ -248,9 +331,24 @@ const AdminDashboard = () => {
                                             value={postResumo} onChange={e => setPostResumo(e.target.value)} />
                                     </div>
                                     <div className="md:col-span-2">
-                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">URL da Imagem de Destaque</label>
-                                        <input type="url" placeholder="https://unsplash.com/foto..." required
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                        <div className="flex items-end justify-between mb-2">
+                                            <label className="block text-xs font-black uppercase text-gray-400 tracking-widest">URL da Imagem de Destaque ou Upload</label>
+                                            <div className="relative overflow-hidden">
+                                                <button type="button" className="text-[10px] font-bold bg-primary text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-red-700 transition-colors disabled:opacity-50" disabled={uploadingKeys['blogRef']}>
+                                                    {uploadingKeys['blogRef'] ? 'Enviando...' : <><UploadCloud size={12} /> Upload PC</>}
+                                                </button>
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*"
+                                                    onChange={(e) => handleModalFileUpload(e, 'blog')}
+                                                    disabled={uploadingKeys['blogRef']}
+                                                    className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                                                />
+                                            </div>
+                                        </div>
+                                        <input type="url" placeholder="https://unsplash.com/foto... ou Upload Automático" required
+                                            disabled={uploadingKeys['blogRef']}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:text-gray-400"
                                             value={postImage} onChange={e => setPostImage(e.target.value)} />
                                     </div>
                                     <div className="md:col-span-2">
@@ -547,7 +645,21 @@ const AdminDashboard = () => {
                                 </h3>
                                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL do Favicon (.ico / .png)</label>
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL do Favicon (.ico / .png)</label>
+                                            <div className="relative overflow-hidden cursor-pointer">
+                                                <span className="text-[10px] font-bold text-primary flex items-center gap-1 cursor-pointer hover:underline">
+                                                    {uploadingKeys['favicon'] ? 'Enviando...' : <><UploadCloud size={12}/> Enviar do PC</>}
+                                                </span>
+                                                <input 
+                                                    type="file" 
+                                                    accept=".ico,.png,.jpg,.jpeg"
+                                                    disabled={uploadingKeys['favicon']}
+                                                    onChange={(e) => handleFileUpload(e, 'favicon', 'favicon', 'favicon')}
+                                                    className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                                                />
+                                            </div>
+                                        </div>
                                         <div className="relative">
                                             <Globe className="absolute left-3 top-3 text-gray-400" size={16} />
                                             <input 
@@ -555,7 +667,8 @@ const AdminDashboard = () => {
                                                 placeholder="https://exemplo.com/favicon.png"
                                                 value={siteMedia.favicon?.url || ''} 
                                                 onChange={(e) => atualizarMedia('favicon', 'url', e.target.value)}
-                                                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                                                disabled={uploadingKeys['favicon']}
+                                                className={`w-full pl-10 pr-4 py-2 border rounded-lg outline-none text-sm transition-all ${uploadingKeys['favicon'] ? 'bg-gray-100 border-gray-200 text-gray-400' : 'bg-white border-gray-200 focus:ring-2 focus:ring-primary/20'}`} />
                                         </div>
                                     </div>
                                     {siteMedia.favicon?.url && (
