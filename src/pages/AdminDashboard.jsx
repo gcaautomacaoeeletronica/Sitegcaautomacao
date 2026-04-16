@@ -955,6 +955,8 @@ const AdminDashboard = () => {
                                                     <h4 className="text-lg font-black text-gray-900 truncate mb-1">{lead.subject}</h4>
                                                     <div className="flex items-center gap-4 text-sm text-gray-500">
                                                         <span className="flex items-center gap-1.5 font-bold"><User size={14} className="text-gray-400" /> {lead.name}</span>
+                                                        <span className="text-gray-300">|</span>
+                                                        <span className="flex items-center gap-1.5 text-primary font-bold"><Phone size={14} className="text-primary/50" /> {lead.phone}</span>
                                                         <span className="hidden md:inline text-gray-300">|</span>
                                                         <span className="flex items-center gap-1.5 truncate"><Mail size={14} className="text-gray-400" /> {lead.email}</span>
                                                     </div>

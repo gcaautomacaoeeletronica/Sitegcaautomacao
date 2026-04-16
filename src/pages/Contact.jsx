@@ -18,13 +18,13 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Salva sempre no painel de leads (CRM interno)
+    adicionarLead(formData);
+
     if (contactMode === 'whatsapp') {
-      // Modo WhatsApp: abre wa.me com dados preenchidos
+      // Abre o WhatsApp com os dados preenchidos
       const txt = `Nova Mensagem no Site GCA%0A%0ACliente: ${encodeURIComponent(formData.name)}%0ATelefone/WhatsApp: ${encodeURIComponent(formData.phone)}%0AEmail: ${encodeURIComponent(formData.email)}%0AAssunto: ${encodeURIComponent(formData.subject)}%0A%0AMensagem: ${encodeURIComponent(formData.message)}`;
       window.open(`https://wa.me/${whatsappNumber}?text=${txt}`, '_blank');
-    } else {
-      // Modo Mensagem: apenas salva no painel de leads (sem forcar abertura do WhatsApp)
-      adicionarLead(formData);
     }
 
     setSubmitted(true);
