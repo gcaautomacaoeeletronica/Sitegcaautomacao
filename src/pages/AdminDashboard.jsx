@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
