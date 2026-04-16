@@ -46,7 +46,7 @@ const BlogPost = () => {
             </h1>
 
             <div className="flex flex-wrap items-center gap-6 text-gray-400 text-xs font-bold uppercase tracking-widest">
-               <span className="flex items-center gap-2"><Calendar size={16} className="text-accent" /> {post.data}</span>
+               <span className="flex items-center gap-2"><Calendar size={16} className="text-accent" /> {new Date(post.data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                <span className="flex items-center gap-2"><User size={16} className="text-accent" /> {post.autor}</span>
                <span className="flex items-center gap-2"><Clock size={16} className="text-accent" /> 5 min de leitura</span>
             </div>

@@ -1,0 +1,113 @@
+export const MARCAS_DEFAULT = [
+  "ABB", "ADLEEPOWER", "ALLEN-BRADLEY", "ALTUS", "ATOS", "AUTONICS", 
+  "AUTOMOTION", "AXOR", "BALDOR", "BEIJER", "BERGLHAR", "DANFOSS", 
+  "DELTA", "FUJI", "HITACHI", "INCONTROL", "KEB", "LS", "M2i", 
+  "MITSUBISHI", "MTL", "NOVUS", "PANASONIC", "PARKER", "PROMATECH", 
+  "SANTERNO", "SCHINEIDER", "SIEMENS", "THERMA", "TOSHIBA", "WEG", 
+  "WEINTEK", "YASKAWA"
+].map((nome, index) => ({
+  id: index.toString(),
+  nome,
+  manuais: [], 
+  iconColor: ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500'][Math.floor(Math.random() * 5)]
+}));
+
+export const BLOG_POSTS_DEFAULT = [
+  {
+    titulo: "Erro F0001 no Inversor WEG CFW500: Causa, Diagnóstico e Solução",
+    resumo: "O código F0001 indica sobrecorrente no inversor WEG CFW500. Entenda as principais causas e como nosso laboratório resolve este defeito em 48h.",
+    conteudo: "O código de falha F0001 no inversor WEG CFW500 é um dos chamados mais frequentes que recebemos em nosso laboratório em Americana-SP. Ele indica uma condição de sobrecorrente detectada pelo firmware do equipamento, e pode ter diversas origens.\n\n**Principais Causas do F0001:**\n- Curto-circuito no motor ou no cabeamento de potência\n- IGBT de potência danificado (desgaste térmico ou elétrico)\n- Driver de gate com falha, aplicando tensão incorreta nos IGBTs\n- Parãmetros incorretos (corrente nominal do motor acima da capacidade do inversor)\n\n**Como Diagnosticamos:**\nEm nosso laboratório, conectamos o equipamento ao rack de testes dedicado para inversores WEG. Realizamos a leitura de corrente em cada fase de saída, medimos a resistência dos IGBTs fora do circuito e testamos o driver de gate com osciloscópio de alta resolução.\n\n**Tempo de Reparo:**\nNa maioria dos casos, o reparo do F0001 leva de 24 a 48 horas. Após o conserto, o equipamento passa por teste de carga real na nossa bancada, simulando a operação em campo, garantindo que sairá do nosso laboratório com a mesma confiabilidade de um novo. Entre em contato para um orçamento sem compromisso.",
+    imageUrl: "https://images.unsplash.com/photo-1565153907400-7e01a9ab25f3?auto=format&fit=crop&w=1200&q=80",
+    data: "2026-04-16T10:00:00Z",
+    autor: "Laboratório GCA"
+  },
+  {
+    titulo: "Conserto de Servo Drive Indramat Rexroth: Vale a Pena Reparar?",
+    resumo: "Servo drives Indramat e Bosch Rexroth são equipamentos de alto valor. Descubra por que o reparo especializado pode economizar até 70% em relação à compra de um novo.",
+    conteudo: "Os servo drives da linha Indramat e Bosch Rexroth – modelos como DKC, HDS, DDS e KDA – são equipamentos de altissima precisão e igualmente alto custo.",
+    imageUrl: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80",
+    data: "2026-04-15T10:00:00Z",
+    autor: "Engenharia GCA"
+  }
+];
+
+export const SITE_CONTENT_DEFAULT = {
+  global: {
+    phone: "(19) 3012-6360",
+    whatsapp: "(19) 97120-6717",
+    whatsappNumber: "5519971206717",
+    email: "comercial@servicedrive.com.br",
+    address: "Rua São Bento, Nº 44, Cariobinha, Americana - SP",
+    cep: "13472-370",
+    googleVerificationCode: "LBGMiyIPvQXnIf50DfR8DxPoJQQwKMUgE7Wcf_qpoaE"
+  },
+  home: {
+    slides: [
+      { title: "Automação e", highlight: "Controle", desc: "Desenvolvemos o coração inteligente da sua indústria." },
+      { title: "Manutenção", highlight: "Industrial", desc: "Eficiência e precisão na recuperação dos seus equipamentos vitais." },
+      { title: "Máquinas e", highlight: "Sistemas CNC", desc: "Restore o fluxo perfeito da sua linha de montagem e usinagem." }
+    ],
+    expertise: {
+      badge: "Expertise Absoluta",
+      title: "Há 10 anos oferecendo o que há de melhor em tecnologia.",
+      text: "Nós reduzimos o tempo de máquina parada através de um diagnóstico rápido, manutenção de altíssimo padrão com simulações de carga reais, e transparência técnica ponta a ponta. Sua planta industrial não pode parar."
+    }
+  },
+  about: {
+    heroTitle: "A Engenharia Por Trás da Máquina",
+    heroSubtitle: "Descubra por que a GCA Automação é o parceiro invisível garantindo que a indústria nunca pare.",
+    foundationBadge: "Fundação 2013",
+    historyTitle: "Uma trajetória marcada por precisão industrial",
+    historyText: "Desde a nossa fundação, focamos em resolver o que outros consideram impossível.",
+    quote: "Excelência técnica não é um diferencial, é a nossa estrutura básica de sobrevivência industrial.",
+    mission: "Prover soluções em manutenção e automação industrial com máxima agilidade e transparência.",
+    vision: "Ser a referência absoluta em reparos eletrônicos industriais complexos na América Latina."
+  },
+  services: {
+    hero: {
+      badge: "Especialistas em Manutenção",
+      title: "Reparos Eletrônicos",
+      highlight: "Industriais",
+      desc: "Manutenção Eletrônica Industrial avançada."
+    },
+    catalog: {
+      title: "Catálogo de",
+      highlight: "Especialidades",
+      subtitle: "Navegue pelas nossas frentes de reparo técnico abaixo."
+    },
+    laboratoryMini: {
+      title: "Laboratório de",
+      highlight: "Reparos Eletrônicos",
+      desc: "Ambiente climatizado limpo e organizado.",
+      items: [
+         "Rack de Testes Contrologix, Compactologix, SLC500...",
+         "Rack de Testes para S7-200, S7-300, ET200L...",
+         "Rack Atos 4004 e Rack OMRON"
+      ]
+    }
+  },
+  laboratory: {
+    hero: {
+      title: "Infraestrutura",
+      highlight: "Laboratorial",
+      desc: "Equipamentos calibrados e ambiente rigorosamente controlado."
+    },
+    performance: {
+      title: "Performance Testada",
+      highlight: "Em Carga Real.",
+      text1: "A diferença entre um conserto comum e uma Engenharia de Reparo está nos testes em bancada.",
+      text2: "Garantimos que o módulo saia do nosso laboratório validado a 100%."
+    }
+  }
+};
+
+export const SITE_MEDIA_DEFAULT = {
+  favicon: { url: '', link: '' },
+  home: { url: 'https://images.unsplash.com/photo-1565153907400-7e01a9ab25f3?auto=format&fit=crop&w=2000&q=80', link: '' },
+  about: { url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=2000&q=80', link: '' },
+  aboutSide: { url: '', link: '' },
+  services: { url: '', link: '' },
+  servicesLab: { url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800', link: '' },
+  laboratory: { url: '', link: '' },
+  contact: { url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2000&q=80', link: '' },
+};

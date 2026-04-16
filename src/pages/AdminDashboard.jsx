@@ -609,7 +609,7 @@ const AdminDashboard = () => {
                                         <div className="flex-1 text-center md:text-left">
                                             <h4 className="font-bold text-gray-900 text-lg mb-1">{post.titulo}</h4>
                                             <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs text-gray-400 font-bold uppercase tracking-wider">
-                                                <span className="flex items-center gap-1"><Calendar size={12}/> {post.data}</span>
+                                                <span className="flex items-center gap-1"><Calendar size={12} className="text-accent"/> {new Date(post.data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                                                 <span className="flex items-center gap-1"><User size={12}/> {post.autor}</span>
                                             </div>
                                         </div>
@@ -950,7 +950,7 @@ const AdminDashboard = () => {
                                                         <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${lead.lido ? 'bg-gray-100 text-gray-400' : 'bg-primary text-white'}`}>
                                                             {lead.lido ? 'Lido' : 'Novo'}
                                                         </span>
-                                                        <span className="text-xs text-gray-400 font-bold">{lead.data}</span>
+                                                        <span className="text-xs text-gray-400 font-bold">{new Date(lead.data).toLocaleString('pt-BR')}</span>
                                                     </div>
                                                     <h4 className="text-lg font-black text-gray-900 truncate mb-1">{lead.subject}</h4>
                                                     <div className="flex items-center gap-4 text-sm text-gray-500">

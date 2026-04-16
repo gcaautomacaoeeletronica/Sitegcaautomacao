@@ -18,8 +18,29 @@ import AdminAuth from './pages/AdminAuth';
 import AdminDashboard from './pages/AdminDashboard';
 import useDynamicFavicon from './hooks/useDynamicFavicon';
 
+// Firebase Sync Initialization
+import { useEffect } from 'react';
+import { useAdminStore } from './store/adminStore';
+import { MARCAS_DEFAULT, BLOG_POSTS_DEFAULT, SITE_CONTENT_DEFAULT, SITE_MEDIA_DEFAULT } from './data/initialData';
+
 function App() {
   useDynamicFavicon();
+  const init = useAdminStore(state => state.init);
+  const seedFirebase = useAdminStore(state => state.seedFirebase);
+
+  useEffect(() => {
+    // 1. Inicia os Listeners de tempo real
+    init();
+
+    // 2. Tenta fazer o seed se o banco estiver vazio
+    seedFirebase({
+      marcas: MARCAS_DEFAULT,
+      blogPosts: BLOG_POSTS_DEFAULT,
+      siteContent: SITE_CONTENT_DEFAULT,
+      siteMedia: SITE_MEDIA_DEFAULT
+    });
+  }, [init, seedFirebase]);
+
   return (
     <HelmetProvider>
       <Router>

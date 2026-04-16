@@ -58,7 +58,7 @@ const Blog = () => {
                   {/* Conteúdo do Card */}
                   <div className="p-6 flex flex-col h-[calc(100%-14rem)]">
                     <div className="flex items-center gap-4 text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-3">
-                       <span className="flex items-center gap-1"><Calendar size={12} className="text-accent"/> {post.data}</span>
+                       <span className="flex items-center gap-1"><Calendar size={12} className="text-accent"/> {new Date(post.data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                        <span className="flex items-center gap-1"><User size={12}/> {post.autor}</span>
                     </div>
                     
