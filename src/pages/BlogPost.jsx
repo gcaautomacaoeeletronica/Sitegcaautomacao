@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn } from '../components/ui/AnimWrapper';
+import SEO from '../components/ui/SEO';
 import { Calendar, User, ArrowLeft, Share2, Clock } from 'lucide-react';
 
 const BlogPost = () => {
@@ -22,6 +23,13 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title={post.titulo}
+        description={post.resumo}
+        ogImage={post.imageUrl}
+        ogType="article"
+        canonical={`/blog/${post.id}`}
+      />
       {/* Header do Artigo */}
       <header className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">
         <div className="absolute inset-0 bg-primary-dark/90"></div>

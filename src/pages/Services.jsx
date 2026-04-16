@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import { ChevronDown, Cpu, Zap, Settings, Activity, Wrench, Shield, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 
 const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
@@ -86,6 +87,11 @@ const Services = () => {
 
   return (
     <div className="w-full bg-[#f8fafb] relative overflow-hidden">
+      <SEO 
+        title="Manutenção Eletrônica Industrial | Especializada"
+        description="Reparo de servodrives, inversores de frequência, CLPs e IHMs. Especialistas Bosch Rexroth, Allen-Bradley, Siemens e Weg."
+        canonical="/manutencao-e-automacao-industrial"
+      />
       
       {/* Background Sólido */}
 

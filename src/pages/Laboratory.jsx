@@ -1,6 +1,7 @@
 import React from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import { Cpu, Zap, Activity } from 'lucide-react';
+import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 
 const Laboratory = () => {
@@ -27,6 +28,11 @@ const Laboratory = () => {
 
   return (
     <div className="w-full bg-[#f6f8f8] relative overflow-hidden">
+      <SEO 
+        title="Infraestrutura Laboratorial | GCA Automação"
+        description="Nosso laboratório conta com ambiente ESD controlado, estações de retrabalho BGA e gigas de teste dedicadas para garantir a qualidade de cada reparo."
+        canonical="/estrutura"
+      />
       
 
       {siteMedia.laboratory?.link ? (

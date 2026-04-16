@@ -51,6 +51,36 @@ export const useAdminStore = create(
       },
       logout: () => set({ isAuthenticated: false }),
 
+      leads: [],
+      
+      adicionarLead: (lead) => {
+        const novoLead = {
+          ...lead,
+          id: Date.now().toString(),
+          data: new Date().toLocaleString('pt-BR'),
+          lido: false
+        };
+        set((state) => ({ leads: [novoLead, ...state.leads] }));
+      },
+
+      removerLead: (id) => {
+        set((state) => ({ 
+          leads: state.leads.filter(l => l.id !== id) 
+        }));
+      },
+
+      marcarLeadLido: (id) => {
+        set((state) => ({
+          leads: state.leads.map(l => l.id === id ? { ...l, lido: true } : l)
+        }));
+      },
+
+      marcarTodosLidos: () => {
+        set((state) => ({
+          leads: state.leads.map(l => ({ ...l, lido: true }))
+        }));
+      },
+
       marcas: MARCAS_DEFAULT,
       
       // Mídia das Páginas - Estrutura Dinâmica Imagem + Link
@@ -278,7 +308,7 @@ export const useAdminStore = create(
       }
     }),
     {
-      name: 'gca-admin-storage-v7', // Versão 7 para CMS Total
+      name: 'gca-admin-storage-v8', // Versão 8 para Gerenciador de Leads
       onRehydrateStorage: () => (state) => {
         window.addEventListener('storage', (event) => {
           if (event.key === 'gca-admin-storage-v6') {

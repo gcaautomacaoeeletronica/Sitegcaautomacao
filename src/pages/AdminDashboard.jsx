@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const { 
-        isAuthenticated, logout, marcas, siteMedia, blogPosts, siteContent,
+        isAuthenticated, logout, marcas, siteMedia, blogPosts, siteContent, leads,
         adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
-        adicionarPost, editarPost, removerPost, atualizarConteudo, atualizarArrayConteudo
+        adicionarPost, editarPost, removerPost, atualizarConteudo, atualizarArrayConteudo,
+        removerLead, marcarLeadLido, marcarTodosLidos
     } = useAdminStore();
     
     // States gerais
@@ -36,6 +37,10 @@ const AdminDashboard = () => {
     const [postResumo, setPostResumo] = useState('');
     const [postConteudo, setPostConteudo] = useState('');
     const [postImage, setPostImage] = useState('');
+
+    // States de Leads
+    const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+    const [selectedLead, setSelectedLead] = useState(null);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -125,11 +130,21 @@ const AdminDashboard = () => {
         setIsBlogModalOpen(false);
     };
 
+    // Handlers Leads
+    const openLeadModal = (lead) => {
+        setSelectedLead(lead);
+        setIsLeadModalOpen(true);
+        if (!lead.lido) {
+            marcarLeadLido(lead.id);
+        }
+    };
+
     const toggleMarcaExpand = (id) => {
         setExpandedMarcaId(prev => prev === id ? null : id);
     };
 
     const totalManuais = marcas.reduce((acc, curr) => acc + (Array.isArray(curr.manuais) ? curr.manuais.length : 0), 0);
+    const unreadLeadsCount = (leads || []).filter(l => !l.lido).length;
 
     const renderMediaInput = (label, chave, placeholderImg = '') => (
         <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
@@ -254,6 +269,62 @@ const AdminDashboard = () => {
                 </div>
             )}
 
+            {/* Modal de Detalhes do Lead */}
+            {isLeadModalOpen && selectedLead && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <FadeIn delay={0}>
+                        <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
+                            <div className="bg-gray-50 border-b border-gray-100 p-6 flex justify-between items-center">
+                                <div className="flex items-center gap-3">
+                                   <div className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center">
+                                      <Mail size={20} />
+                                   </div>
+                                   <div>
+                                      <h3 className="font-black text-gray-900 leading-tight">Detalhes do Contato</h3>
+                                      <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">{selectedLead.data}</p>
+                                   </div>
+                                </div>
+                                <button onClick={() => setIsLeadModalOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors bg-white p-2 border border-gray-200 rounded-full shadow-sm"><X size={20}/></button>
+                            </div>
+                            <div className="p-8 space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                   <div className="space-y-1">
+                                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nome do Cliente</p>
+                                      <p className="font-bold text-gray-900">{selectedLead.name}</p>
+                                   </div>
+                                   <div className="space-y-1">
+                                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">E-mail</p>
+                                      <p className="font-bold text-gray-900 break-all">{selectedLead.email}</p>
+                                   </div>
+                                </div>
+                                <div className="space-y-1 pt-4 border-t border-gray-50">
+                                   <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Assunto</p>
+                                   <p className="font-black text-primary text-lg">{selectedLead.subject}</p>
+                                </div>
+                                <div className="space-y-1 pt-4 border-t border-gray-50">
+                                   <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mensagem / Sintoma</p>
+                                   <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 whitespace-pre-wrap text-gray-700 leading-relaxed max-h-48 overflow-y-auto">
+                                      {selectedLead.message}
+                                   </div>
+                                </div>
+                                
+                                <div className="flex gap-3 pt-4">
+                                   <a href={`mailto:${selectedLead.email}`} className="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                                      <Mail size={16} /> Responder via E-mail
+                                   </a>
+                                   <button 
+                                      onClick={() => { removerLead(selectedLead.id); setIsLeadModalOpen(false); }}
+                                      className="px-6 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white font-bold py-3 rounded-xl transition-all border border-red-100"
+                                   >
+                                      <Trash2 size={18} />
+                                   </button>
+                                </div>
+                            </div>
+                        </div>
+                    </FadeIn>
+                </div>
+            )}
+
             {/* Sidebar Cockpit */}
             <aside className="w-full md:w-64 bg-[#0a0f18] text-white flex flex-col shrink-0">
                 <div className="p-6 border-b border-white/10">
@@ -286,6 +357,19 @@ const AdminDashboard = () => {
                     >
                         <Type size={18} /> Textos do Site
                     </button>
+                    <button 
+                        onClick={() => setActiveTab('leads')}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'leads' ? 'bg-primary text-white shadow-lg shadow-red-500/20' : 'bg-transparent text-gray-400 hover:bg-white/5'}`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <Mail size={18} /> Mensagens
+                        </div>
+                        {unreadLeadsCount > 0 && (
+                            <span className="bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse">
+                                {unreadLeadsCount}
+                            </span>
+                        )}
+                    </button>
                 </nav>
                 <div className="p-4 border-t border-white/10">
                     <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg cursor-pointer hover:bg-red-500/20 transition-colors" onClick={logout}>
@@ -300,7 +384,7 @@ const AdminDashboard = () => {
                     <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <h1 className="text-3xl font-black text-gray-900 truncate">
-                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : activeTab === 'blog' ? 'Editor de Blog' : activeTab === 'textos' ? 'Textos & Institucional' : 'Imagens & Links Dinâmicos'}
+                                {activeTab === 'manuais' ? 'Gestão de Conteúdo' : activeTab === 'blog' ? 'Editor de Blog' : activeTab === 'textos' ? 'Textos & Institucional' : activeTab === 'leads' ? 'Gerenciador de Leads' : 'Imagens & Links Dinâmicos'}
                             </h1>
                             <p className="text-gray-500 mt-1">Configurações globais com salvamento automático.</p>
                         </div>
@@ -327,6 +411,25 @@ const AdminDashboard = () => {
                                    <span className="text-xl font-black text-primary flex items-center gap-1">
                                        <Newspaper size={16} /> {blogPosts.length}
                                    </span>
+                               </div>
+                           </div>
+                        )}
+
+                        {activeTab === 'leads' && (
+                           <div className="flex items-center gap-4">
+                               <button 
+                                  onClick={marcarTodosLidos}
+                                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:text-primary transition-all shadow-sm"
+                               >
+                                  <CheckCheck size={16} /> LER TODAS
+                               </button>
+                               <div className="flex bg-white rounded-xl shadow-sm border border-gray-100 p-2 shrink-0">
+                                   <div className="px-4 py-2">
+                                       <span className="block text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Mensagens Totais</span>
+                                       <span className="text-xl font-black text-primary flex items-center gap-1">
+                                           <Mail size={16} /> {leads.length}
+                                       </span>
+                                   </div>
                                </div>
                            </div>
                         )}
@@ -799,6 +902,64 @@ const AdminDashboard = () => {
                     </FadeIn>
                 )}
 
+                {/* TAB: LEADS (MENSAGENS) */}
+                {activeTab === 'leads' && (
+                    <FadeIn>
+                        <div className="space-y-6">
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="divide-y divide-gray-100 h-[650px] overflow-y-auto">
+                                    {leads.map((lead) => (
+                                        <div 
+                                            key={lead.id} 
+                                            className={`p-6 transition-all border-l-4 ${lead.lido ? 'border-transparent bg-white hover:bg-gray-50' : 'border-primary bg-blue-50/30'}`}
+                                        >
+                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center gap-3 mb-2">
+                                                        <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${lead.lido ? 'bg-gray-100 text-gray-400' : 'bg-primary text-white'}`}>
+                                                            {lead.lido ? 'Lido' : 'Novo'}
+                                                        </span>
+                                                        <span className="text-xs text-gray-400 font-bold">{lead.data}</span>
+                                                    </div>
+                                                    <h4 className="text-lg font-black text-gray-900 truncate mb-1">{lead.subject}</h4>
+                                                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                                                        <span className="flex items-center gap-1.5 font-bold"><User size={14} className="text-gray-400" /> {lead.name}</span>
+                                                        <span className="hidden md:inline text-gray-300">|</span>
+                                                        <span className="flex items-center gap-1.5 truncate"><Mail size={14} className="text-gray-400" /> {lead.email}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-3 shrink-0">
+                                                    <button 
+                                                        onClick={() => openLeadModal(lead)}
+                                                        className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-primary hover:text-primary transition-all shadow-sm"
+                                                    >
+                                                        <Eye size={16} /> VER COMPLETO
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => removerLead(lead.id)}
+                                                        className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                                        title="Excluir mensagem"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {leads.length === 0 && (
+                                        <div className="text-center py-32 space-y-4">
+                                            <div className="w-20 h-20 bg-gray-50 text-gray-200 rounded-full flex items-center justify-center mx-auto">
+                                                <Mail size={40} />
+                                            </div>
+                                            <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Nenhuma mensagem recebida ainda.</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </FadeIn>
+                )}
             </main>
         </div>
     );

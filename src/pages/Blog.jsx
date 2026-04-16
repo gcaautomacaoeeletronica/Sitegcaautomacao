@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
+import SEO from '../components/ui/SEO';
 import { Calendar, User, ArrowRight, Newspaper } from 'lucide-react';
 
 const Blog = () => {
@@ -9,6 +10,11 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <SEO 
+        title="Blog GCA Insight | Tecnologia Industrial"
+        description="Fique por dentro das novidades em automação, manutenção eletrônica industrial 4.0 e tendências tecnológicas."
+        canonical="/blog"
+      />
       {/* Banner de Cabeçalho Corporativo */}
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">
         <div className="absolute inset-0 bg-primary-dark/90"></div>

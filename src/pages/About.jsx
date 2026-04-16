@@ -1,6 +1,7 @@
 import React from 'react';
 import { Target, Lightbulb, CheckCircle2, Eye } from 'lucide-react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
+import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 
 const About = () => {
@@ -30,6 +31,11 @@ const About = () => {
 
   return (
     <div className="w-full bg-slate-50 relative overflow-hidden">
+      <SEO 
+        title="Sobre a GCA | Experiência e Precisão"
+        description="Conheça a história e os valores da GCA Automação. Desde 2013 liderando o mercado de manutenção eletrônica industrial de alta complexidade."
+        canonical="/sobre-nos"
+      />
       
       {/* Background patterns genéricos */}
       <div className="absolute inset-0 pattern-grid opacity-50 pointer-events-none"></div>

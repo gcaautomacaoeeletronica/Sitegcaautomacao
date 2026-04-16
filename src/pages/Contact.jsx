@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { FadeIn, SlideIn } from '../components/ui/AnimWrapper';
 import { MapPin, Phone, Mail, Clock, Send, ShieldAlert } from 'lucide-react';
+import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 
 const Contact = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const global = useAdminStore((state) => state.siteContent.global);
+  const adicionarLead = useAdminStore((state) => state.adicionarLead);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Formulário de alto padrão enviado com sucesso! Equipe responderá em breve.");
+    adicionarLead(formData);
+    setSubmitted(true);
     setFormData({ name: '', email: '', subject: '', message: '' });
+    
+    // Volta ao estado normal após 5 segundos
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   const heroContent = (
@@ -35,6 +42,11 @@ const Contact = () => {
 
   return (
     <div className="w-full bg-[#f6f8f8] relative">
+      <SEO 
+        title="Contato e Localização | GCA Automação"
+        description="Fale com nosso plantão técnico, solicite orçamentos ou visite nosso laboratório em Americana-SP. Atendimento ágil para todo o parque industrial."
+        canonical="/entre-em-contato"
+      />
       {/* Geometric bg pattern */}
       <div className="absolute inset-0 pattern-grid opacity-30 pointer-events-none"></div>
 
@@ -57,7 +69,17 @@ const Contact = () => {
                         <h2 className="text-3xl font-black text-gray-900 tracking-tight">Abra um Chamado de Orçamento</h2>
                      </div>
 
-                     <form onSubmit={handleSubmit} className="space-y-8">
+                     {submitted ? (
+                       <FadeIn className="py-12 text-center bg-green-50 rounded-2xl border border-green-100">
+                          <div className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-200">
+                             <Send size={32} />
+                          </div>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-2">Mensagem Enviada!</h3>
+                          <p className="text-gray-600 max-w-sm mx-auto">Recebemos sua solicitação. Um especialista técnico entrará em contato em breve.</p>
+                          <button onClick={() => setSubmitted(false)} className="mt-8 text-sm font-bold text-green-700 underline underline-offset-4 hover:text-green-800">Enviar outra mensagem</button>
+                       </FadeIn>
+                     ) : (
+                       <form onSubmit={handleSubmit} className="space-y-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                            <div className="space-y-2">
                               <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Nome do Contato</label>
@@ -81,7 +103,8 @@ const Contact = () => {
                            <Send size={18} className="mr-3 group-hover:animate-bounce" />
                            Submeter Pedido
                         </button>
-                     </form>
+                      </form>
+                     )}
                   </div>
 
                   {/* Infos Lateral Super Dark Mode */}

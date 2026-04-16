@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import ServiceCard from '../components/ui/ServiceCard';
+import SEO from '../components/ui/SEO';
 import { Settings, Zap, Cpu, Layers } from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 
@@ -22,6 +23,11 @@ const Home = () => {
 
   return (
     <div className="flex flex-col w-full bg-slate-50 overflow-hidden">
+      <SEO 
+        title="Automação Industrial e Manutenção Eletrônica"
+        description="Especialistas em manutenção de servodrives, inversores Bosch Rexroth, Indramat e sistemas CNC. Precisão e agilidade em Americana-SP."
+        canonical="/"
+      />
       
       {/* Hero Slider Section Premium */}
       <section className="relative w-full h-[80vh] md:h-[90vh] min-h-[600px] overflow-hidden">

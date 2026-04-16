@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import { Search, FolderDown, Download, FileText, X, ExternalLink } from 'lucide-react';
+import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 
 const Downloads = () => {
@@ -17,6 +18,11 @@ const Downloads = () => {
 
   return (
     <div className="w-full bg-[#f6f8f8] min-h-screen relative overflow-hidden">
+      <SEO 
+        title="Downloads de Manuais e Datasheets"
+        description="Acesse nosso acervo técnico de manuais Bosch Rexroth, Indramat, Siemens, ABB e outras grandes marcas industriais."
+        canonical="/download-de-manuais"
+      />
       
       {/* Drawer / Modal de Documentos selecionados */}
       {selectedBrand && (
