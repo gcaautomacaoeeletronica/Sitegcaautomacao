@@ -22,9 +22,18 @@ const Contact = () => {
     adicionarLead(formData);
 
     if (contactMode === 'whatsapp') {
+      // Limpa caracteres não numéricos do número
+      const cleanPhone = whatsappNumber.replace(/\D/g, '');
+      
       // Abre o WhatsApp com os dados preenchidos
       const txt = `Nova Mensagem no Site GCA%0A%0ACliente: ${encodeURIComponent(formData.name)}%0ATelefone/WhatsApp: ${encodeURIComponent(formData.phone)}%0AEmail: ${encodeURIComponent(formData.email)}%0AAssunto: ${encodeURIComponent(formData.subject)}%0A%0AMensagem: ${encodeURIComponent(formData.message)}`;
-      window.open(`https://wa.me/${whatsappNumber}?text=${txt}`, '_blank');
+      
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = `https://wa.me/${cleanPhone}?text=${txt}`;
+      } else {
+        window.open(`https://wa.me/${cleanPhone}?text=${txt}`, '_blank');
+      }
     }
 
     setSubmitted(true);
