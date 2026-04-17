@@ -3,7 +3,7 @@ import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui
 import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
 import * as Icons from 'lucide-react';
-import { Settings, Zap, Cpu, Layers, Plus, Trash2 } from 'lucide-react';
+import { Settings, Zap, Cpu, Layers, Plus, Trash2, Linkedin, Instagram, Facebook } from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
@@ -11,7 +11,8 @@ import IconSelector from '../components/ui/IconSelector';
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const homeContent = useAdminStore((state) => state.siteContent?.home);
-  const googleVerificationCode = useAdminStore((state) => state.siteContent?.global?.googleVerificationCode);
+  const global = useAdminStore((state) => state.siteContent?.global);
+  const googleVerificationCode = global?.googleVerificationCode;
   const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
@@ -207,36 +208,36 @@ const Home = () => {
         <div className="w-px h-24 bg-gradient-to-b from-transparent to-gray-300 mx-auto"></div>
         
         <a 
-          href={useAdminStore.getState().siteContent.global?.linkedin} 
+          href={global?.linkedin} 
           target="_blank" 
           rel="noopener noreferrer"
           className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
         >
-          <Icons.Linkedin size={20} className="text-gray-400 group-hover:text-[#0077B5] transition-colors" />
+          <Linkedin size={20} className="text-gray-400 group-hover:text-[#0077B5] transition-colors" />
           <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
             LinkedIn
           </span>
         </a>
 
         <a 
-          href={useAdminStore.getState().siteContent.global?.instagram} 
+          href={global?.instagram} 
           target="_blank" 
           rel="noopener noreferrer"
           className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
         >
-          <Icons.Instagram size={20} className="text-gray-400 group-hover:text-[#E4405F] transition-colors" />
+          <Instagram size={20} className="text-gray-400 group-hover:text-[#E4405F] transition-colors" />
           <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
             Instagram
           </span>
         </a>
 
         <a 
-          href={useAdminStore.getState().siteContent.global?.facebook} 
+          href={global?.facebook} 
           target="_blank" 
           rel="noopener noreferrer"
           className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
         >
-          <Icons.Facebook size={20} className="text-gray-400 group-hover:text-[#1877F2] transition-colors" />
+          <Facebook size={20} className="text-gray-400 group-hover:text-[#1877F2] transition-colors" />
           <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
             Facebook
           </span>

@@ -1,6 +1,4 @@
-import React from 'react';
-import { MapPin, Mail, Phone, Smartphone, ChevronRight } from 'lucide-react';
-import * as Icons from 'lucide-react';
+import { MapPin, Mail, Phone, Smartphone, ChevronRight, Linkedin, Instagram, Facebook } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAdminStore } from '../../store/adminStore';
 import EditableText from '../ui/EditableText';
@@ -34,13 +32,13 @@ const Footer = () => {
             {/* Redes Sociais no Footer */}
             <div className="flex gap-4 pt-4">
               <a href={global?.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-[#0077B5] transition-all border border-white/5 group">
-                <Icons.Linkedin size={18} />
+                <Linkedin size={18} />
               </a>
               <a href={global?.instagram} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-[#E4405F] transition-all border border-white/5 group">
-                <Icons.Instagram size={18} />
+                <Instagram size={18} />
               </a>
               <a href={global?.facebook} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-[#1877F2] transition-all border border-white/5 group">
-                <Icons.Facebook size={18} />
+                <Facebook size={18} />
               </a>
             </div>
           </div>
