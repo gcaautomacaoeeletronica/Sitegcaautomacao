@@ -139,3 +139,10 @@ USING (bucket_id = 'site-assets');
 CREATE POLICY "Delete para admin"
 ON storage.objects FOR DELETE TO authenticated
 USING (bucket_id = 'site-assets');
+
+-- ==========================================
+-- 4. Aumentar o limite de upload do bucket para 150MB
+-- ==========================================
+UPDATE storage.buckets
+SET file_size_limit = 157286400
+WHERE id = 'site-assets';
