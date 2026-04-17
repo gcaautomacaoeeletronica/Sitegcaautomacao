@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { ChevronDown, Cpu, Zap, Settings, Activity, Wrench, Shield, ArrowRight } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/ui/SEO';
+import * as Icons from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
+import IconSelector from '../components/ui/IconSelector';
+import { Plus, X } from 'lucide-react';
 
-const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
+const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
+  const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
+  const addItemToArray = useAdminStore((state) => state.addItemToArray);
+  const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
+  
+  const Icon = Icons[iconName] || Icons.HelpCircle;
 
   return (
-    <div className={`mb-4 rounded border transition-all duration-300 overflow-hidden ${isOpen ? 'bg-white border-accent/30 shadow-sm' : 'bg-white/50 border-gray-100 hover:border-gray-200'}`}>
+    <div className={`mb-4 rounded border transition-all duration-300 overflow-hidden relative group ${isOpen ? 'bg-white border-accent/30 shadow-sm' : 'bg-white/50 border-gray-100 hover:border-gray-200'}`}>
+      {/* Icon Selector */}
+      <IconSelector pagina={pagina} path={`${path}.icon`} currentIcon={iconName} />
+
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-6 focus:outline-none"
@@ -19,7 +31,7 @@ const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
           <div className={`w-10 h-10 rounded flex items-center justify-center transition-colors ${isOpen ? 'bg-red-50 text-accent' : 'bg-blue-50 text-primary'}`}>
             <Icon size={20} />
           </div>
-          <EditableText pagina="services" path={`accordions.${title}`} tag="h3" className="text-xl font-bold text-gray-900 tracking-tight text-left">
+          <EditableText pagina={pagina} path={`${path}.title`} tag="h3" className="text-xl font-bold text-gray-900 tracking-tight text-left">
             {title}
           </EditableText>
         </div>
@@ -30,11 +42,34 @@ const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
         <div className="px-6 pb-6 pt-0 ml-14">
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8">
             {items.map((item, idx) => (
-              <li key={idx} className="flex items-start">
+              <li key={idx} className="flex items-start group/item relative">
                  <span className="mt-1.5 mr-3 w-1.5 h-1.5 bg-accent rounded-full flex-shrink-0"></span>
-                 <span className="text-gray-600 font-medium leading-relaxed">{item}</span>
+                 <EditableText pagina={pagina} path={`${path}.items.${idx}`} tag="span" className="text-gray-600 font-medium leading-relaxed">
+                   {item}
+                 </EditableText>
+                 
+                 {isVisualEditorActive && (
+                   <button 
+                     onClick={(e) => { e.stopPropagation(); removeItemFromArray(pagina, `${path}.items`, idx); }}
+                     className="ml-2 text-red-400 hover:text-red-600 opacity-0 group-hover/item:opacity-100 transition-opacity"
+                   >
+                     <X size={12} />
+                   </button>
+                 )}
               </li>
             ))}
+            
+            {/* Add Sub-item Button */}
+            {isVisualEditorActive && (
+              <li className="flex items-center">
+                <button 
+                  onClick={() => addItemToArray(pagina, `${path}.items`, 'Novo Item')}
+                  className="text-xs font-bold text-primary hover:text-accent flex items-center gap-1 transition-colors uppercase tracking-widest"
+                >
+                  <Plus size={12} /> Adicionar Item
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -45,26 +80,9 @@ const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
 const Services = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const servicesContent = useAdminStore((state) => state.siteContent?.services);
-
-  const generalEquipments = [
-    "Inversores de frequência", "Servodrives", "Conversores CA/CC", "Retificadores comuns ou regenerativos",
-    "Soft Starter", "IHM", "CLP", "Controladores em geral", "Placas eletrônicas em geral"
-  ];
-
-  const servodrives = [
-    "Sinamics", "Simodrive", "Parker SPD, LVD, SLVD", "Bosch Rexroth Indradrive, EcoDrive",
-    "Allen-Bradley Kinetix6000, 6500, 5500, 5700, Ultra3000", "Axor Minimagnum", "Mitsubishi", 
-    "Panasonic", "SEW Movidrive", "Simovert Masterdrives MC"
-  ];
-
-  const galvanoplastia = ["Retificador a tiristor", "Retificadores a transistor (chaveado)"];
-  const kba = ["Display HMI TA53", "CLP MCGR3", "Servodrive REPW2", "HUB SBAH1", "Servomotores"];
-  const teares = ["Servodrive/Controlador HI-DRIVE PROMATECH ITEMA", "DEIMOTION SL TEX N' 0565"];
-  const siemens = ["Fonte chaveada SITOP", "Inversores de Frequência MM440", "Inversores Simovert Masterdrives"];
-  const robots = ["Solda ponto REXROTH PSI6000", "Cartão de Controle / CPU ABB", "Pendent ABB", "Módulo de potência SERVOPACK Yaskawa"];
-  const injetoras = ["Teachbox", "Wittmann EU-186 W-DRIVE 20A/30A/40A", "Controlador de temperatura Yudo CW662", "Controlador de temperatura Winmold / Polimold / Tecnoserv", "Sequenciador Yudo CW-661", "Console de operação", "CLP"];
-  const eletrica = ["Reles de Proteção", "Disjuntores de Média Tensão", "Retificador carregador de baterias"];
-  const camaraQuente = ["Yudo CW301", "Yudo TW600", "Yudo CW661", "Yudo CW662", "Yudo CGF-560S", "Heuroheaters", "Polimold", "Tecnoserv"];
+  const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
+  const addItemToArray = useAdminStore((state) => state.addItemToArray);
+  const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
 
   const heroContent = (
     <section className="relative pt-32 pb-24 top-0 bg-[#0a0f18] overflow-hidden">
@@ -112,16 +130,42 @@ const Services = () => {
           </FadeIn>
 
           <StaggerContainer>
-             <StaggerItem><AccordionItem title="Reparo Geral de Equipamentos Eletrônicos" items={generalEquipments} icon={Settings} defaultOpen={true} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Servodrives" items={servodrives} icon={Activity} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Reparo e Reforma de Retificadores (Galvanoplastia)" items={galvanoplastia} icon={Zap} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Máquinas e Equipamentos Gráficos KBA" items={kba} icon={Cpu} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Reparos de Acionamentos de Teares" items={teares} icon={Wrench} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Equipamentos SIEMENS" items={siemens} icon={Cpu} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Robôs e Equipamentos de Solda" items={robots} icon={Settings} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Equipamentos de Injetoras" items={injetoras} icon={Activity} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Reparo de Controladores de Câmara Quente" items={camaraQuente} icon={Zap} /></StaggerItem>
-             <StaggerItem><AccordionItem title="Equipamentos de Distribuição Elétrica" items={eletrica} icon={Shield} /></StaggerItem>
+             {(servicesContent?.catalog || []).map((cat, idx) => (
+                <StaggerItem key={idx} className="relative group">
+                   {isVisualEditorActive && (
+                     <button 
+                       onClick={() => removeItemFromArray('services', 'catalog', idx)}
+                       className="absolute -top-2 -right-2 z-50 bg-red-500 text-white p-1 rounded-full shadow-lg hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                     >
+                       <X size={12} />
+                     </button>
+                   )}
+                   <AccordionItem 
+                     pagina="services" 
+                     path={`catalog.${idx}`} 
+                     title={cat.title} 
+                     items={cat.items} 
+                     iconName={cat.icon} 
+                     defaultOpen={idx === 0} 
+                   />
+                </StaggerItem>
+             ))}
+
+             {/* Add New Category Button */}
+             {isVisualEditorActive && (
+               <div className="mt-8 flex justify-center">
+                 <button 
+                   onClick={() => addItemToArray('services', 'catalog', { 
+                     title: 'Nova Categoria', 
+                     icon: 'Settings', 
+                     items: ['Exemplo de Item'] 
+                   })}
+                   className="px-6 py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 hover:text-primary hover:border-primary/30 transition-all flex items-center gap-2 font-bold uppercase tracking-widest text-xs"
+                 >
+                   <Plus size={16} /> Adicionar Nova Categoria de Reparo
+                 </button>
+               </div>
+             )}
           </StaggerContainer>
 
         </div>

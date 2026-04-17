@@ -52,6 +52,17 @@ export const SITE_CONTENT_DEFAULT = {
       title: "Há 10 anos oferecendo o que há de melhor em tecnologia.",
       text: "Nós reduzimos o tempo de máquina parada através de um diagnóstico rápido, manutenção de altíssimo padrão com simulações de carga reais, e transparência técnica ponta a ponta. Sua planta industrial não pode parar."
     }
+    portfolio: {
+      badge: "Portfólio de Soluções",
+      title: "O que fazemos de",
+      highlight: "Melhor"
+    },
+    services: [
+      { title: "Laboratório & Gigas", desc: "Ambiente ESD com simulações reais para teste final.", link: "/estrutura", icon: "Layers" },
+      { title: "Máquinas Gráficas", desc: "Reparos completos em hardware e lógica KBA.", link: "/manutencao-e-automacao-industrial", icon: "Settings" },
+      { title: "Solda Robô Rexroth", desc: "Fontes e controles de painéis dedicados PSI6000.", link: "/manutencao-e-automacao-industrial", icon: "Zap" },
+      { title: "Série DKC Ecodrive", desc: "Especialistas plenos na linha completa Bosch Rexroth.", link: "/manutencao-e-automacao-industrial", icon: "Cpu" }
+    ]
   },
   about: {
     heroTitle: "A Engenharia Por Trás da Máquina",
@@ -70,11 +81,28 @@ export const SITE_CONTENT_DEFAULT = {
       highlight: "Industriais",
       desc: "Manutenção Eletrônica Industrial avançada."
     },
-    catalog: {
-      title: "Catálogo de",
-      highlight: "Especialidades",
-      subtitle: "Navegue pelas nossas frentes de reparo técnico abaixo."
-    },
+    catalog: [
+      { 
+        title: "Reparo Geral de Equipamentos Eletrônicos", 
+        icon: "Settings", 
+        items: ["Inversores de frequência", "Servodrives", "Conversores CA/CC", "Retificadores comuns ou regenerativos", "Soft Starter", "IHM", "CLP", "Controladores em geral", "Placas eletrônicas em geral"] 
+      },
+      { 
+        title: "Servodrives", 
+        icon: "Activity", 
+        items: ["Sinamics", "Simodrive", "Parker SPD, LVD, SLVD", "Bosch Rexroth Indradrive, EcoDrive", "Allen-Bradley Kinetix6000, 6500, 5500, 5700, Ultra3000", "Axor Minimagnum", "Mitsubishi", "Panasonic", "SEW Movidrive", "Simovert Masterdrives MC"] 
+      },
+      { 
+        title: "Reparo e Reforma de Retificadores (Galvanoplastia)", 
+        icon: "Zap", 
+        items: ["Retificador a tiristor", "Retificadores a transistor (chaveado)"] 
+      },
+      { 
+        title: "Máquinas e Equipamentos Gráficos KBA", 
+        icon: "Cpu", 
+        items: ["Display HMI TA53", "CLP MCGR3", "Servodrive REPW2", "HUB SBAH1", "Servomotores"] 
+      }
+    ],
     laboratoryMini: {
       title: "Laboratório de",
       highlight: "Reparos Eletrônicos",

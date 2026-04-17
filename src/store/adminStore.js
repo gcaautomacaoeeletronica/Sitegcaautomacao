@@ -243,6 +243,48 @@ export const useAdminStore = create((set, get) => ({
     set({ siteContent: newContent }); // Update local state immediately for UX
     await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
   },
+  addItemToArray: async (pagina, path, defaultItem) => {
+    const { siteContent } = get();
+    const updateDeep = (obj, pathArray, value) => {
+      const newObj = { ...obj };
+      let current = newObj;
+      for (let i = 0; i < pathArray.length - 1; i++) {
+        const key = pathArray[i];
+        current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
+        current = current[key];
+      }
+      const lastKey = pathArray[pathArray.length - 1];
+      const arr = Array.isArray(current[lastKey]) ? [...current[lastKey]] : [];
+      arr.push(value);
+      current[lastKey] = arr;
+      return newObj;
+    };
+    const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), defaultItem);
+    const newContent = { ...siteContent, [pagina]: newPageContent };
+    set({ siteContent: newContent });
+    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+  },
+  removeItemFromArray: async (pagina, path, index) => {
+    const { siteContent } = get();
+    const updateDeep = (obj, pathArray, idx) => {
+      const newObj = { ...obj };
+      let current = newObj;
+      for (let i = 0; i < pathArray.length - 1; i++) {
+        const key = pathArray[i];
+        current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
+        current = current[key];
+      }
+      const lastKey = pathArray[pathArray.length - 1];
+      const arr = Array.isArray(current[lastKey]) ? [...current[lastKey]] : [];
+      arr.splice(idx, 1);
+      current[lastKey] = arr;
+      return newObj;
+    };
+    const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), index);
+    const newContent = { ...siteContent, [pagina]: newPageContent };
+    set({ siteContent: newContent });
+    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+  },
   atualizarArrayConteudo: async (pagina, chave, index, subChave, valor) => {
     const { siteContent } = get();
     const novoArray = [...siteContent[pagina][chave]];

@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
-import { Settings, Zap, Cpu, Layers } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
+import IconSelector from '../components/ui/IconSelector';
+import { Plus, Trash2 } from 'lucide-react';
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const homeContent = useAdminStore((state) => state.siteContent?.home);
   const googleVerificationCode = useAdminStore((state) => state.siteContent?.global?.googleVerificationCode);
+  const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
+  const addItemToArray = useAdminStore((state) => state.addItemToArray);
+  const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
+  
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = (homeContent?.slides || []).map((s, i) => ({
     ...s,
@@ -140,38 +146,56 @@ const Home = () => {
           </FadeIn>
 
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            <StaggerItem>
-               <ServiceCard 
-                 title="Laboratório & Gigas" 
-                 description="Ambiente ESD com simulações reais para teste final."
-                 link="/estrutura"
-                 icon={Layers}
-               />
-            </StaggerItem>
-            <StaggerItem>
-               <ServiceCard 
-                  title="Máquinas Gráficas" 
-                  description="Reparos completos em hardware e lógica KBA."
-                  link="/manutencao-e-automacao-industrial"
-                  icon={Settings}
-               />
-            </StaggerItem>
-            <StaggerItem>
-               <ServiceCard 
-                 title="Solda Robô Rexroth" 
-                 description="Fontes e controles de painéis dedicados PSI6000."
-                 link="/manutencao-e-automacao-industrial"
-                 icon={Zap}
-               />
-            </StaggerItem>
-            <StaggerItem>
-               <ServiceCard 
-                 title="Série DKC Ecodrive" 
-                 description="Especialistas plenos na linha completa Bosch Rexroth."
-                 link="/manutencao-e-automacao-industrial"
-                 icon={Cpu}
-               />
-            </StaggerItem>
+            {(homeContent?.services || []).map((service, idx) => {
+              const DynamicIcon = Icons[service.icon] || Icons.HelpCircle;
+              return (
+                <StaggerItem key={idx} className="relative group">
+                   {/* Delete Button */}
+                   {isVisualEditorActive && (
+                     <button 
+                       onClick={() => removeItemFromArray('home', 'services', idx)}
+                       className="absolute -top-3 -right-3 z-50 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                     >
+                       <Trash2 size={14} />
+                     </button>
+                   )}
+
+                   <ServiceCard 
+                     title={<EditableText pagina="home" path={`services.${idx}.title`} tag="span">{service.title}</EditableText>}
+                     description={<EditableText pagina="home" path={`services.${idx}.desc`} tag="span">{service.desc}</EditableText>}
+                     link={service.link}
+                     icon={DynamicIcon}
+                   />
+
+                   {/* Icon Selector Overlay */}
+                   <IconSelector 
+                     pagina="home" 
+                     path={`services.${idx}.icon`} 
+                     currentIcon={service.icon} 
+                   />
+                </StaggerItem>
+              );
+            })}
+
+            {/* Add New Card Button */}
+            {isVisualEditorActive && (
+              <div className="flex items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-lg hover:border-primary/30 transition-all group">
+                <button 
+                  onClick={() => addItemToArray('home', 'services', { 
+                    title: 'Novo Serviço', 
+                    desc: 'Descrição do novo serviço industrial.', 
+                    link: '/manutencao-e-automacao-industrial', 
+                    icon: 'Settings' 
+                  })}
+                  className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-primary transition-colors"
+                >
+                  <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-primary/10">
+                    <Plus size={24} />
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-widest">Adicionar Card</span>
+                </button>
+              </div>
+            )}
           </StaggerContainer>
 
         </div>
