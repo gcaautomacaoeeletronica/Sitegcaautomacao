@@ -127,7 +127,7 @@ const Footer = () => {
                 </div>
               </a>
               
-              <a href={`https://wa.me/${global?.whatsapp?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 group">
+              <a href={`https://wa.me/${global?.whatsappNumber || '5519971206717'}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 group">
                 <div className="bg-gray-800 p-2.5 rounded-xl group-hover:bg-[#25D366] group-hover:scale-110 transition-all">
                   <Smartphone size={18} className="text-white" />
                 </div>

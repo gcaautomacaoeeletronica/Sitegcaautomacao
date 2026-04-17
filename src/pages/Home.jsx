@@ -316,10 +316,10 @@ const Home = () => {
 
       {/* Botão WhatsApp Flutuante (Lead Focus) */}
       <a 
-        href={`https://wa.me/${whatsappNumber}`} 
+        href={`https://wa.me/${global?.whatsappNumber || '5519971206717'}`} 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-10 right-10 z-50 group flex items-center gap-3"
+        className="fixed bottom-4 right-4 md:bottom-10 md:right-10 z-50 group flex items-center gap-3"
       >
         <div className="hidden group-hover:flex px-6 py-3 bg-white/90 backdrop-blur-md text-[#25D366] text-xs font-black uppercase tracking-widest rounded-full shadow-2xl border border-[#25D366]/20 animate-in fade-in slide-in-from-right-4">
           Orçamento Rápido
