@@ -128,61 +128,62 @@ export const useAdminStore = create((set, get) => ({
 
   // Leads Actions
   adicionarLead: async (lead) => {
-    await supabase.from('leads').insert([{
-      name: lead.name,
-      email: lead.email,
-      subject: lead.subject,
-      message: lead.message
+    const { error } = await supabase.from('leads').insert([{
+      name: lead.name, email: lead.email, subject: lead.subject, message: lead.message
     }]);
+    if (error) console.error(error);
   },
   removerLead: async (id) => {
-    await supabase.from('leads').delete().eq('id', id);
+    const { error } = await supabase.from('leads').delete().eq('id', id);
+    if (error) console.error(error);
   },
   marcarLeadLido: async (id) => {
-    await supabase.from('leads').update({ read: true }).eq('id', id);
+    const { error } = await supabase.from('leads').update({ read: true }).eq('id', id);
+    if (error) console.error(error);
   },
   marcarTodosLidos: async () => {
-    await supabase.from('leads').update({ read: true }).eq('read', false);
+    const { error } = await supabase.from('leads').update({ read: true }).eq('read', false);
+    if (error) console.error(error);
   },
 
   // Marcas / Manuais Actions
   adicionarMarca: async (nome) => {
-    await supabase.from('marcas').insert([{ name: nome.toUpperCase(), icon_color: 'bg-primary' }]);
+    const { error } = await supabase.from('marcas').insert([{ name: nome.toUpperCase(), icon_color: 'bg-primary' }]);
+    if (error) { console.error(error); alert('Erro ao adicionar marca: ' + error.message); }
   },
   removerMarca: async (id) => {
-    await supabase.from('marcas').delete().eq('id', id);
+    const { error } = await supabase.from('marcas').delete().eq('id', id);
+    if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
   },
   adicionarManual: async (idMarca, titulo, link) => {
-    await supabase.from('downloads').insert([{ marca_id: idMarca, title: titulo, link: link }]);
+    const { error } = await supabase.from('downloads').insert([{ marca_id: idMarca, title: titulo, link: link }]);
+    if (error) { console.error(error); alert('Erro ao adicionar arquivo: ' + error.message); }
   },
   removerManual: async (_idMarca, manualId) => {
-    await supabase.from('downloads').delete().eq('id', manualId);
+    const { error } = await supabase.from('downloads').delete().eq('id', manualId);
+    if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
   },
   editarManual: async (_idMarca, manualId, novoTitulo, novoLink) => {
-    await supabase.from('downloads').update({ title: novoTitulo, link: novoLink }).eq('id', manualId);
+    const { error } = await supabase.from('downloads').update({ title: novoTitulo, link: novoLink }).eq('id', manualId);
+    if (error) { console.error(error); alert('Erro ao editar arquivo: ' + error.message); }
   },
 
   // Blog Actions
   adicionarPost: async (post) => {
-    await supabase.from('blog_posts').insert([{
-      title: post.titulo,
-      summary: post.resumo,
-      content: post.conteudo,
-      image_url: post.imageUrl,
-      author: post.autor
+    const { error } = await supabase.from('blog_posts').insert([{
+      title: post.titulo, summary: post.resumo, content: post.conteudo, image_url: post.imageUrl, author: post.autor
     }]);
+    if (error) { console.error(error); alert('Erro ao salvar post: ' + error.message); }
   },
   removerPost: async (id) => {
-    await supabase.from('blog_posts').delete().eq('id', id);
+    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+    if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
   },
   editarPost: async (id, updatedPost) => {
-    await supabase.from('blog_posts').update({
-      title: updatedPost.titulo,
-      summary: updatedPost.resumo,
-      content: updatedPost.conteudo,
-      image_url: updatedPost.imageUrl,
-      author: updatedPost.autor
+    const { error } = await supabase.from('blog_posts').update({
+      title: updatedPost.titulo, summary: updatedPost.resumo, content: updatedPost.conteudo, image_url: updatedPost.imageUrl, author: updatedPost.autor
     }).eq('id', id);
+    if (error) { console.error(error); alert('Erro ao editar post: ' + error.message); }
   },
 
   // CMS Actions (Content & Media)
