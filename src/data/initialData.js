@@ -39,7 +39,10 @@ export const SITE_CONTENT_DEFAULT = {
     email: "comercial@servicedrive.com.br",
     address: "Rua São Bento, Nº 44, Cariobinha, Americana - SP",
     cep: "13472-370",
-    googleVerificationCode: "LBGMiyIPvQXnIf50DfR8DxPoJQQwKMUgE7Wcf_qpoaE"
+    googleVerificationCode: "LBGMiyIPvQXnIf50DfR8DxPoJQQwKMUgE7Wcf_qpoaE",
+    linkedin: "https://linkedin.com/company/gca-automacao",
+    instagram: "https://instagram.com/gca.automacao",
+    facebook: "https://facebook.com/gca.automacao"
   },
   home: {
     slides: [

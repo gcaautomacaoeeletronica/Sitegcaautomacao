@@ -202,6 +202,49 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Barra de Redes Sociais Flutuante */}
+      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-6">
+        <div className="w-px h-24 bg-gradient-to-b from-transparent to-gray-300 mx-auto"></div>
+        
+        <a 
+          href={useAdminStore.getState().siteContent.global?.linkedin} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
+        >
+          <Icons.Linkedin size={20} className="text-gray-400 group-hover:text-[#0077B5] transition-colors" />
+          <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+            LinkedIn
+          </span>
+        </a>
+
+        <a 
+          href={useAdminStore.getState().siteContent.global?.instagram} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
+        >
+          <Icons.Instagram size={20} className="text-gray-400 group-hover:text-[#E4405F] transition-colors" />
+          <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+            Instagram
+          </span>
+        </a>
+
+        <a 
+          href={useAdminStore.getState().siteContent.global?.facebook} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
+        >
+          <Icons.Facebook size={20} className="text-gray-400 group-hover:text-[#1877F2] transition-colors" />
+          <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+            Facebook
+          </span>
+        </a>
+
+        <div className="w-px h-24 bg-gradient-to-t from-transparent to-gray-300 mx-auto"></div>
+      </div>
+
     </div>
   );
 };
