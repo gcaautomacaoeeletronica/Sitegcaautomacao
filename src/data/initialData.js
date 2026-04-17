@@ -45,6 +45,15 @@ export const SITE_CONTENT_DEFAULT = {
     facebook: "https://facebook.com/gca.automacao"
   },
   home: {
+    stats: [
+      { label: "Anos de Experiência", value: "10+", icon: "Clock" },
+      { label: "Atendimentos / Ano", value: "1500+", icon: "Workflow" },
+      { label: "Suporte Técnico", value: "24h", icon: "MessagesSquare" },
+      { label: "Garantia Laboratório", value: "100%", icon: "ShieldCheck" }
+    ],
+    trustBrands: [
+      "Bosch Rexroth", "Siemens", "WEG", "Allen-Bradley", "Parker", "Schneider Electric", "Danfoss", "Indramat"
+    ],
     slides: [
       { title: "Automação e", highlight: "Controle", desc: "Desenvolvemos o coração inteligente da sua indústria." },
       { title: "Manutenção", highlight: "Industrial", desc: "Eficiência e precisão na recuperação dos seus equipamentos vitais." },

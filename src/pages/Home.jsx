@@ -3,10 +3,47 @@ import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui
 import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
 import * as Icons from 'lucide-react';
-import { Settings, Zap, Cpu, Layers, Plus, Trash2 } from 'lucide-react';
+import { Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, ShieldCheck, MessagesSquare } from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
+import { useScroll, useSpring, useTransform, motion } from 'framer-motion';
+
+// Componente Interno para o Carrossel de Marcas (Infinite Marquee)
+const TrustBar = ({ brands = [] }) => (
+  <div className="bg-white py-12 border-y border-gray-100 overflow-hidden relative group">
+    <div className="flex animate-marquee whitespace-nowrap gap-16 items-center group-hover:pause">
+      {[...brands, ...brands].map((brand, i) => (
+        <span key={i} className="text-3xl md:text-4xl font-black text-gray-100 uppercase tracking-tighter hover:text-accent transition-all duration-500 cursor-default px-4">
+          {brand}
+        </span>
+      ))}
+    </div>
+  </div>
+);
+
+// Componente Interno para Estatísticas
+const StatsSection = ({ stats = [] }) => (
+  <section className="py-20 bg-[#0c0e12] relative overflow-hidden">
+    <div className="absolute inset-0 pattern-grid opacity-5"></div>
+    <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+        {stats.map((stat, idx) => {
+          const Icon = Icons[stat.icon] || Icons.Zap;
+          return (
+            <FadeIn key={idx} delay={idx * 0.1} className="text-center group flex flex-col items-center">
+              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:scale-110 transition-all duration-500 border border-white/5 shadow-2xl">
+                <Icon className="text-accent group-hover:text-white" size={28} />
+              </div>
+              <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">{stat.value}</div>
+              <div className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-[0.2em] leading-tight max-w-[120px]">{stat.label}</div>
+            </FadeIn>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+);
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
@@ -16,6 +53,11 @@ const Home = () => {
   const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
+  const whatsappNumber = global?.whatsappNumber;
+  
+  // Hooks para efeitos de scroll na barra social
+  const { scrollYProgress } = useScroll();
+  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = (homeContent?.slides || []).map((s, i) => ({
@@ -196,27 +238,35 @@ const Home = () => {
                   </div>
                   <span className="text-xs font-bold uppercase tracking-widest">Adicionar Card</span>
                 </button>
-              </StaggerItem>
-            )}
-          </StaggerContainer>
-
+                         </StaggerContainer>
         </div>
       </section>
 
-      {/* Barra de Redes Sociais Flutuante */}
-      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-6">
-        <div className="w-px h-24 bg-gradient-to-b from-transparent to-gray-300 mx-auto"></div>
+      {/* Seção de Estatísticas (Stats Section) */}
+      <StatsSection stats={homeContent?.stats || []} />
+
+      {/* Trust Bar (Marcas atendidas) */}
+      <TrustBar brands={homeContent?.trustBrands || []} />
+
+      {/* Barra de Redes Sociais Premium (Glassmorphism + Scroll Progress) */}
+      <div className="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-8 py-10 px-4 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden group">
+        {/* Linha de progresso que enche no scroll */}
+        <motion.div 
+          className="absolute top-0 w-0.5 bg-accent origin-top"
+          style={{ scaleY, height: '100%' }}
+        />
+        <div className="w-px h-10 bg-white/10 pointer-events-none"></div>
         
         <a 
           href={global?.linkedin} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
+          className="group/icon relative p-3.5 bg-white/5 rounded-full hover:bg-accent transition-all duration-500 hover:-translate-y-1 shadow-lg"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover:text-[#0077B5] transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover/icon:text-white">
             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>
           </svg>
-          <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+          <span className="absolute left-16 px-3 py-1.5 bg-accent text-white text-[10px] font-black rounded-lg opacity-0 group-hover/icon:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-xl translate-x-2 group-hover/icon:translate-x-0">
             LinkedIn
           </span>
         </a>
@@ -225,12 +275,12 @@ const Home = () => {
           href={global?.instagram} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
+          className="group/icon relative p-3.5 bg-white/5 rounded-full hover:bg-accent transition-all duration-500 hover:-translate-y-1 shadow-lg"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover:text-[#E4405F] transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover/icon:text-white">
             <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
           </svg>
-          <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+          <span className="absolute left-16 px-3 py-1.5 bg-accent text-white text-[10px] font-black rounded-lg opacity-0 group-hover/icon:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-xl translate-x-2 group-hover/icon:translate-x-0">
             Instagram
           </span>
         </a>
@@ -239,19 +289,35 @@ const Home = () => {
           href={global?.facebook} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="group relative p-3 bg-white border border-gray-100 rounded-full shadow-sm hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all"
+          className="group/icon relative p-3.5 bg-white/5 rounded-full hover:bg-accent transition-all duration-500 hover:-translate-y-1 shadow-lg"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover:text-[#1877F2] transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover/icon:text-white">
             <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
           </svg>
-          <span className="absolute left-14 px-2 py-1 bg-gray-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+          <span className="absolute left-16 px-3 py-1.5 bg-accent text-white text-[10px] font-black rounded-lg opacity-0 group-hover/icon:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-xl translate-x-2 group-hover/icon:translate-x-0">
             Facebook
           </span>
         </a>
 
-        <div className="w-px h-24 bg-gradient-to-t from-transparent to-gray-300 mx-auto"></div>
+        <div className="w-px h-10 bg-white/10 pointer-events-none"></div>
       </div>
 
+      {/* Botão WhatsApp Flutuante (Lead Focus) */}
+      <a 
+        href={`https://wa.me/${whatsappNumber}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-10 right-10 z-50 group flex items-center gap-3"
+      >
+        <div className="hidden group-hover:flex px-6 py-3 bg-white/90 backdrop-blur-md text-[#25D366] text-xs font-black uppercase tracking-widest rounded-full shadow-2xl border border-[#25D366]/20 animate-in fade-in slide-in-from-right-4">
+          Orçamento Rápido
+        </div>
+        <div className="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-2xl shadow-[#25D366]/30 hover:scale-110 transition-transform active:scale-95 animate-pulse-subtle p-4">
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.411.001 12.045a11.871 11.871 0 001.592 5.96L0 24l6.117-1.604a11.845 11.845 0 005.932 1.583h.005c6.637 0 12.046-5.411 12.05-12.046a11.82 11.82 0 00-3.48-8.492" />
+          </svg>
+        </div>
+      </a>
     </div>
   );
 };
