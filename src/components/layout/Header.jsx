@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail } from 'lucide-react';
 import { useAdminStore } from '../../store/adminStore';
+import EditableText from '../ui/EditableText';
 
 const Header = () => {
   const global = useAdminStore((state) => state.siteContent.global);
@@ -44,11 +45,11 @@ const Header = () => {
           <div className="flex items-center space-x-6 tracking-wider">
             <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                <Phone size={12} className="text-accent" />
-               <span>{global?.phone || ''}</span>
+               <EditableText pagina="global" path="phone" tag="span">{global?.phone || ''}</EditableText>
             </div>
             <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                <Mail size={12} className="text-accent" />
-               <span>{global?.email || ''}</span>
+               <EditableText pagina="global" path="email" tag="span">{global?.email || ''}</EditableText>
             </div>
           </div>
           <NavLink to="/admin" className="hidden sm:block text-[10px] text-gray-500 hover:text-accent uppercase tracking-widest font-mono transition-colors cursor-pointer">
@@ -65,7 +66,7 @@ const Header = () => {
             <div className="flex-shrink-0 flex items-center group cursor-pointer">
               <div className="relative flex items-center">
                  <span className="font-extrabold text-lg md:text-xl xl:text-2xl text-primary tracking-tight uppercase">
-                   GCA Automação
+                   <EditableText pagina="global" path="logoText" tag="span">GCA Automação</EditableText>
                  </span>
               </div>
             </div>

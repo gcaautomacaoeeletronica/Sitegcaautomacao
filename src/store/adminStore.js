@@ -18,6 +18,8 @@ import {
 export const useAdminStore = create((set, get) => ({
   isAuthenticated: false,
   adminEmail: null,
+  isVisualEditorActive: false,
+  toggleVisualEditor: () => set(state => ({ isVisualEditorActive: !state.isVisualEditorActive })),
   admins: [],
   leads: [],
   marcas: [],
@@ -217,6 +219,27 @@ export const useAdminStore = create((set, get) => ({
   atualizarConteudo: async (pagina, chave, valor) => {
     const { siteContent } = get();
     const newContent = { ...siteContent, [pagina]: { ...siteContent[pagina], [chave]: valor } };
+    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+  },
+  saveText: async (pagina, path, newValue) => {
+    const { siteContent } = get();
+    // Funçao utilitária para atualizar objeto aninhado
+    const updateDeep = (obj, pathArray, value) => {
+      const newObj = { ...obj };
+      let current = newObj;
+      for (let i = 0; i < pathArray.length - 1; i++) {
+        const key = pathArray[i];
+        current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
+        current = current[key];
+      }
+      current[pathArray[pathArray.length - 1]] = value;
+      return newObj;
+    };
+
+    const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), newValue);
+    const newContent = { ...siteContent, [pagina]: newPageContent };
+    
+    set({ siteContent: newContent }); // Update local state immediately for UX
     await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
   },
   atualizarArrayConteudo: async (pagina, chave, index, subChave, valor) => {

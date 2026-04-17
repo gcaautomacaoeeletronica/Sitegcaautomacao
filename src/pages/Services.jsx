@@ -4,6 +4,7 @@ import { ChevronDown, Cpu, Zap, Settings, Activity, Wrench, Shield, ArrowRight }
 import { Link } from 'react-router-dom';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
+import EditableText from '../components/ui/EditableText';
 
 const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -18,7 +19,9 @@ const AccordionItem = ({ title, items, icon: Icon, defaultOpen = false }) => {
           <div className={`w-10 h-10 rounded flex items-center justify-center transition-colors ${isOpen ? 'bg-red-50 text-accent' : 'bg-blue-50 text-primary'}`}>
             <Icon size={20} />
           </div>
-          <h3 className="text-xl font-bold text-gray-900 tracking-tight text-left">{title}</h3>
+          <EditableText pagina="services" path={`accordions.${title}`} tag="h3" className="text-xl font-bold text-gray-900 tracking-tight text-left">
+            {title}
+          </EditableText>
         </div>
         <ChevronDown className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent' : ''}`} />
       </button>
@@ -70,16 +73,16 @@ const Services = () => {
       <div className="absolute inset-0 bg-[#0a0f18]/80"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <SlideIn direction="up">
-          <span className="inline-block py-1.5 px-4 rounded-full bg-accent/20 border border-accent/30 text-accent font-bold tracking-widest uppercase mb-6 text-xs">
+          <EditableText pagina="services" path="hero.badge" tag="span" className="inline-block py-1.5 px-4 rounded-full bg-accent/20 border border-accent/30 text-accent font-bold tracking-widest uppercase mb-6 text-xs">
             {servicesContent?.hero?.badge || ''}
-          </span>
+          </EditableText>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight uppercase leading-[1.1]">
-            {servicesContent?.hero?.title || ''} <br/>
-            <span className="text-gray-300">{servicesContent?.hero?.highlight || ''}</span>
+            <EditableText pagina="services" path="hero.title" tag="span">{servicesContent?.hero?.title || ''}</EditableText> <br/>
+            <EditableText pagina="services" path="hero.highlight" tag="span" className="text-gray-300">{servicesContent?.hero?.highlight || ''}</EditableText>
           </h1>
-          <p className="text-xl text-gray-400 font-light max-w-2xl leading-relaxed">
+          <EditableText pagina="services" path="hero.desc" tag="p" className="text-xl text-gray-400 font-light max-w-2xl leading-relaxed">
             {servicesContent?.hero?.desc || ''}
-          </p>
+          </EditableText>
         </SlideIn>
       </div>
     </section>
@@ -132,18 +135,18 @@ const Services = () => {
                
                <FadeIn>
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    {servicesContent?.laboratoryMini?.title || ''} <br/>
-                    <span className="text-primary">{servicesContent?.laboratoryMini?.highlight || ''}</span>
+                    <EditableText pagina="services" path="laboratoryMini.title" tag="span">{servicesContent?.laboratoryMini?.title || ''}</EditableText> <br/>
+                    <EditableText pagina="services" path="laboratoryMini.highlight" tag="span" className="text-primary">{servicesContent?.laboratoryMini?.highlight || ''}</EditableText>
                   </h2>
-                  <p className="text-lg text-gray-600 mb-6 leading-relaxed font-light">
+                  <EditableText pagina="services" path="laboratoryMini.desc" tag="p" className="text-lg text-gray-600 mb-6 leading-relaxed font-light">
                     {servicesContent?.laboratoryMini?.desc || ''}
-                  </p>
+                  </EditableText>
                   
                   <div className="bg-slate-50 p-6 rounded-2xl border border-gray-100 mb-8">
                      <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2"><Zap size={18} className="text-accent" /> Gigas de teste para CLP e IHM</h4>
                      <ul className="space-y-2 text-sm text-gray-600">
                         {(servicesContent?.laboratoryMini?.items || []).map((item, idx) => (
-                           <li key={idx}>• {item}</li>
+                           <li key={idx}>• <EditableText pagina="services" path={`laboratoryMini.items.${idx}`} tag="span">{item}</EditableText></li>
                         ))}
                      </ul>
                   </div>

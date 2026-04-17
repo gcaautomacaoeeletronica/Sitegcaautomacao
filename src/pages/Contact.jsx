@@ -3,6 +3,7 @@ import { FadeIn, SlideIn } from '../components/ui/AnimWrapper';
 import { MapPin, Phone, Mail, Send, ShieldAlert } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
+import EditableText from '../components/ui/EditableText';
 
 const Contact = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
@@ -48,11 +49,11 @@ const Contact = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <SlideIn direction="up">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 uppercase tracking-tight">
-            Fale com a <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-accent underline decoration-8 decoration-accent/50 underline-offset-8">GCA</span>
+            <EditableText pagina="contact" path="heroTitle" tag="span">Fale com a <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-accent underline decoration-8 decoration-accent/50 underline-offset-8">GCA</span></EditableText>
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto font-light">
+          <EditableText pagina="contact" path="heroSubtitle" tag="p" className="text-xl text-blue-100 max-w-2xl mx-auto font-light">
             Máquina parada? Precisando de um orçamento comissionado? Preencha os campos ou acione nosso plantão iminente.
-          </p>
+          </EditableText>
         </SlideIn>
       </div>
     </section>
@@ -83,7 +84,7 @@ const Contact = () => {
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 text-accent rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-red-100">
                     <ShieldAlert size={14} /> Atendimento Ágil
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900 tracking-tight">Abra um Chamado de Orçamento</h2>
+                  <EditableText pagina="contact" path="formTitle" tag="h2" className="text-3xl font-black text-gray-900 tracking-tight">Abra um Chamado de Orçamento</EditableText>
                 </div>
 
                 {/* Seletor de Modo de Contato */}
@@ -184,25 +185,25 @@ const Contact = () => {
                     <div className="flex items-center gap-3 mb-2 font-mono text-xs text-accent tracking-widest uppercase">
                       <Phone size={14} /> Plantão Direto
                     </div>
-                    <p className="text-2xl font-light tracking-tight">{global?.phone || ''}</p>
-                    <p className="text-xl font-medium tracking-tight text-gray-300">Whatsapp: {global?.whatsapp || ''}</p>
+                    <EditableText pagina="global" path="phone" tag="p" className="text-2xl font-light tracking-tight">{global?.phone || ''}</EditableText>
+                    <p className="text-xl font-medium tracking-tight text-gray-300">Whatsapp: <EditableText pagina="global" path="whatsapp" tag="span">{global?.whatsapp || ''}</EditableText></p>
                   </div>
 
                   <div className="group">
                     <div className="flex items-center gap-3 mb-2 font-mono text-xs text-blue-400 tracking-widest uppercase">
                       <Mail size={14} /> E-mail Geral
                     </div>
-                    <p className="text-lg font-light tracking-tight">{global?.email || ''}</p>
+                    <EditableText pagina="global" path="email" tag="p" className="text-lg font-light tracking-tight">{global?.email || ''}</EditableText>
                   </div>
 
                   <div className="group">
                     <div className="flex items-center gap-3 mb-2 font-mono text-xs text-gray-400 tracking-widest uppercase">
                       <MapPin size={14} /> Laboratório Central
                     </div>
-                    <p className="text-base font-light tracking-wide leading-relaxed text-gray-300">
-                      {global?.address || ''}<br />
-                      CEP {global?.cep || ''}
-                    </p>
+                    <div className="text-base font-light tracking-wide leading-relaxed text-gray-300">
+                      <EditableText pagina="global" path="address" tag="p">{global?.address || ''}</EditableText>
+                      CEP <EditableText pagina="global" path="cep" tag="span">{global?.cep || ''}</EditableText>
+                    </div>
                   </div>
                 </div>
               </div>

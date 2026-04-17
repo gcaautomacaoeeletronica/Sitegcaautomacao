@@ -3,6 +3,7 @@ import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui
 import { Cpu, Zap, Activity } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
+import EditableText from '../components/ui/EditableText';
 
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
@@ -16,11 +17,12 @@ const Laboratory = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SlideIn>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter">
-            {labContent?.hero?.title || ''} <br/><span className="font-light">{labContent?.hero?.highlight || ''}</span>
+            <EditableText pagina="laboratory" path="hero.title" tag="span">{labContent?.hero?.title || ''}</EditableText> <br/>
+            <EditableText pagina="laboratory" path="hero.highlight" tag="span" className="font-light">{labContent?.hero?.highlight || ''}</EditableText>
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl font-light">
+          <EditableText pagina="laboratory" path="hero.desc" tag="p" className="text-xl text-blue-100 max-w-2xl font-light">
             {labContent?.hero?.desc || ''}
-          </p>
+          </EditableText>
         </SlideIn>
       </div>
     </section>
@@ -45,14 +47,15 @@ const Laboratory = () => {
                
                <FadeIn className="order-2 lg:order-1">
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    {labContent?.performance?.title || ''} <br/><span className="text-accent underline decoration-4 underline-offset-4">{labContent?.performance?.highlight || ''}</span>
+                    <EditableText pagina="laboratory" path="performance.title" tag="span">{labContent?.performance?.title || ''}</EditableText> <br/>
+                    <EditableText pagina="laboratory" path="performance.highlight" tag="span" className="text-accent underline decoration-4 underline-offset-4">{labContent?.performance?.highlight || ''}</EditableText>
                   </h2>
-                  <p className="text-lg text-gray-600 leading-relaxed mb-6 font-light">
+                  <EditableText pagina="laboratory" path="performance.text1" tag="p" className="text-lg text-gray-600 leading-relaxed mb-6 font-light">
                     {labContent?.performance?.text1 || ''}
-                  </p>
-                  <p className="text-lg text-gray-600 leading-relaxed font-light">
+                  </EditableText>
+                  <EditableText pagina="laboratory" path="performance.text2" tag="p" className="text-lg text-gray-600 leading-relaxed font-light">
                     {labContent?.performance?.text2 || ''}
-                  </p>
+                  </EditableText>
                </FadeIn>
                
                <div className="order-1 lg:order-2 w-full aspect-square md:aspect-video lg:aspect-square bg-gray-100 rounded-sm border border-gray-200 flex items-center justify-center shadow-sm">
@@ -74,10 +77,12 @@ const Laboratory = () => {
                      <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center mb-8 border border-blue-100">
                         <Zap size={28} className="text-primary group-hover:scale-110 transition-transform" />
                      </div>
-                     <h3 className="font-bold text-gray-900 text-2xl mb-4">Gigas Dedicadas</h3>
-                     <p className="text-gray-600 font-light leading-relaxed">
-                       Paredes de simulação de carga contínua (burn-in) atestadas por analisadores de espectro.
-                     </p>
+                     <h3 className="font-bold text-gray-900 text-2xl mb-4">
+                        <EditableText pagina="laboratory" path="features.0.title" tag="span">{labContent?.features?.[0]?.title || 'Gigas Dedicadas'}</EditableText>
+                     </h3>
+                     <EditableText pagina="laboratory" path="features.0.desc" tag="p" className="text-gray-600 font-light leading-relaxed">
+                       {labContent?.features?.[0]?.desc || 'Paredes de simulação de carga contínua (burn-in) atestadas por analisadores de espectro.'}
+                     </EditableText>
                   </div>
                 </StaggerItem>
 
@@ -87,10 +92,12 @@ const Laboratory = () => {
                      <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center mb-8 border border-blue-100">
                         <Activity size={28} className="text-primary group-hover:scale-110 transition-transform" />
                      </div>
-                     <h3 className="font-bold text-gray-900 text-2xl mb-4">Ambiente ESD</h3>
-                     <p className="text-gray-600 font-light leading-relaxed">
-                       Controle estrito eletrostático em 100% da área física: pisos, bancadas e vestuário especial.
-                     </p>
+                     <h3 className="font-bold text-gray-900 text-2xl mb-4">
+                        <EditableText pagina="laboratory" path="features.1.title" tag="span">{labContent?.features?.[1]?.title || 'Ambiente ESD'}</EditableText>
+                     </h3>
+                     <EditableText pagina="laboratory" path="features.1.desc" tag="p" className="text-gray-600 font-light leading-relaxed">
+                       {labContent?.features?.[1]?.desc || 'Controle estrito eletrostático em 100% da área física: pisos, bancadas e vestuário especial.'}
+                     </EditableText>
                   </div>
                 </StaggerItem>
 
@@ -100,10 +107,12 @@ const Laboratory = () => {
                      <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center mb-8 border border-blue-100">
                         <Cpu size={28} className="text-primary group-hover:scale-110 transition-transform" />
                      </div>
-                     <h3 className="font-bold text-gray-900 text-2xl mb-4">SMD & BGA</h3>
-                     <p className="text-gray-600 font-light leading-relaxed">
-                       Estações de retrabalho BGA robotizadas com perfis térmicos computadorizados.
-                     </p>
+                     <h3 className="font-bold text-gray-900 text-2xl mb-4">
+                        <EditableText pagina="laboratory" path="features.2.title" tag="span">{labContent?.features?.[2]?.title || 'SMD & BGA'}</EditableText>
+                     </h3>
+                     <EditableText pagina="laboratory" path="features.2.desc" tag="p" className="text-gray-600 font-light leading-relaxed">
+                       {labContent?.features?.[2]?.desc || 'Estações de retrabalho BGA robotizadas com perfis térmicos computadorizados.'}
+                     </EditableText>
                   </div>
                 </StaggerItem>
 

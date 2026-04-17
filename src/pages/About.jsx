@@ -3,6 +3,7 @@ import { Target, Lightbulb, CheckCircle2, Eye } from 'lucide-react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
+import EditableText from '../components/ui/EditableText';
 
 const About = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
@@ -19,11 +20,13 @@ const About = () => {
             Nossa História
           </span>
           <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
-            {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
+            <EditableText pagina="about" path="heroTitle" tag="span">
+              {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
+            </EditableText>
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed">
+          <EditableText pagina="about" path="heroSubtitle" tag="p" className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed">
             {aboutContent?.heroSubtitle || ''}
-          </p>
+          </EditableText>
         </SlideIn>
       </div>
     </section>
@@ -53,17 +56,21 @@ const About = () => {
               <FadeIn>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-px bg-accent"></div>
-                  <h2 className="text-sm font-bold text-accent tracking-widest uppercase">{aboutContent?.foundationBadge || ''}</h2>
+                  <EditableText pagina="about" path="foundationBadge" tag="h2" className="text-sm font-bold text-accent tracking-widest uppercase">
+                    {aboutContent?.foundationBadge || ''}
+                  </EditableText>
                 </div>
                 <h3 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-8 leading-tight">
-                  {(aboutContent?.historyTitle || '').split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}
+                  <EditableText pagina="about" path="historyTitle" tag="span">
+                    {(aboutContent?.historyTitle || '').split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}
+                  </EditableText>
                 </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed text-lg">
+                <EditableText pagina="about" path="historyText" tag="p" className="text-gray-600 mb-6 leading-relaxed text-lg">
                   {aboutContent?.historyText || ''}
-                </p>
+                </EditableText>
                 <div className="relative pl-8 py-4 my-10 bg-white border border-gray-200 shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-1.5 before:bg-accent">
                   <p className="text-gray-800 italic text-lg leading-relaxed font-medium">
-                    "{aboutContent?.quote || ''}"
+                    "<EditableText pagina="about" path="quote" tag="span">{aboutContent?.quote || ''}</EditableText>"
                   </p>
                 </div>
               </FadeIn>
@@ -119,9 +126,9 @@ const About = () => {
                 <Target size={32} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Missão</h3>
-              <p className="text-gray-600 leading-relaxed relative z-10">
+              <EditableText pagina="about" path="mission" tag="p" className="text-gray-600 leading-relaxed relative z-10">
                 {aboutContent?.mission || ''}
-              </p>
+              </EditableText>
             </StaggerItem>
 
             <StaggerItem className="group relative bg-white p-10 rounded-sm border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 transform md:translate-y-8">
@@ -130,9 +137,9 @@ const About = () => {
                 <Eye size={32} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Visão</h3>
-              <p className="text-gray-600 leading-relaxed relative z-10">
+              <EditableText pagina="about" path="vision" tag="p" className="text-gray-600 leading-relaxed relative z-10">
                 {aboutContent?.vision || ''}
-              </p>
+              </EditableText>
             </StaggerItem>
 
             <StaggerItem className="group relative bg-white p-10 rounded-sm border border-gray-200 shadow-sm hover:border-accent hover:shadow-md transition-all duration-300 hover:-translate-y-1">

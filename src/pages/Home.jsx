@@ -4,6 +4,7 @@ import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
 import { Settings, Zap, Cpu, Layers } from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
+import EditableText from '../components/ui/EditableText';
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
@@ -49,14 +50,16 @@ const Home = () => {
               
               <div className="relative z-20 px-4 max-w-5xl mx-auto w-full flex flex-col justify-center translate-y-10">
                 <div className="overflow-hidden mb-2 border-l-4 border-accent pl-6">
-                   <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight transition-transform duration-1000 delay-100 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-                     {slide.title} <br/>
-                     <span className="text-accent">{slide.highlight}</span>
-                   </h1>
-                </div>
-                <p className={`text-gray-300 text-lg md:text-2xl mt-6 font-medium max-w-2xl transition-all duration-1000 delay-300 ${index === currentSlide ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-                   {slide.desc}
-                </p>
+                    <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight transition-transform duration-1000 delay-100 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
+                      <EditableText pagina="home" path={`slides.${index}.title`} tag="span">{slide.title}</EditableText> <br/>
+                      <EditableText pagina="home" path={`slides.${index}.highlight`} tag="span" className="text-accent">{slide.highlight}</EditableText>
+                    </h1>
+                 </div>
+                 <div className={`mt-6 transition-all duration-1000 delay-300 ${index === currentSlide ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
+                    <EditableText pagina="home" path={`slides.${index}.desc`} tag="p" className="text-gray-300 text-lg md:text-2xl font-medium max-w-2xl">
+                       {slide.desc}
+                    </EditableText>
+                 </div>
                 
                 <div className={`mt-10 flex gap-4 transition-all duration-1000 delay-500 ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                    <a href="/manutencao-e-automacao-industrial" className="px-8 py-4 bg-accent hover:bg-red-700 text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center transition-all min-w-[200px]">
@@ -94,22 +97,26 @@ const Home = () => {
             <div className="flex flex-col md:flex-row gap-12 items-center">
                <div className="md:w-1/2">
                   <SlideIn>
-                     <div className="flex items-center gap-4 mb-6">
-                       <span className="w-12 h-px bg-accent block"></span>
-                       <span className="text-xs font-bold text-accent tracking-widest uppercase">{homeContent?.expertise?.badge || ''}</span>
-                     </div>
-                     <h2 className="text-3xl md:text-5xl font-extrabold text-primary leading-tight mb-8">
-                       {homeContent?.expertise?.title || ''}
-                     </h2>
-                  </SlideIn>
-               </div>
-               <div className="md:w-1/2">
-                  <FadeIn delay={0.2}>
-                     <p className="text-gray-600 text-lg leading-relaxed border-l-2 border-gray-200 pl-6">
-                       {homeContent?.expertise?.text || ''}
-                     </p>
-                  </FadeIn>
-               </div>
+                      <div className="flex items-center gap-4 mb-6">
+                        <span className="w-12 h-px bg-accent block"></span>
+                        <EditableText pagina="home" path="expertise.badge" className="text-xs font-bold text-accent tracking-widest uppercase" tag="span">
+                          {homeContent?.expertise?.badge || ''}
+                        </EditableText>
+                      </div>
+                      <h2 className="text-3xl md:text-5xl font-extrabold text-primary leading-tight mb-8">
+                        <EditableText pagina="home" path="expertise.title" tag="span">
+                          {homeContent?.expertise?.title || ''}
+                        </EditableText>
+                      </h2>
+                   </SlideIn>
+                </div>
+                <div className="md:w-1/2">
+                   <FadeIn delay={0.2}>
+                      <EditableText pagina="home" path="expertise.text" tag="p" className="text-gray-600 text-lg leading-relaxed border-l-2 border-gray-200 pl-6">
+                        {homeContent?.expertise?.text || ''}
+                      </EditableText>
+                   </FadeIn>
+                </div>
             </div>
          </div>
       </section>
@@ -120,9 +127,15 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <FadeIn className="text-center mb-20">
-            <h2 className="text-sm font-bold text-gray-400 tracking-widest uppercase mb-4">{homeContent?.portfolio?.badge || ''}</h2>
+            <EditableText pagina="home" path="portfolio.badge" tag="h2" className="text-sm font-bold text-gray-400 tracking-widest uppercase mb-4">
+              {homeContent?.portfolio?.badge || ''}
+            </EditableText>
             <h3 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-              {homeContent?.portfolio?.title || ''} <span className="text-accent underline decoration-4 underline-offset-4">{homeContent?.portfolio?.highlight || ''}</span>
+              <EditableText pagina="home" path="portfolio.title" tag="span">{homeContent?.portfolio?.title || ''}</EditableText> 
+              {' '}
+              <EditableText pagina="home" path="portfolio.highlight" tag="span" className="text-accent underline decoration-4 underline-offset-4">
+                {homeContent?.portfolio?.highlight || ''}
+              </EditableText>
             </h3>
           </FadeIn>
 
