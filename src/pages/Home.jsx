@@ -3,10 +3,10 @@ import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui
 import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
 import * as Icons from 'lucide-react';
+import { Settings, Zap, Cpu, Layers, Plus, Trash2 } from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
-import { Plus, Trash2 } from 'lucide-react';
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);

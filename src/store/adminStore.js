@@ -26,8 +26,8 @@ export const useAdminStore = create((set, get) => ({
   leads: [],
   marcas: [],
   blogPosts: [],
-  siteMedia: {},
-  siteContent: {},
+  siteMedia: SITE_MEDIA_DEFAULT,
+  siteContent: SITE_CONTENT_DEFAULT,
 
   // Inicialização e Listeners
   init: () => {

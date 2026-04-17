@@ -31,7 +31,7 @@ const IconSelector = ({ pagina, path, currentIcon, onSelect }) => {
             className={`p-1.5 rounded hover:bg-primary/10 transition-colors flex items-center justify-center ${currentIcon === name ? 'bg-primary/20 text-primary' : 'text-gray-400'}`}
             title={name}
           >
-            <Icon size={16} />
+            {Icon ? <Icon size={16} /> : <Icons.HelpCircle size={16} />}
           </button>
         );
       })}

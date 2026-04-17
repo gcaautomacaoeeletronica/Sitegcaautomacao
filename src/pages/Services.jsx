@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
-import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronDown, ArrowRight, Zap, Activity, Cpu, Settings, Wrench, Shield, Plus, X, Layers, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
 import * as Icons from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
-import { Plus, X } from 'lucide-react';
 
 const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
-  const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
   
