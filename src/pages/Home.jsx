@@ -2,8 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
-import * as Icons from 'lucide-react';
-import { Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, ShieldCheck, MessagesSquare } from 'lucide-react';
+import { 
+  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle 
+} from 'lucide-react';
+
+// Mapa de ícones estático para garantir estabilidade no build da Vercel
+const ICON_MAP = {
+  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle
+};
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
@@ -29,7 +37,7 @@ const StatsSection = ({ stats = [] }) => (
     <div className="max-w-7xl mx-auto px-4 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
         {stats.map((stat, idx) => {
-          const Icon = Icons[stat.icon] || Icons.Zap;
+          const Icon = ICON_MAP[stat.icon] || ICON_MAP.Zap;
           return (
             <FadeIn key={idx} delay={idx * 0.1} className="text-center group flex flex-col items-center">
               <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:scale-110 transition-all duration-500 border border-white/5 shadow-2xl">
@@ -191,7 +199,7 @@ const Home = () => {
 
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {(homeContent?.services || []).map((service, idx) => {
-              const DynamicIcon = Icons[service.icon] || Icons.HelpCircle;
+              const DynamicIcon = ICON_MAP[service.icon] || ICON_MAP.HelpCircle;
               return (
                 <StaggerItem key={idx} className="relative group">
                    {/* Delete Button */}
