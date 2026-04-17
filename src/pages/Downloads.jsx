@@ -10,11 +10,13 @@ const Downloads = () => {
   const marcas = useAdminStore((state) => state.marcas);
 
   const selectedBrand = marcas.find(m => m.id === selectedBrandId);
-  const filtered = marcas.filter(m => {
-     const matchName = m.nome.toLowerCase().includes(searchTerm.toLowerCase());
-     const matchFile = Array.isArray(m.manuais) && m.manuais.some(man => man.titulo.toLowerCase().includes(searchTerm.toLowerCase()));
-     return matchName || matchFile;
-  });
+  const filtered = marcas
+    .filter(m => {
+       const matchName = m.nome.toLowerCase().includes(searchTerm.toLowerCase());
+       const matchFile = Array.isArray(m.manuais) && m.manuais.some(man => man.titulo.toLowerCase().includes(searchTerm.toLowerCase()));
+       return matchName || matchFile;
+    })
+    .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 
   return (
     <div className="w-full bg-[#f6f8f8] min-h-screen relative overflow-hidden">
