@@ -1,13 +1,18 @@
 import React from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { Cpu, Zap, Activity } from 'lucide-react';
 import SEO from '../components/ui/SEO';
+import * as Icons from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
+import IconSelector from '../components/ui/IconSelector';
+import { Plus, Trash2, Zap, Activity, Cpu } from 'lucide-react';
 
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const labContent = useAdminStore((state) => state.siteContent?.laboratory);
+  const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
+  const addItemToArray = useAdminStore((state) => state.addItemToArray);
+  const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
 
   const heroContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-primary overflow-hidden">
@@ -68,54 +73,64 @@ const Laboratory = () => {
 
             </div>
 
-            {/* Feature Cards Modernos */}
+            {/* Feature Cards Modernos Dinâmicos */}
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <StaggerItem className="group">
-                  <div className="bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-                     <div className="absolute -top-4 -right-4 text-9xl text-gray-50 opacity-50 font-black pointer-events-none text-blue-500/10"><Zap /></div>
-                     <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center mb-8 border border-blue-100">
-                        <Zap size={28} className="text-primary group-hover:scale-110 transition-transform" />
-                     </div>
-                     <h3 className="font-bold text-gray-900 text-2xl mb-4">
-                        <EditableText pagina="laboratory" path="features.0.title" tag="span">{labContent?.features?.[0]?.title || 'Gigas Dedicadas'}</EditableText>
-                     </h3>
-                     <EditableText pagina="laboratory" path="features.0.desc" tag="p" className="text-gray-600 font-light leading-relaxed">
-                       {labContent?.features?.[0]?.desc || 'Paredes de simulação de carga contínua (burn-in) atestadas por analisadores de espectro.'}
-                     </EditableText>
-                  </div>
-                </StaggerItem>
+                {(labContent?.features || []).map((feature, idx) => {
+                  const DynamicIcon = Icons[feature.icon] || Icons.HelpCircle;
+                  return (
+                    <StaggerItem key={idx} className={`group ${idx === 1 ? 'mt-0 md:mt-8' : idx === 2 ? 'mt-0 md:mt-16' : ''}`}>
+                      <div className="bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                         {/* Delete Button */}
+                         {isVisualEditorActive && (
+                           <button 
+                             onClick={() => removeItemFromArray('laboratory', 'features', idx)}
+                             className="absolute top-2 right-2 z-50 bg-red-500 text-white p-1 rounded-full shadow-lg hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                           >
+                             <Trash2 size={12} />
+                           </button>
+                         )}
 
-                <StaggerItem className="group mt-0 md:mt-8">
-                  <div className="bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-                     <div className="absolute -top-4 -right-4 text-9xl text-gray-50 opacity-50 font-black pointer-events-none text-blue-500/10"><Activity /></div>
-                     <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center mb-8 border border-blue-100">
-                        <Activity size={28} className="text-primary group-hover:scale-110 transition-transform" />
-                     </div>
-                     <h3 className="font-bold text-gray-900 text-2xl mb-4">
-                        <EditableText pagina="laboratory" path="features.1.title" tag="span">{labContent?.features?.[1]?.title || 'Ambiente ESD'}</EditableText>
-                     </h3>
-                     <EditableText pagina="laboratory" path="features.1.desc" tag="p" className="text-gray-600 font-light leading-relaxed">
-                       {labContent?.features?.[1]?.desc || 'Controle estrito eletrostático em 100% da área física: pisos, bancadas e vestuário especial.'}
-                     </EditableText>
-                  </div>
-                </StaggerItem>
+                         <div className="absolute -top-4 -right-4 text-9xl text-gray-50 opacity-50 font-black pointer-events-none text-blue-500/10">
+                            <DynamicIcon />
+                         </div>
 
-                <StaggerItem className="group mt-0 md:mt-16">
-                  <div className="bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-                     <div className="absolute -top-4 -right-4 text-9xl text-gray-50 opacity-50 font-black pointer-events-none text-blue-500/10"><Cpu /></div>
-                     <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center mb-8 border border-blue-100">
-                        <Cpu size={28} className="text-primary group-hover:scale-110 transition-transform" />
-                     </div>
-                     <h3 className="font-bold text-gray-900 text-2xl mb-4">
-                        <EditableText pagina="laboratory" path="features.2.title" tag="span">{labContent?.features?.[2]?.title || 'SMD & BGA'}</EditableText>
-                     </h3>
-                     <EditableText pagina="laboratory" path="features.2.desc" tag="p" className="text-gray-600 font-light leading-relaxed">
-                       {labContent?.features?.[2]?.desc || 'Estações de retrabalho BGA robotizadas com perfis térmicos computadorizados.'}
-                     </EditableText>
-                  </div>
-                </StaggerItem>
+                         <div className="relative mb-8">
+                            <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center border border-blue-100 group-hover:bg-primary group-hover:text-white transition-all">
+                               <DynamicIcon size={28} className="transition-transform group-hover:scale-110" />
+                            </div>
+                            {/* Icon Selector */}
+                            <IconSelector pagina="laboratory" path={`features.${idx}.icon`} currentIcon={feature.icon} />
+                         </div>
 
+                         <h3 className="font-bold text-gray-900 text-2xl mb-4">
+                            <EditableText pagina="laboratory" path={`features.${idx}.title`} tag="span">{feature.title}</EditableText>
+                         </h3>
+                         <EditableText pagina="laboratory" path={`features.${idx}.desc`} tag="p" className="text-gray-600 font-light leading-relaxed">
+                            {feature.desc}
+                         </EditableText>
+                      </div>
+                    </StaggerItem>
+                  );
+                })}
+
+                {/* Add New Card Button */}
+                {isVisualEditorActive && (
+                  <div className="flex items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-lg hover:border-primary/30 transition-all group min-h-[300px]">
+                    <button 
+                      onClick={() => addItemToArray('laboratory', 'features', { 
+                        title: 'Nova Infraestrutura', 
+                        desc: 'Descrição detalhada do novo equipamento ou área laboratorial.', 
+                        icon: 'Activity' 
+                      })}
+                      className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-primary transition-colors"
+                    >
+                      <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-primary/10">
+                        <Plus size={24} />
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-widest">Adicionar Item Lab</span>
+                    </button>
+                  </div>
+                )}
             </StaggerContainer>
 
          </div>

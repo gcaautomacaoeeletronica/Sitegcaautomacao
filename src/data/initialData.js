@@ -125,7 +125,12 @@ export const SITE_CONTENT_DEFAULT = {
       highlight: "Em Carga Real.",
       text1: "A diferença entre um conserto comum e uma Engenharia de Reparo está nos testes em bancada.",
       text2: "Garantimos que o módulo saia do nosso laboratório validado a 100%."
-    }
+    },
+    features: [
+      { title: 'Gigas Dedicadas', desc: 'Paredes de simulação de carga contínua (burn-in) atestadas por analisadores de espectro.', icon: 'Zap' },
+      { title: 'Ambiente ESD', desc: 'Controle estrito eletrostático em 100% da área física: pisos, bancadas e vestuário especial.', icon: 'Activity' },
+      { title: 'SMD & BGA', desc: 'Estações de retrabalho BGA robotizadas com perfis térmicos computadorizados.', icon: 'Cpu' }
+    ]
   }
 };
 
