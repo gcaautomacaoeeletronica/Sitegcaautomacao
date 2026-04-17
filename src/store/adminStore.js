@@ -15,67 +15,63 @@ export const useAdminStore = create((set, get) => ({
   siteMedia: SITE_MEDIA_DEFAULT,
   siteContent: SITE_CONTENT_DEFAULT,
 
+  // Funcões de Fetch (Disponibilizadas globalmente para atualizações manuais)
+  fetchLeads: async () => {
+    const { data } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+    if (data) set({ leads: data.map(l => ({ ...l, data: l.created_at, lido: l.read })) });
+  },
+  fetchBlog: async () => {
+    const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false });
+    if (data) set({ blogPosts: data.map(p => ({ ...p, titulo: p.title, resumo: p.summary, conteudo: p.content, imageUrl: p.image_url, data: p.created_at })) });
+  },
+  fetchMarcas: async () => {
+    const { data: marcasData } = await supabase.from('marcas').select('*, downloads(*)');
+    if (marcasData) {
+      set({ 
+        marcas: marcasData.map(m => ({ 
+          id: m.id, 
+          nome: m.name, 
+          iconColor: m.icon_color, 
+          manuais: m.downloads ? m.downloads.map(d => ({ id: d.id, titulo: d.title, link: d.link })) : []
+        })) 
+      });
+    }
+  },
+  fetchConfig: async () => {
+    const { data } = await supabase.from('site_config').select('*');
+    if (data) {
+      const content = data.find(c => c.key === 'siteContent')?.data || SITE_CONTENT_DEFAULT;
+      const media = data.find(c => c.key === 'siteMedia')?.data || SITE_MEDIA_DEFAULT;
+      set({ siteContent: content, siteMedia: media });
+    }
+  },
+
   // Inicialização e Listeners
   init: async () => {
     console.log('Iniciando Supabase Sync...');
 
-    // 1. Observar sessão do Supabase
     const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      set({ isAuthenticated: true, adminEmail: session.user.email, isAuthLoading: false });
-    } else {
-      set({ isAuthenticated: false, adminEmail: null, isAuthLoading: false });
-    }
+    set({ isAuthenticated: !!session, adminEmail: session ? session.user.email : null, isAuthLoading: false });
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        set({ isAuthenticated: true, adminEmail: session.user.email, isAuthLoading: false });
-      } else {
-        set({ isAuthenticated: false, adminEmail: null, isAuthLoading: false });
-      }
+      set({ isAuthenticated: !!session, adminEmail: session ? session.user.email : null, isAuthLoading: false });
     });
 
     // 2. Fetch Inicial
-    const fetchLeads = async () => {
-      const { data } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
-      if (data) set({ leads: data.map(l => ({ ...l, data: l.created_at, lido: l.read })) });
-    };
-
-    const fetchBlog = async () => {
-      const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false });
-      if (data) set({ blogPosts: data.map(p => ({ ...p, titulo: p.title, resumo: p.summary, conteudo: p.content, imageUrl: p.image_url, data: p.created_at })) });
-    };
-
-    const fetchMarcas = async () => {
-      const { data: marcasData } = await supabase.from('marcas').select('*, downloads(*)');
-      if (marcasData) {
-        set({ marcas: marcasData.map(m => ({ 
-          id: m.id, 
-          nome: m.name, 
-          iconColor: m.icon_color, 
-          manuais: m.downloads.map(d => ({ id: d.id, titulo: d.title, link: d.link }))
-        })) });
-      }
-    };
-
-    const fetchConfig = async () => {
-      const { data } = await supabase.from('site_config').select('*');
-      if (data) {
-        const content = data.find(c => c.key === 'siteContent')?.data || SITE_CONTENT_DEFAULT;
-        const media = data.find(c => c.key === 'siteMedia')?.data || SITE_MEDIA_DEFAULT;
-        set({ siteContent: content, siteMedia: media });
-      }
-    };
-
-    // Executar fetches
+    const { fetchLeads, fetchBlog, fetchMarcas, fetchConfig } = get();
     await Promise.all([fetchLeads(), fetchBlog(), fetchMarcas(), fetchConfig()]);
 
-    // 3. Listeners Realtime
-    supabase.channel('public:leads').on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, fetchLeads).subscribe();
-    supabase.channel('public:blog_posts').on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts' }, fetchBlog).subscribe();
-    supabase.channel('public:marcas').on('postgres_changes', { event: '*', schema: 'public', table: 'marcas' }, fetchMarcas).subscribe();
-    supabase.channel('public:downloads').on('postgres_changes', { event: '*', schema: 'public', table: 'downloads' }, fetchMarcas).subscribe();
-    supabase.channel('public:site_config').on('postgres_changes', { event: '*', schema: 'public', table: 'site_config' }, fetchConfig).subscribe();
+    // 3. Listeners Realtime (se falhar, temos os fetchers diretos agindo nos botões)
+    supabase.channel('public_leads')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, fetchLeads).subscribe();
+    supabase.channel('public_blog')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts' }, fetchBlog).subscribe();
+    supabase.channel('public_marcas')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'marcas' }, fetchMarcas).subscribe();
+    supabase.channel('public_downloads')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'downloads' }, fetchMarcas).subscribe();
+    supabase.channel('public_config')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_config' }, fetchConfig).subscribe();
   },
 
   // Auth Supabase
@@ -150,22 +146,27 @@ export const useAdminStore = create((set, get) => ({
   adicionarMarca: async (nome) => {
     const { error } = await supabase.from('marcas').insert([{ name: nome.toUpperCase(), icon_color: 'bg-primary' }]);
     if (error) { console.error(error); alert('Erro ao adicionar marca: ' + error.message); }
+    else get().fetchMarcas();
   },
   removerMarca: async (id) => {
     const { error } = await supabase.from('marcas').delete().eq('id', id);
     if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
+    else get().fetchMarcas();
   },
   adicionarManual: async (idMarca, titulo, link) => {
     const { error } = await supabase.from('downloads').insert([{ marca_id: idMarca, title: titulo, link: link }]);
     if (error) { console.error(error); alert('Erro ao adicionar arquivo: ' + error.message); }
+    else get().fetchMarcas();
   },
   removerManual: async (_idMarca, manualId) => {
     const { error } = await supabase.from('downloads').delete().eq('id', manualId);
     if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
+    else get().fetchMarcas();
   },
   editarManual: async (_idMarca, manualId, novoTitulo, novoLink) => {
     const { error } = await supabase.from('downloads').update({ title: novoTitulo, link: novoLink }).eq('id', manualId);
     if (error) { console.error(error); alert('Erro ao editar arquivo: ' + error.message); }
+    else get().fetchMarcas();
   },
 
   // Blog Actions
@@ -174,16 +175,19 @@ export const useAdminStore = create((set, get) => ({
       title: post.titulo, summary: post.resumo, content: post.conteudo, image_url: post.imageUrl, author: post.autor
     }]);
     if (error) { console.error(error); alert('Erro ao salvar post: ' + error.message); }
+    else get().fetchBlog();
   },
   removerPost: async (id) => {
     const { error } = await supabase.from('blog_posts').delete().eq('id', id);
     if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
+    else get().fetchBlog();
   },
   editarPost: async (id, updatedPost) => {
     const { error } = await supabase.from('blog_posts').update({
       title: updatedPost.titulo, summary: updatedPost.resumo, content: updatedPost.conteudo, image_url: updatedPost.imageUrl, author: updatedPost.autor
     }).eq('id', id);
     if (error) { console.error(error); alert('Erro ao editar post: ' + error.message); }
+    else get().fetchBlog();
   },
 
   // CMS Actions (Content & Media)
