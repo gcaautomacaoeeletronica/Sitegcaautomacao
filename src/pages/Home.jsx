@@ -17,18 +17,52 @@ import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import { useScroll, useSpring, useTransform, motion } from 'framer-motion';
 
-// Componente Interno para o Carrossel de Marcas (Infinite Marquee)
-const TrustBar = ({ brands = [] }) => (
-  <div className="bg-white py-12 border-y border-gray-100 overflow-hidden relative group">
-    <div className="flex animate-marquee whitespace-nowrap gap-16 items-center group-hover:pause">
-      {[...brands, ...brands].map((brand, i) => (
-        <span key={i} className="text-3xl md:text-4xl font-black text-gray-100 uppercase tracking-tighter hover:text-accent transition-all duration-500 cursor-default px-4">
-          {brand}
-        </span>
-      ))}
-    </div>
-  </div>
-);
+// Componente Inovador de Marcas (Industrial Glass Marquee)
+const InnovativeBrandsCarousel = () => {
+  const brands = [
+    { name: 'WEG', color: 'hover:text-blue-500' },
+    { name: 'Siemens', color: 'hover:text-blue-400' },
+    { name: 'Bosch Rexroth', color: 'hover:text-red-500' },
+    { name: 'Allen-Bradley', color: 'hover:text-orange-600' },
+    { name: 'Schneider', color: 'hover:text-green-500' },
+    { name: 'Omron', color: 'hover:text-blue-600' },
+    { name: 'SMC', color: 'hover:text-blue-300' },
+    { name: 'ABB', color: 'hover:text-red-600' },
+    { name: 'Fanuc', color: 'hover:text-yellow-500' },
+    { name: 'Yaskawa', color: 'hover:text-blue-500' }
+  ];
+
+  return (
+    <section className="bg-[#080a0f] py-20 relative overflow-hidden border-y border-white/5">
+      {/* Background patterns */}
+      <div className="absolute inset-0 pattern-grid opacity-10 pointer-events-none"></div>
+      
+      <div className="max-w-7xl mx-auto px-4 mb-12 relative z-10 text-center">
+        <h4 className="text-[10px] font-black text-gray-500 tracking-[0.4em] uppercase mb-2">Padrão de Excelência Global</h4>
+        <h3 className="text-xl md:text-2xl font-bold text-white/90">Marcas e Tecnologias de <span className="text-accent underline decoration-2 underline-offset-4">Classe Mundial</span></h3>
+      </div>
+
+      <div className="relative group">
+        {/* Gradients masks for side fade */}
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#080a0f] to-transparent z-10"></div>
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#080a0f] to-transparent z-10"></div>
+
+        <div className="flex animate-marquee whitespace-nowrap gap-8 items-center group-hover:pause py-4">
+          {[...brands, ...brands, ...brands].map((brand, i) => (
+            <div 
+              key={i} 
+              className={`inline-flex items-center justify-center px-10 py-6 glass-brand-card rounded-2xl min-w-[220px] mx-2 group/card`}
+            >
+              <span className={`text-2xl md:text-3xl font-black text-white/40 tracking-tighter transition-all duration-500 ${brand.color} group-hover/card:text-white group-hover/card:scale-105 uppercase italic`}>
+                {brand.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 // Componente Interno para Estatísticas
 const StatsSection = ({ stats = [] }) => (
@@ -280,8 +314,8 @@ const Home = () => {
       {/* Seção de Estatísticas (Stats Section) */}
       <StatsSection stats={homeContent?.stats || []} />
 
-      {/* Trust Bar (Marcas atendidas) */}
-      <TrustBar brands={homeContent?.trustBrands || []} />
+      {/* Carousel Inovador de Marcas (Marcas atendidas) */}
+      <InnovativeBrandsCarousel />
 
       {/* Divisor SVG Técnico 2 */}
       <div className="relative h-16 bg-white overflow-hidden pointer-events-none">
