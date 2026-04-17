@@ -10,7 +10,7 @@ const Contact = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const global = useAdminStore((state) => state.siteContent?.global);
   const adicionarLead = useAdminStore((state) => state.adicionarLead);
-  const whatsappNumber = useAdminStore((state) => state.siteContent?.global?.whatsappNumber) || '5519971206717';
+  const whatsappNumber = (global?.whatsappNumber || global?.whatsapp || '5519971206717').replace(/\D/g, '');
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [contactMode, setContactMode] = useState('message'); // 'message' | 'whatsapp'

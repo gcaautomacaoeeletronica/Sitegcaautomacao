@@ -316,7 +316,7 @@ const Home = () => {
 
       {/* Botão WhatsApp Flutuante (Lead Focus) */}
       <a 
-        href={`https://wa.me/${global?.whatsappNumber || '5519971206717'}`} 
+        href={`https://wa.me/${(global?.whatsappNumber || global?.whatsapp || '5519971206717').replace(/\D/g, '')}`} 
         target="_blank" 
         rel="noopener noreferrer"
         className="fixed bottom-4 right-4 md:bottom-10 md:right-10 z-50 group flex items-center gap-3"
