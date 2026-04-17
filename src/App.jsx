@@ -26,20 +26,20 @@ import { MARCAS_DEFAULT, BLOG_POSTS_DEFAULT, SITE_CONTENT_DEFAULT, SITE_MEDIA_DE
 function App() {
   useDynamicFavicon();
   const init = useAdminStore(state => state.init);
-  const seedFirebase = useAdminStore(state => state.seedFirebase);
+  const seedSupabase = useAdminStore(state => state.seedSupabase);
 
   useEffect(() => {
     // 1. Inicia os Listeners de tempo real
     init();
 
     // 2. Tenta fazer o seed se o banco estiver vazio
-    seedFirebase({
+    seedSupabase({
       marcas: MARCAS_DEFAULT,
       blogPosts: BLOG_POSTS_DEFAULT,
       siteContent: SITE_CONTENT_DEFAULT,
       siteMedia: SITE_MEDIA_DEFAULT
     });
-  }, [init, seedFirebase]);
+  }, [init, seedSupabase]);
 
   return (
     <HelmetProvider>

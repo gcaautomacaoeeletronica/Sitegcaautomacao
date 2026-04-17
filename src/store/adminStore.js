@@ -1,19 +1,5 @@
 import { create } from 'zustand';
-import { db, storage, auth, secondaryAuth } from '../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { 
-  collection, 
-  addDoc, 
-  onSnapshot, 
-  doc, 
-  setDoc, 
-  deleteDoc, 
-  updateDoc, 
-  getDocs,
-  query,
-  orderBy
-} from 'firebase/firestore';
+import { supabase } from '../lib/supabase';
 import { SITE_CONTENT_DEFAULT, SITE_MEDIA_DEFAULT } from '../data/initialData';
 
 export const useAdminStore = create((set, get) => ({
@@ -30,246 +16,188 @@ export const useAdminStore = create((set, get) => ({
   siteContent: SITE_CONTENT_DEFAULT,
 
   // Inicialização e Listeners
-  init: () => {
-    console.log('Iniciando GCA Cloud Sync...');
+  init: async () => {
+    console.log('Iniciando Supabase Sync...');
 
-    // Observar sessão real do Firebase
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        set({ isAuthenticated: true, adminEmail: user.email, isAuthLoading: false });
+    // 1. Observar sessão do Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      set({ isAuthenticated: true, adminEmail: session.user.email, isAuthLoading: false });
+    } else {
+      set({ isAuthenticated: false, adminEmail: null, isAuthLoading: false });
+    }
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        set({ isAuthenticated: true, adminEmail: session.user.email, isAuthLoading: false });
       } else {
         set({ isAuthenticated: false, adminEmail: null, isAuthLoading: false });
       }
     });
 
-    // 0. Monitorar Administradores
-    onSnapshot(collection(db, 'admins'), (snapshot) => {
-      const admins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      set({ admins });
-    });
-    
-    // 1. Monitorar Leads
-    onSnapshot(query(collection(db, 'leads'), orderBy('data', 'desc')), (snapshot) => {
-      const leads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      set({ leads });
-    });
+    // 2. Fetch Inicial
+    const fetchLeads = async () => {
+      const { data } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+      if (data) set({ leads: data.map(l => ({ ...l, data: l.created_at, lido: l.read })) });
+    };
 
-    // 2. Monitorar Blog
-    onSnapshot(query(collection(db, 'blog'), orderBy('data', 'desc')), (snapshot) => {
-      const blogPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      set({ blogPosts });
-    });
+    const fetchBlog = async () => {
+      const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false });
+      if (data) set({ blogPosts: data.map(p => ({ ...p, titulo: p.title, resumo: p.summary, conteudo: p.content, imageUrl: p.image_url, data: p.created_at })) });
+    };
 
-    // 3. Monitorar Marcas (Downloads)
-    onSnapshot(collection(db, 'marcas'), (snapshot) => {
-      const marcas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      set({ marcas });
-    });
-
-    // 4. Monitorar Conteúdo Global e Mídias
-    onSnapshot(doc(db, 'config', 'siteData'), (snapshot) => {
-
-      // Converte objetos Firestore com chaves numéricas de volta para arrays
-      const sanitize = (data) => {
-        if (Array.isArray(data)) {
-          return data.map(sanitize);
-        }
-        if (data && typeof data === 'object') {
-          const keys = Object.keys(data);
-          const isNumericObject = keys.length > 0 && keys.every(k => !isNaN(parseInt(k)));
-          if (isNumericObject) {
-            return keys.sort((a, b) => parseInt(a) - parseInt(b)).map(k => sanitize(data[k]));
-          }
-          const result = {};
-          keys.forEach(k => { result[k] = sanitize(data[k]); });
-          return result;
-        }
-        return data;
-      };
-
-      // Mescla profunda preferindo dados da nuvem, mas mantendo defaults para campos novos
-      const deepMerge = (target, source) => {
-        if (Array.isArray(source)) return source; // Arrays da nuvem sempre vencem
-        if (Array.isArray(target) && !Array.isArray(source)) return target; // Mantém array default se nuvem não tem
-        const output = { ...target };
-        if (source && typeof source === 'object') {
-          Object.keys(source).forEach(key => {
-            if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-              output[key] = deepMerge(target?.[key] ?? {}, source[key]);
-            } else {
-              output[key] = source[key];
-            }
-          });
-        }
-        return output;
-      };
-
-      if (snapshot.exists()) {
-        const cloudData = snapshot.data();
-        const cleanContent = sanitize(cloudData.siteContent || {});
-        const cleanMedia   = sanitize(cloudData.siteMedia   || {});
-
-        set({ 
-          siteMedia:   deepMerge(SITE_MEDIA_DEFAULT,   cleanMedia),
-          siteContent: deepMerge(SITE_CONTENT_DEFAULT, cleanContent)
-        });
-      } else {
-        set({ siteMedia: SITE_MEDIA_DEFAULT, siteContent: SITE_CONTENT_DEFAULT });
+    const fetchMarcas = async () => {
+      const { data: marcasData } = await supabase.from('marcas').select('*, downloads(*)');
+      if (marcasData) {
+        set({ marcas: marcasData.map(m => ({ 
+          id: m.id, 
+          nome: m.name, 
+          iconColor: m.icon_color, 
+          manuais: m.downloads.map(d => ({ id: d.id, titulo: d.title, link: d.link }))
+        })) });
       }
-    });
+    };
+
+    const fetchConfig = async () => {
+      const { data } = await supabase.from('site_config').select('*');
+      if (data) {
+        const content = data.find(c => c.key === 'siteContent')?.data || SITE_CONTENT_DEFAULT;
+        const media = data.find(c => c.key === 'siteMedia')?.data || SITE_MEDIA_DEFAULT;
+        set({ siteContent: content, siteMedia: media });
+      }
+    };
+
+    // Executar fetches
+    await Promise.all([fetchLeads(), fetchBlog(), fetchMarcas(), fetchConfig()]);
+
+    // 3. Listeners Realtime
+    supabase.channel('public:leads').on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, fetchLeads).subscribe();
+    supabase.channel('public:blog_posts').on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts' }, fetchBlog).subscribe();
+    supabase.channel('public:marcas').on('postgres_changes', { event: '*', schema: 'public', table: 'marcas' }, fetchMarcas).subscribe();
+    supabase.channel('public:downloads').on('postgres_changes', { event: '*', schema: 'public', table: 'downloads' }, fetchMarcas).subscribe();
+    supabase.channel('public:site_config').on('postgres_changes', { event: '*', schema: 'public', table: 'site_config' }, fetchConfig).subscribe();
   },
 
-  // Auth Reais
+  // Auth Supabase
   login: async (email, password) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // O estado se atualiza pelo onAuthStateChanged do init()
-      return true;
-    } catch (error) {
-      console.error('Erro de Login Firebase:', error);
-      throw error;
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return true;
   },
+
   logout: async () => {
-    await signOut(auth);
+    await supabase.auth.signOut();
   },
 
   changePassword: async (newPassword) => {
-    if(!auth.currentUser) throw new Error('Não há usuário logado para trocar de senha.');
-    await updatePassword(auth.currentUser, newPassword);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
   },
 
   createNewAdmin: async (email, password, name) => {
-    try {
-      // Usar a instância secundária para não deslogar o admin atual
-      const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
-      // Salvar os dados na collection admins para a tabela do painel
-      await setDoc(doc(db, 'admins', userCredential.user.uid), {
-        email: userCredential.user.email,
-        name: name,
-        createdAt: new Date().toISOString()
-      });
-      // Importante: deslogar o secundário para evitar polução
-      await signOut(secondaryAuth);
-      return true;
-    } catch (error) {
-      console.error('Erro ao Criar Sub-Admin:', error);
-      throw error;
-    }
+    // No Supabase, a criação de usuários costuma ser via Edge Functions ou pela Dashboard
+    // mas podemos usar o signUp direto se as políticas permitirem.
+    const { data, error } = await supabase.auth.signUp({ 
+      email, 
+      password, 
+      options: { data: { name } } 
+    });
+    if (error) throw error;
+    return data;
   },
 
-  // Storage Actions
-  uploadFileToStorage: (file, pathFolder = 'uploads') => {
-    return new Promise((resolve, reject) => {
-      if (!file) {
-        reject('Nenhum arquivo providenciado.');
-        return;
-      }
-      const uniqueName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-      const storageRef = ref(storage, `${pathFolder}/${uniqueName}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+  // Storage Actions (Supabase Storage)
+  uploadFileToStorage: async (file, pathFolder = 'uploads') => {
+    if (!file) throw new Error('Nenhum arquivo providenciado.');
+    
+    const uniqueName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+    const filePath = `${pathFolder}/${uniqueName}`;
 
-      uploadTask.on(
-        'state_changed',
-        () => {
-          // Progress can be monitored here if needed
-        },
-        (error) => reject(error),
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadURL);
-          } catch (err) {
-            reject(err);
-          }
-        }
-      );
-    });
+    const { error: uploadError } = await supabase.storage
+      .from('site-assets') // Bucket name padrão, ajuste se necessário
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('site-assets')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
   },
 
   // Leads Actions
   adicionarLead: async (lead) => {
-    try {
-      await addDoc(collection(db, 'leads'), {
-        ...lead,
-        data: new Date().toISOString(),
-        lido: false
-      });
-    } catch (e) { console.error('Erro ao salvar lead:', e); }
+    await supabase.from('leads').insert([{
+      name: lead.name,
+      email: lead.email,
+      subject: lead.subject,
+      message: lead.message
+    }]);
   },
   removerLead: async (id) => {
-    await deleteDoc(doc(db, 'leads', id));
+    await supabase.from('leads').delete().eq('id', id);
   },
   marcarLeadLido: async (id) => {
-    await updateDoc(doc(db, 'leads', id), { lido: true });
+    await supabase.from('leads').update({ read: true }).eq('id', id);
   },
   marcarTodosLidos: async () => {
-    const { leads } = get();
-    leads.forEach(async (l) => {
-      if(!l.lido) await updateDoc(doc(db, 'leads', l.id), { lido: true });
-    });
+    await supabase.from('leads').update({ read: true }).eq('read', false);
   },
 
   // Marcas / Manuais Actions
   adicionarMarca: async (nome) => {
-    await addDoc(collection(db, 'marcas'), {
-      nome: nome.toUpperCase(),
-      manuais: [],
-      iconColor: 'bg-primary'
-    });
+    await supabase.from('marcas').insert([{ name: nome.toUpperCase(), icon_color: 'bg-primary' }]);
   },
   removerMarca: async (id) => {
-    await deleteDoc(doc(db, 'marcas', id));
+    await supabase.from('marcas').delete().eq('id', id);
   },
   adicionarManual: async (idMarca, titulo, link) => {
-    const marca = get().marcas.find(m => m.id === idMarca);
-    if (!marca) return;
-    const novosManuais = [...(marca.manuais || []), { id: Date.now().toString(), titulo, link }];
-    await updateDoc(doc(db, 'marcas', idMarca), { manuais: novosManuais });
+    await supabase.from('downloads').insert([{ marca_id: idMarca, title: titulo, link: link }]);
   },
-  removerManual: async (idMarca, manualId) => {
-    const marca = get().marcas.find(m => m.id === idMarca);
-    if (!marca) return;
-    const novosManuais = marca.manuais.filter(m => m.id !== manualId);
-    await updateDoc(doc(db, 'marcas', idMarca), { manuais: novosManuais });
+  removerManual: async (_idMarca, manualId) => {
+    await supabase.from('downloads').delete().eq('id', manualId);
   },
-  editarManual: async (idMarca, manualId, novoTitulo, novoLink) => {
-    const marca = get().marcas.find(m => m.id === idMarca);
-    if (!marca) return;
-    const novosManuais = marca.manuais.map(m => 
-      m.id === manualId ? { ...m, titulo: novoTitulo, link: novoLink } : m
-    );
-    await updateDoc(doc(db, 'marcas', idMarca), { manuais: novosManuais });
+  editarManual: async (_idMarca, manualId, novoTitulo, novoLink) => {
+    await supabase.from('downloads').update({ title: novoTitulo, link: novoLink }).eq('id', manualId);
   },
 
   // Blog Actions
   adicionarPost: async (post) => {
-    await addDoc(collection(db, 'blog'), {
-      ...post,
-      data: new Date().toISOString()
-    });
+    await supabase.from('blog_posts').insert([{
+      title: post.titulo,
+      summary: post.resumo,
+      content: post.conteudo,
+      image_url: post.imageUrl,
+      author: post.autor
+    }]);
   },
   removerPost: async (id) => {
-    await deleteDoc(doc(db, 'blog', id));
+    await supabase.from('blog_posts').delete().eq('id', id);
   },
   editarPost: async (id, updatedPost) => {
-    await updateDoc(doc(db, 'blog', id), updatedPost);
+    await supabase.from('blog_posts').update({
+      title: updatedPost.titulo,
+      summary: updatedPost.resumo,
+      content: updatedPost.conteudo,
+      image_url: updatedPost.imageUrl,
+      author: updatedPost.autor
+    }).eq('id', id);
   },
 
   // CMS Actions (Content & Media)
   atualizarMedia: async (chave, tipo, valor) => {
     const { siteMedia } = get();
     const newMedia = { ...siteMedia, [chave]: { ...siteMedia[chave], [tipo]: valor } };
-    await setDoc(doc(db, 'config', 'siteData'), { siteMedia: newMedia }, { merge: true });
+    await supabase.from('site_config').upsert({ key: 'siteMedia', data: newMedia }, { onConflict: 'key' });
   },
   atualizarConteudo: async (pagina, chave, valor) => {
     const { siteContent } = get();
     const newContent = { ...siteContent, [pagina]: { ...siteContent[pagina], [chave]: valor } };
-    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
   },
   saveText: async (pagina, path, newValue) => {
     const { siteContent } = get();
-    // Funçao utilitária para atualizar objeto aninhado
     const updateDeep = (obj, pathArray, value) => {
       const newObj = { ...obj };
       let current = newObj;
@@ -285,8 +213,8 @@ export const useAdminStore = create((set, get) => ({
     const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), newValue);
     const newContent = { ...siteContent, [pagina]: newPageContent };
     
-    set({ siteContent: newContent }); // Update local state immediately for UX
-    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+    set({ siteContent: newContent });
+    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
   },
   addItemToArray: async (pagina, path, defaultItem) => {
     const { siteContent } = get();
@@ -307,7 +235,7 @@ export const useAdminStore = create((set, get) => ({
     const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), defaultItem);
     const newContent = { ...siteContent, [pagina]: newPageContent };
     set({ siteContent: newContent });
-    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
   },
   removeItemFromArray: async (pagina, path, index) => {
     const { siteContent } = get();
@@ -328,7 +256,7 @@ export const useAdminStore = create((set, get) => ({
     const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), index);
     const newContent = { ...siteContent, [pagina]: newPageContent };
     set({ siteContent: newContent });
-    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
   },
   atualizarArrayConteudo: async (pagina, chave, index, subChave, valor) => {
     const { siteContent } = get();
@@ -339,32 +267,42 @@ export const useAdminStore = create((set, get) => ({
       novoArray[index] = valor;
     }
     const newContent = { ...siteContent, [pagina]: { ...siteContent[pagina], [chave]: novoArray } };
-    await setDoc(doc(db, 'config', 'siteData'), { siteContent: newContent }, { merge: true });
+    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
   },
 
-  // Função Seeding (Executar apenas se a nuvem estiver vazia)
-  seedFirebase: async (initialData) => {
-    const snapshot = await getDocs(collection(db, 'marcas'));
-    if (snapshot.empty) {
-      console.log('☁️ Nuvem vazia detectada. Iniciando migração de dados...');
+  // Função Seeding Supabase (Opcional, similar ao Firebase)
+  seedSupabase: async (initialData) => {
+    const { data } = await supabase.from('marcas').select('id');
+    if (!data || data.length === 0) {
+      console.log('🚀 Supabase vazio. Iniciando seed...');
       
-      // Seed Marcas
-      initialData.marcas.forEach(async m => {
-        await addDoc(collection(db, 'marcas'), { nome: m.nome, manuais: m.manuais, iconColor: m.iconColor });
-      });
+      // Seed Marcas e Downloads
+      for (const m of initialData.marcas) {
+        const { data: newMarca } = await supabase.from('marcas').insert({ name: m.nome, icon_color: m.iconColor }).select().single();
+        if (newMarca) {
+          const downloads = m.manuais.map(d => ({ marca_id: newMarca.id, title: d.titulo, link: d.link }));
+          await supabase.from('downloads').insert(downloads);
+        }
+      }
 
       // Seed Blog
-      initialData.blogPosts.forEach(async p => {
-        await addDoc(collection(db, 'blog'), p);
-      });
+      const blogs = initialData.blogPosts.map(p => ({
+        title: p.titulo,
+        summary: p.resumo,
+        content: p.conteudo,
+        image_url: p.imageUrl,
+        author: p.autor,
+        created_at: p.data
+      }));
+      await supabase.from('blog_posts').insert(blogs);
 
       // Seed Config
-      await setDoc(doc(db, 'config', 'siteData'), { 
-        siteMedia: initialData.siteMedia, 
-        siteContent: initialData.siteContent 
-      });
+      await supabase.from('site_config').insert([
+        { key: 'siteMedia', data: initialData.siteMedia },
+        { key: 'siteContent', data: initialData.siteContent }
+      ]);
       
-      console.log('✅ Migração concluída com sucesso!');
+      console.log('✅ Seed concluído!');
     }
   }
 }));
