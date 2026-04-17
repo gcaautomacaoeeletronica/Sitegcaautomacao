@@ -79,7 +79,7 @@ const Laboratory = () => {
                   const DynamicIcon = Icons[feature.icon] || Icons.HelpCircle;
                   return (
                     <StaggerItem key={idx} className={`group ${idx === 1 ? 'mt-0 md:mt-8' : idx === 2 ? 'mt-0 md:mt-16' : ''}`}>
-                      <div className="bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                      <div className={`bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative ${isVisualEditorActive ? 'overflow-visible' : 'overflow-hidden'}`}>
                          {/* Delete Button */}
                          {isVisualEditorActive && (
                            <button 
@@ -94,11 +94,11 @@ const Laboratory = () => {
                             <DynamicIcon />
                          </div>
 
-                         <div className="relative mb-8">
+                         <div className="relative mb-8 flex items-start justify-between">
                             <div className="w-14 h-14 bg-blue-50 rounded flex items-center justify-center border border-blue-100 group-hover:bg-primary group-hover:text-white transition-all">
                                <DynamicIcon size={28} className="transition-transform group-hover:scale-110" />
                             </div>
-                            {/* Icon Selector */}
+                            {/* Icon Selector Button stays on top right of the icon group */}
                             <IconSelector pagina="laboratory" path={`features.${idx}.icon`} currentIcon={feature.icon} />
                          </div>
 

@@ -60,8 +60,8 @@ const EditableText = ({ pagina, path, children, className = "", tag = "span" }) 
       
       {/* Visual Indicators */}
       {!isEditing && !loading && (
-        <div className="absolute -top-6 left-0 bg-primary text-white text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
-          CLIQUE PARA EDITAR
+        <div className="absolute -top-4 left-0 bg-primary/80 text-white text-[7px] font-bold px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none uppercase tracking-tighter">
+          Editor Ativo
         </div>
       )}
       

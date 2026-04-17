@@ -1,11 +1,14 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAdminStore } from '../../store/adminStore';
 
 const ServiceCard = ({ title, description, link = "/servicos", icon: Icon }) => {
+  const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
+
   return (
     <Link to={link} className="block group h-full">
-       <div className="relative h-full flex flex-col bg-white border border-gray-200 rounded overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/50 hover:-translate-y-1">
+       <div className={`relative h-full flex flex-col bg-white border border-gray-200 rounded transition-all duration-300 hover:shadow-md hover:border-primary/50 hover:-translate-y-1 ${isVisualEditorActive ? 'overflow-visible' : 'overflow-hidden'}`}>
          
          {/* Top Accent Line */}
          <div className="absolute top-0 left-0 w-full h-1 bg-gray-100 group-hover:bg-primary transition-all duration-300"></div>
