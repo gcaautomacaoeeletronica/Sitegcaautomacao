@@ -246,7 +246,9 @@ const Home = () => {
                   </div>
                   <span className="text-xs font-bold uppercase tracking-widest">Adicionar Card</span>
                 </button>
-                         </StaggerContainer>
+              </StaggerItem>
+            )}
+          </StaggerContainer>
         </div>
       </section>
 
