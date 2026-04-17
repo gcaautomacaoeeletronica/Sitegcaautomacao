@@ -29,6 +29,15 @@ const BlogPost = () => {
         ogImage={post.imageUrl}
         ogType="article"
         canonical={`/blog/${post.id}`}
+        keywords={`${post.titulo}, automação industrial, manutenção eletrônica, reparo industrial, GCA automação`}
+        breadcrumbs={[
+          { name: 'Blog Técnico', path: '/blog' },
+          { name: post.titulo, path: `/blog/${post.id}` }
+        ]}
+        article={{
+          datePublished: post.data,
+          dateModified: post.data
+        }}
       />
       {/* Header do Artigo */}
       <header className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">

@@ -1,14 +1,125 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon e Ícones Multiplataforma -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Tema e Cor (Android Chrome / iOS Safari) -->
+    <meta name="theme-color" content="#c0392b" />
+    <meta name="msapplication-TileColor" content="#c0392b" />
+    <meta name="application-name" content="GCA Automação Industrial" />
+    <meta name="apple-mobile-web-app-title" content="GCA Automação" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- SEO Básico -->
+    <title>GCA Automação e Eletrônica Industrial | Americana-SP</title>
+    <meta name="description" content="GCA Automação Industrial — Especialistas em Reparo e Manutenção de Inversores de Frequência, Servodrives, CLPs e Máquinas Gráficas KBA em Americana-SP." />
+    <meta name="keywords" content="automação industrial, manutenção eletrônica industrial, reparo de inversores de frequência, conserto de servodrive, americana sp, bosch rexroth, siemens, weg, parker, allen-bradley" />
+    <meta name="author" content="GCA Automação e Eletrônica Industrial" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="language" content="Portuguese" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="category" content="industrial, automation, electronics" />
+
+    <!-- Verificações de Propriedade dos Motores de Busca -->
     <meta name="google-site-verification" content="LBGMiyIPvQXnIf50DfR8DxPoJQQwKMUgE7Wcf_qpoaE" />
-    <title>GCA Automação e Eletrônica Industrial</title>
+    <!-- <meta name="msvalidate.01" content="SEU_CODIGO_BING_AQUI" /> -->
+    <!-- <meta name="yandex-verification" content="SEU_CODIGO_YANDEX_AQUI" /> -->
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GCA Automação Industrial" />
+    <meta property="og:title" content="GCA Automação e Eletrônica Industrial | Americana-SP" />
+    <meta property="og:description" content="Reparo e manutenção eletrônica industrial de alta precisão: Inversores, Servodrives, CLPs, Máquinas KBA. Americana-SP." />
+    <meta property="og:url" content="https://gcaautomacao.vercel.app" />
+    <meta property="og:image" content="https://gcaautomacao.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="GCA Automação Industrial - Laboratório de Reparos Eletrônicos" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GCA Automação e Eletrônica Industrial" />
+    <meta name="twitter:description" content="Especialistas em reparo de inversores, servodrives e CLPs industriais em Americana-SP." />
+    <meta name="twitter:image" content="https://gcaautomacao.vercel.app/og-image.jpg" />
+
+    <!-- Geo Tags Localização (Americana-SP) -->
+    <meta name="geo.region" content="BR-SP" />
+    <meta name="geo.placename" content="Americana, São Paulo, Brasil" />
+    <meta name="geo.position" content="-22.7392;-47.3311" />
+    <meta name="ICBM" content="-22.7392, -47.3311" />
+
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- DNS Prefetch (Performance) -->
+    <link rel="preconnect" href="https://kntkigijruzonpkwhqld.supabase.co" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+    <!-- JSON-LD: Schema.org LocalBusiness (indexação Google Maps / Knowledge Graph) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "GCA Automação e Eletrônica Industrial",
+      "@id": "https://gcaautomacao.vercel.app",
+      "url": "https://gcaautomacao.vercel.app",
+      "telephone": "+551930126360",
+      "email": "comercial@servicedrive.com.br",
+      "description": "Especialistas em reparo e manutenção de inversores de frequência, servodrives Bosch Rexroth, Siemens, ABB, WEG, Parker, Allen-Bradley, CLPs, IHMs e máquinas gráficas KBA.",
+      "image": "https://gcaautomacao.vercel.app/og-image.jpg",
+      "priceRange": "$$",
+      "currenciesAccepted": "BRL",
+      "paymentAccepted": "Dinheiro, Transferência Bancária, Pix",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rua São Bento, Nº 44, Cariobinha",
+        "addressLocality": "Americana",
+        "addressRegion": "SP",
+        "postalCode": "13472-370",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -22.739228,
+        "longitude": -47.331139
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+          "opens": "08:00",
+          "closes": "18:00"
+        }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Serviços de Manutenção Eletrônica Industrial",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reparo de Inversores de Frequência" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reparo de Servodrives Bosch Rexroth Indramat" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Manutenção de Máquinas Gráficas KBA" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reparo de CLPs Siemens e Allen-Bradley" } }
+        ]
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "São Paulo"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/gca-automacao-industrial"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

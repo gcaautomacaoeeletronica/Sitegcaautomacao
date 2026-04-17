@@ -19,9 +19,11 @@ const Downloads = () => {
   return (
     <div className="w-full bg-[#f6f8f8] min-h-screen relative overflow-hidden">
       <SEO 
-        title="Downloads de Manuais e Datasheets"
-        description="Acesse nosso acervo técnico de manuais Bosch Rexroth, Indramat, Siemens, ABB e outras grandes marcas industriais."
+        title="Downloads de Manuais Técnicos e Datasheets | WEG, Siemens, ABB, Bosch Rexroth"
+        description="Acesse gratuitamente manuais técnicos em PDF de inversores, servodrives e CLPs das maiores marcas: WEG, Siemens, ABB, Bosch Rexroth, Allen-Bradley, Yaskawa, Mitsubishi."
         canonical="/download-de-manuais"
+        keywords="manual inversor weg PDF, manual servodrive bosch rexroth, datasheet siemens sinamics, manual allen-bradley kinetix, manual yaskawa PDF, manual mitsubishi inversor"
+        breadcrumbs={[{ name: 'Manuais Técnicos', path: '/download-de-manuais' }]}
       />
       
       {/* Drawer / Modal de Documentos selecionados */}

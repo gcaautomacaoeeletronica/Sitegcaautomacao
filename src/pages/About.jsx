@@ -35,9 +35,11 @@ const About = () => {
   return (
     <div className="w-full bg-slate-50 relative overflow-hidden">
       <SEO 
-        title="Sobre a GCA | Experiência e Precisão"
-        description="Conheça a história e os valores da GCA Automação. Desde 2013 liderando o mercado de manutenção eletrônica industrial de alta complexidade."
+        title="Sobre a GCA | 10 Anos de Excelência em Americana-SP"
+        description="Conheça a GCA Automação Industrial, fundada em 2013. Laboratório próprio em Americana-SP especializado em reparo de equipamentos eletrônicos industriais de alta complexidade."
         canonical="/sobre-nos"
+        keywords="GCA automação industrial americana sp, empresa reparo eletrônico industrial americana, manutençao eletrônica industrial SP"
+        breadcrumbs={[{ name: 'Sobre Nós', path: '/sobre-nos' }]}
       />
       
       {/* Background patterns genéricos */}

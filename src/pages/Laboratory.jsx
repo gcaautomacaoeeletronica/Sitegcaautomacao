@@ -36,9 +36,11 @@ const Laboratory = () => {
   return (
     <div className="w-full bg-[#f6f8f8] relative overflow-hidden">
       <SEO 
-        title="Infraestrutura Laboratorial | GCA Automação"
-        description="Nosso laboratório conta com ambiente ESD controlado, estações de retrabalho BGA e gigas de teste dedicadas para garantir a qualidade de cada reparo."
+        title="Infraestrutura Laboratorial | Ambiente ESD e Gigas de Teste"
+        description="Nosso laboratório industrial em Americana-SP conta com ambiente ESD controlado, estações BGA robotizadas e gigas de teste dedicadas para Siemens S7, CompactLogix e Omron."
         canonical="/estrutura"
+        keywords="laboratório eletrônica industrial americana sp, teste inversor frequencia, ambiente ESD reparo eletrônico, giga teste CLP, retrabalho BGA industrial"
+        breadcrumbs={[{ name: 'Estrutura / Laboratório', path: '/estrutura' }]}
       />
       
 

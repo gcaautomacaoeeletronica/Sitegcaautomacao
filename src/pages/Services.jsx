@@ -107,9 +107,11 @@ const Services = () => {
   return (
     <div className="w-full bg-[#f8fafb] relative overflow-hidden">
       <SEO 
-        title="Manutenção Eletrônica Industrial | Especializada"
-        description="Reparo de servodrives, inversores de frequência, CLPs e IHMs. Especialistas Bosch Rexroth, Allen-Bradley, Siemens e Weg."
+        title="Manutenção Eletrônica Industrial | Inversores, Servodrives e CLPs"
+        description="Reparo especializado de servodrives Bosch Rexroth Indradrive, inversores WEG, Siemens Sinamics, Allen-Bradley Kinetix, Parker, CLPs e IHMs industriais."
         canonical="/manutencao-e-automacao-industrial"
+        keywords="reparo servodrive bosch rexroth, conserto inversor siemens sinamics, manutenção inversor allen-bradley, reparo inversor weg americana, conserto CLP siemens s7, manutenção CLP allen-bradley"
+        breadcrumbs={[{ name: 'Serviços', path: '/manutencao-e-automacao-industrial' }]}
       />
       
       {/* Background Sólido */}

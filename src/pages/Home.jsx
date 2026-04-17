@@ -32,9 +32,10 @@ const Home = () => {
   return (
     <div className="flex flex-col w-full bg-slate-50 overflow-hidden">
       <SEO 
-        title="Automação Industrial e Manutenção Eletrônica"
-        description="Especialistas em manutenção de servodrives, inversores Bosch Rexroth, Indramat e sistemas CNC. Precisão e agilidade em Americana-SP."
+        title="Automação Industrial e Manutenção Eletrônica em Americana-SP"
+        description="GCA Automação Industrial — Especialistas em reparo de servodrives Bosch Rexroth, inversores WEG, Siemens Sinamics, Allen-Bradley Kinetix e CLPs. Americana-SP. Orçamento rápido 24h."
         canonical="/"
+        keywords="conserto inversor de frequência americana sp, reparo servodrive bosch rexroth americana, manutenção eletrônica industrial americana sp, laboratório eletrônica industrial, GCA automação"
         googleVerification={googleVerificationCode}
       />
       
