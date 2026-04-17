@@ -52,7 +52,6 @@ const Header = () => {
                <EditableText pagina="global" path="email" tag="span">{global?.email || ''}</EditableText>
             </div>
           </div>
-          </div>
         </div>
       </div>
 

@@ -51,7 +51,7 @@ export const SITE_CONTENT_DEFAULT = {
       badge: "Expertise Absoluta",
       title: "Há 10 anos oferecendo o que há de melhor em tecnologia.",
       text: "Nós reduzimos o tempo de máquina parada através de um diagnóstico rápido, manutenção de altíssimo padrão com simulações de carga reais, e transparência técnica ponta a ponta. Sua planta industrial não pode parar."
-    }
+    },
     portfolio: {
       badge: "Portfólio de Soluções",
       title: "O que fazemos de",
