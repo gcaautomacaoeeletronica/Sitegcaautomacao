@@ -202,66 +202,94 @@ export const useAdminStore = create((set, get) => ({
     await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
   },
   saveText: async (pagina, path, newValue) => {
-    const { siteContent } = get();
-    const updateDeep = (obj, pathArray, value) => {
-      const newObj = { ...obj };
-      let current = newObj;
-      for (let i = 0; i < pathArray.length - 1; i++) {
-        const key = pathArray[i];
-        current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
-        current = current[key];
-      }
-      current[pathArray[pathArray.length - 1]] = value;
-      return newObj;
-    };
+    const { siteContent, fetchConfig } = get();
+    try {
+      const updateDeep = (obj, pathArray, value) => {
+        const newObj = { ...obj };
+        let current = newObj;
+        for (let i = 0; i < pathArray.length - 1; i++) {
+          const key = pathArray[i];
+          current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
+          current = current[key];
+        }
+        current[pathArray[pathArray.length - 1]] = value;
+        return newObj;
+      };
 
-    const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), newValue);
-    const newContent = { ...siteContent, [pagina]: newPageContent };
-    
-    set({ siteContent: newContent });
-    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+      const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), newValue);
+      const newContent = { ...siteContent, [pagina]: newPageContent };
+      
+      set({ siteContent: newContent });
+      const { error } = await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+      if (error) throw error;
+      
+      // Forçar refresh para garantir consistência
+      await fetchConfig();
+    } catch (err) {
+      console.error("Erro ao salvar texto:", err);
+      alert("Falha ao salvar alteração. Verifique sua conexão.");
+    }
   },
   addItemToArray: async (pagina, path, defaultItem) => {
-    const { siteContent } = get();
-    const updateDeep = (obj, pathArray, value) => {
-      const newObj = { ...obj };
-      let current = newObj;
-      for (let i = 0; i < pathArray.length - 1; i++) {
-        const key = pathArray[i];
-        current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
-        current = current[key];
-      }
-      const lastKey = pathArray[pathArray.length - 1];
-      const arr = Array.isArray(current[lastKey]) ? [...current[lastKey]] : [];
-      arr.push(value);
-      current[lastKey] = arr;
-      return newObj;
-    };
-    const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), defaultItem);
-    const newContent = { ...siteContent, [pagina]: newPageContent };
-    set({ siteContent: newContent });
-    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+    const { siteContent, fetchConfig } = get();
+    try {
+      const updateDeep = (obj, pathArray, value) => {
+        const newObj = JSON.parse(JSON.stringify(obj)); // Clone profundo para segurança em arrays
+        let current = newObj;
+        for (let i = 0; i < pathArray.length - 1; i++) {
+          const key = pathArray[i];
+          if (!current[key]) current[key] = {};
+          current = current[key];
+        }
+        const lastKey = pathArray[pathArray.length - 1];
+        if (!Array.isArray(current[lastKey])) current[lastKey] = [];
+        current[lastKey].push(value);
+        return newObj;
+      };
+
+      const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), defaultItem);
+      const newContent = { ...siteContent, [pagina]: newPageContent };
+      
+      set({ siteContent: newContent });
+      const { error } = await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+      if (error) throw error;
+
+      await fetchConfig();
+    } catch (err) {
+      console.error("Erro ao adicionar item:", err);
+      alert("Erro ao adicionar novo item ao site.");
+    }
   },
   removeItemFromArray: async (pagina, path, index) => {
-    const { siteContent } = get();
-    const updateDeep = (obj, pathArray, idx) => {
-      const newObj = { ...obj };
-      let current = newObj;
-      for (let i = 0; i < pathArray.length - 1; i++) {
-        const key = pathArray[i];
-        current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
-        current = current[key];
-      }
-      const lastKey = pathArray[pathArray.length - 1];
-      const arr = Array.isArray(current[lastKey]) ? [...current[lastKey]] : [];
-      arr.splice(idx, 1);
-      current[lastKey] = arr;
-      return newObj;
-    };
-    const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), index);
-    const newContent = { ...siteContent, [pagina]: newPageContent };
-    set({ siteContent: newContent });
-    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+    const { siteContent, fetchConfig } = get();
+    try {
+      const updateDeep = (obj, pathArray, idx) => {
+        const newObj = JSON.parse(JSON.stringify(obj));
+        let current = newObj;
+        for (let i = 0; i < pathArray.length - 1; i++) {
+          const key = pathArray[i];
+          if (!current[key]) current[key] = {};
+          current = current[key];
+        }
+        const lastKey = pathArray[pathArray.length - 1];
+        if (Array.isArray(current[lastKey])) {
+          current[lastKey].splice(idx, 1);
+        }
+        return newObj;
+      };
+
+      const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), index);
+      const newContent = { ...siteContent, [pagina]: newPageContent };
+      
+      set({ siteContent: newContent });
+      const { error } = await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+      if (error) throw error;
+
+      await fetchConfig();
+    } catch (err) {
+      console.error("Erro ao remover item:", err);
+      alert("Erro ao remover item do site.");
+    }
   },
   atualizarArrayConteudo: async (pagina, chave, index, subChave, valor) => {
     const { siteContent } = get();
