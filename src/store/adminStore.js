@@ -14,6 +14,7 @@ import {
   query,
   orderBy
 } from 'firebase/firestore';
+import { SITE_CONTENT_DEFAULT, SITE_MEDIA_DEFAULT } from '../data/initialData';
 
 export const useAdminStore = create((set, get) => ({
   isAuthenticated: false,
@@ -67,9 +68,39 @@ export const useAdminStore = create((set, get) => ({
 
     // 4. Monitorar Conteúdo Global e Mídias
     onSnapshot(doc(db, 'config', 'siteData'), (snapshot) => {
+      // Função Auxiliar para Mescla Profunda (Merging)
+      const deepMerge = (target, source) => {
+        const output = { ...target };
+        if (source && typeof source === 'object') {
+          Object.keys(source).forEach(key => {
+            if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+              if (!(key in target)) {
+                Object.assign(output, { [key]: source[key] });
+              } else {
+                output[key] = deepMerge(target[key], source[key]);
+              }
+            } else {
+              Object.assign(output, { [key]: source[key] });
+            }
+          });
+        }
+        return output;
+      };
+
       if (snapshot.exists()) {
-        const data = snapshot.data();
-        set({ siteMedia: data.siteMedia || {}, siteContent: data.siteContent || {} });
+        const cloudData = snapshot.data();
+        
+        // MESCLAR: Dados Iniciais + Dados da Nuvem (Nuvem ganha se existir)
+        const mergedContent = deepMerge(SITE_CONTENT_DEFAULT, cloudData.siteContent || {});
+        const mergedMedia = deepMerge(SITE_MEDIA_DEFAULT, cloudData.siteMedia || {});
+        
+        set({ 
+          siteMedia: mergedMedia, 
+          siteContent: mergedContent 
+        });
+      } else {
+        // Se nem o documento existe, usa só os defaults
+        set({ siteMedia: SITE_MEDIA_DEFAULT, siteContent: SITE_CONTENT_DEFAULT });
       }
     });
   },
