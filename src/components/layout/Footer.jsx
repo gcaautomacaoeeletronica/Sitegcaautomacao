@@ -110,8 +110,8 @@ const Footer = () => {
             <Link to="/admin" className="text-xs text-gray-700 hover:text-accent font-bold uppercase tracking-widest transition-colors border border-gray-800 px-3 py-1 rounded-md bg-white/5">
               Acesso Restrito
             </Link>
-            <span className="text-xs text-gray-600 hover:text-gray-300 cursor-pointer transition-colors">Política de Privacidade</span>
-            <span className="text-xs text-gray-600 hover:text-gray-300 cursor-pointer transition-colors">Termos de Uso</span>
+            <Link to="/privacidade" className="text-xs text-gray-600 hover:text-accent transition-colors">Política de Privacidade</Link>
+            <Link to="/termos" className="text-xs text-gray-600 hover:text-accent transition-colors">Termos de Uso</Link>
           </div>
         </div>
       </div>
