@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
+import { FadeIn, SlideIn } from '../components/ui/AnimWrapper';
 import { MapPin, Phone, Mail, Send, ShieldAlert, Clock, MessageSquare } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
