@@ -22,7 +22,7 @@ export const useAdminStore = create((set, get) => ({
   },
   fetchBlog: async () => {
     const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false });
-    if (data) set({ blogPosts: data.map(p => ({ ...p, titulo: p.title, resumo: p.summary, conteudo: p.content, imageUrl: p.image_url, data: p.created_at })) });
+    if (data) set({ blogPosts: data.map(p => ({ ...p, titulo: p.title, resumo: p.summary, conteudo: p.content, imageUrl: p.image_url, autor: p.author, data: p.created_at })) });
   },
   fetchMarcas: async () => {
     const { data: marcasData } = await supabase.from('marcas').select('*, downloads(*)');

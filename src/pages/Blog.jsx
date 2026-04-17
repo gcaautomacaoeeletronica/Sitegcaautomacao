@@ -50,7 +50,7 @@ const Blog = () => {
                     />
                     <div className="absolute top-4 left-4">
                        <span className="bg-primary text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-sm">
-                         {post.autor.split(' ')[1] || 'Técnico'}
+                         {post.autor ? post.autor.split(' ')[1] || 'Técnico' : 'Técnico'}
                        </span>
                     </div>
                   </div>
@@ -59,7 +59,7 @@ const Blog = () => {
                   <div className="p-6 flex flex-col h-[calc(100%-14rem)]">
                     <div className="flex items-center gap-4 text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-3">
                        <span className="flex items-center gap-1"><Calendar size={12} className="text-accent"/> {new Date(post.data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                       <span className="flex items-center gap-1"><User size={12}/> {post.autor}</span>
+                       <span className="flex items-center gap-1"><User size={12}/> {post.autor || 'Admin'}</span>
                     </div>
                     
                     <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors leading-tight line-clamp-2">
