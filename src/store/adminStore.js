@@ -6,6 +6,7 @@ export const useAdminStore = create((set, get) => ({
   isAuthenticated: false,
   adminEmail: null,
   isAuthLoading: true,
+  isInitialLoading: true,
   isVisualEditorActive: false,
   toggleVisualEditor: () => set(state => ({ isVisualEditorActive: !state.isVisualEditorActive })),
   admins: [],
@@ -60,6 +61,7 @@ export const useAdminStore = create((set, get) => ({
     // 2. Fetch Inicial
     const { fetchLeads, fetchBlog, fetchMarcas, fetchConfig } = get();
     await Promise.all([fetchLeads(), fetchBlog(), fetchMarcas(), fetchConfig()]);
+    set({ isInitialLoading: false });
 
     // 3. Listeners Realtime (se falhar, temos os fetchers diretos agindo nos botões)
     supabase.channel('public_leads')

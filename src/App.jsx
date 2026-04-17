@@ -24,11 +24,13 @@ import useDynamicFavicon from './hooks/useDynamicFavicon';
 // Store and Data
 import { useAdminStore } from './store/adminStore';
 import { MARCAS_DEFAULT, BLOG_POSTS_DEFAULT, SITE_CONTENT_DEFAULT, SITE_MEDIA_DEFAULT } from './data/initialData';
+import SplashScreen from './components/ui/SplashScreen';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
   const init = useAdminStore(state => state.init);
   const seedSupabase = useAdminStore(state => state.seedSupabase);
+  const isInitialLoading = useAdminStore(state => state.isInitialLoading);
 
   useEffect(() => {
     init();
@@ -39,6 +41,10 @@ const AnimatedRoutes = () => {
       siteMedia: SITE_MEDIA_DEFAULT
     });
   }, [init, seedSupabase]);
+
+  if (isInitialLoading) {
+    return <SplashScreen />;
+  }
 
   return (
     <AnimatePresence mode="wait">
