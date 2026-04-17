@@ -1,3 +1,4 @@
+import React from 'react';
 import { Target, Lightbulb, CheckCircle2, Eye, ShieldCheck, Cpu } from 'lucide-react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
