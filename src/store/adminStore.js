@@ -200,8 +200,18 @@ export const useAdminStore = create((set, get) => ({
   },
   atualizarConteudo: async (pagina, chave, valor) => {
     const { siteContent } = get();
-    const newContent = { ...siteContent, [pagina]: { ...siteContent[pagina], [chave]: valor } };
+    let newPageContent = { ...siteContent[pagina], [chave]: valor };
+    
+    // Auto-sincronizar whatsappNumber quando o whatsapp formatado mudar
+    if (pagina === 'global' && chave === 'whatsapp') {
+      const cleanNumber = valor.replace(/\D/g, '');
+      const finalNumber = cleanNumber.startsWith('55') || cleanNumber.length > 11 ? cleanNumber : `55${cleanNumber}`;
+      newPageContent = { ...newPageContent, whatsappNumber: finalNumber };
+    }
+
+    const newContent = { ...siteContent, [pagina]: newPageContent };
     await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+    set({ siteContent: newContent });
   },
   saveText: async (pagina, path, newValue) => {
     const { siteContent, fetchConfig } = get();
@@ -218,7 +228,16 @@ export const useAdminStore = create((set, get) => ({
         return newObj;
       };
 
-      const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), newValue);
+      let newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), newValue);
+      
+      // Auto-sincronizar whatsappNumber quando o whatsapp formatado mudar
+      if (pagina === 'global' && path === 'whatsapp') {
+        const cleanNumber = newValue.replace(/\D/g, '');
+        // Se o número não tem DDI, assume 55 (Brasil) por ser o foco da GCA
+        const finalNumber = cleanNumber.startsWith('55') || cleanNumber.length > 11 ? cleanNumber : `55${cleanNumber}`;
+        newPageContent = { ...newPageContent, whatsappNumber: finalNumber };
+      }
+
       const newContent = { ...siteContent, [pagina]: newPageContent };
       
       set({ siteContent: newContent });
