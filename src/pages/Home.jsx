@@ -324,60 +324,6 @@ const Home = () => {
         </svg>
       </div>
 
-      {/* Barra de Redes Sociais Premium (Glassmorphism + Scroll Progress) */}
-      <div className="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-8 py-10 px-4 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden group">
-        {/* Linha de progresso que enche no scroll */}
-        <motion.div 
-          className="absolute top-0 w-0.5 bg-accent origin-top"
-          style={{ scaleY, height: '100%' }}
-        />
-        <div className="w-px h-10 bg-white/10 pointer-events-none"></div>
-        
-        <a 
-          href={global?.linkedin} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="group/icon relative p-3.5 bg-white/5 rounded-full hover:bg-accent transition-all duration-500 hover:-translate-y-1 shadow-lg"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover/icon:text-white">
-            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>
-          </svg>
-          <span className="absolute left-16 px-3 py-1.5 bg-accent text-white text-[10px] font-black rounded-lg opacity-0 group-hover/icon:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-xl translate-x-2 group-hover/icon:translate-x-0">
-            LinkedIn
-          </span>
-        </a>
-
-        <a 
-          href={global?.instagram} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="group/icon relative p-3.5 bg-white/5 rounded-full hover:bg-accent transition-all duration-500 hover:-translate-y-1 shadow-lg"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover/icon:text-white">
-            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-          </svg>
-          <span className="absolute left-16 px-3 py-1.5 bg-accent text-white text-[10px] font-black rounded-lg opacity-0 group-hover/icon:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-xl translate-x-2 group-hover/icon:translate-x-0">
-            Instagram
-          </span>
-        </a>
-
-        <a 
-          href={global?.facebook} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="group/icon relative p-3.5 bg-white/5 rounded-full hover:bg-accent transition-all duration-500 hover:-translate-y-1 shadow-lg"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 group-hover/icon:text-white">
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-          </svg>
-          <span className="absolute left-16 px-3 py-1.5 bg-accent text-white text-[10px] font-black rounded-lg opacity-0 group-hover/icon:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-xl translate-x-2 group-hover/icon:translate-x-0">
-            Facebook
-          </span>
-        </a>
-
-        <div className="w-px h-10 bg-white/10 pointer-events-none"></div>
-      </div>
-
       {/* Botão WhatsApp Flutuante (Lead Focus) */}
       <a 
         href={`https://wa.me/${whatsappNumber}`} 
