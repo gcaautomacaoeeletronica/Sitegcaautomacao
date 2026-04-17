@@ -63,14 +63,19 @@ const Home = () => {
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
   const whatsappNumber = global?.whatsappNumber;
   
-  // Hooks para efeitos de scroll na barra social
-  const { scrollYProgress } = useScroll();
+  // Hooks para efeitos de scroll na barra social e progresso global
+  const { scrollY, scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  
+  // Efeito Parallax para seções
+  const yHero = useTransform(scrollY, [0, 1000], [0, 400]);
+  const yPattern = useTransform(scrollY, [0, 1000], [0, -200]);
   
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = (homeContent?.slides || []).map((s, i) => ({
     ...s,
-    bg: i === 0 ? "bg-primary-dark" : i === 1 ? "bg-blue-900" : "bg-gray-900"
+    bg: i === 0 ? "bg-primary-dark" : i === 1 ? "bg-[#0a0f18]" : "bg-[#111827]"
   }));
 
   useEffect(() => {
@@ -81,13 +86,19 @@ const Home = () => {
   }, [slides.length]);
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 overflow-hidden">
+    <div className="min-h-screen bg-slate-50 font-inter selection:bg-accent selection:text-white pt-20">
       <SEO 
-        title="Automação Industrial e Manutenção Eletrônica em Americana-SP"
+        title="GCA Automação Industrial | Excelência em Manutenção e Projetos"
         description="GCA Automação Industrial — Especialistas em reparo de servodrives Bosch Rexroth, inversores WEG, Siemens Sinamics, Allen-Bradley Kinetix e CLPs. Americana-SP. Orçamento rápido 24h."
         canonical="/"
         keywords="conserto inversor de frequência americana sp, reparo servodrive bosch rexroth americana, manutenção eletrônica industrial americana sp, laboratório eletrônica industrial, GCA automação"
         googleVerification={googleVerificationCode}
+      />
+
+      {/* Barra de Progresso Global (Topo) */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-accent z-[100] origin-left shadow-[0_0_10px_#D71920]"
+        style={{ scaleX }}
       />
       
       {/* Hero Slider Section Premium */}
@@ -97,16 +108,23 @@ const Home = () => {
             <div 
               key={index}
               className={`absolute inset-0 transition-all duration-1000 ease-in-out flex items-center justify-center ${slide.bg} ${
-                index === currentSlide ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105'
+                index === currentSlide ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'
               }`}
             >
-              {/* Mesh Overlay & Tech Grid */}
+              {/* Background Parallax Pattern */}
+              <motion.div 
+                style={{ y: yPattern }}
+                className="absolute inset-0 pattern-grid opacity-10 pointer-events-none"
+              />
+              
               <div className="absolute inset-0 bg-cover bg-center transition-all duration-1000" 
                    style={{ backgroundImage: `url(${siteMedia.home?.url})`, opacity: index === currentSlide ? 0.8 : 0 }}></div>
               <div className="absolute inset-0 bg-[#0a0c10] opacity-60"></div>
-              <div className="absolute inset-0 pattern-grid opacity-10"></div>
               
-              <div className="relative z-20 px-4 max-w-5xl mx-auto w-full flex flex-col justify-center translate-y-10">
+              <motion.div 
+                style={{ y: yHero }}
+                className="relative z-20 px-4 max-w-5xl mx-auto w-full flex flex-col justify-center translate-y-10"
+              >
                 <div className="overflow-hidden mb-2 border-l-4 border-accent pl-6">
                     <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight transition-transform duration-1000 delay-100 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
                       <EditableText pagina="home" path={`slides.${index}.title`} tag="span">{slide.title}</EditableText> <br/>
@@ -127,7 +145,7 @@ const Home = () => {
                      Fale Conosco
                    </a>
                 </div>
-              </div>
+              </motion.div>
             </div>
           );
 
@@ -252,11 +270,25 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Divisor SVG Técnico 1 */}
+      <div className="relative h-16 bg-white overflow-hidden">
+        <svg className="absolute bottom-0 w-full h-16 text-[#0c0e12] fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
+
       {/* Seção de Estatísticas (Stats Section) */}
       <StatsSection stats={homeContent?.stats || []} />
 
       {/* Trust Bar (Marcas atendidas) */}
       <TrustBar brands={homeContent?.trustBrands || []} />
+
+      {/* Divisor SVG Técnico 2 */}
+      <div className="relative h-16 bg-white overflow-hidden pointer-events-none">
+        <svg className="absolute top-0 w-full h-16 text-white fill-current transform rotate-180" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
 
       {/* Barra de Redes Sociais Premium (Glassmorphism + Scroll Progress) */}
       <div className="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-8 py-10 px-4 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden group">

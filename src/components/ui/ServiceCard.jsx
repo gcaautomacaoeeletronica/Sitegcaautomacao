@@ -63,6 +63,13 @@ const ServiceCard = ({ title, description, link = "/servicos", icon: Icon }) => 
          
          {/* Subtle pattern bottom right */}
          <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-pattern-dots opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+         {/* Scanner Line Effect - Appears on Hover */}
+         {!isVisualEditorActive && (
+           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">
+              <div className="scanner-line"></div>
+           </div>
+         )}
        </div>
     </Link>
   );

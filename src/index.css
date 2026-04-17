@@ -65,6 +65,24 @@
   .animate-pulse-subtle {
     animation: pulse-subtle 3s ease-in-out infinite;
   }
+
+  @keyframes scanner {
+    0% { top: -10%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 110%; opacity: 0; }
+  }
+
+  .scanner-line {
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    box-shadow: 0 0 15px var(--color-accent);
+    animation: scanner 3s linear infinite;
+    z-index: 20;
+    pointer-events: none;
+  }
 }
 
 .group:hover .group-hover\:pause {
