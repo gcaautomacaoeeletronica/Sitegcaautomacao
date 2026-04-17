@@ -106,3 +106,36 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.blog_posts;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.marcas;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.downloads;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.site_config;
+
+
+-- ==========================================
+-- Configuração do Storage (Arquivos/Imagens)
+-- ==========================================
+
+-- 1. Criar o Bucket 'site-assets' e torná-lo público
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('site-assets', 'site-assets', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. Remover políticas antigas se existirem
+DROP POLICY IF EXISTS "Leitura pública de imagens" ON storage.objects;
+DROP POLICY IF EXISTS "Upload para admin" ON storage.objects;
+DROP POLICY IF EXISTS "Update para admin" ON storage.objects;
+DROP POLICY IF EXISTS "Delete para admin" ON storage.objects;
+
+-- 3. Criar políticas de segurança para garantir que imagens apareçam e apenas usuários logados enviem
+CREATE POLICY "Leitura pública de imagens"
+ON storage.objects FOR SELECT TO public
+USING (bucket_id = 'site-assets');
+
+CREATE POLICY "Upload para admin"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK (bucket_id = 'site-assets');
+
+CREATE POLICY "Update para admin"
+ON storage.objects FOR UPDATE TO authenticated
+USING (bucket_id = 'site-assets');
+
+CREATE POLICY "Delete para admin"
+ON storage.objects FOR DELETE TO authenticated
+USING (bucket_id = 'site-assets');
