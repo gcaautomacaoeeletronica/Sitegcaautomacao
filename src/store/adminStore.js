@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { db, storage } from '../firebase';
+import { db, storage, auth, secondaryAuth } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { 
   collection, 
   addDoc, 
@@ -15,7 +16,9 @@ import {
 } from 'firebase/firestore';
 
 export const useAdminStore = create((set, get) => ({
-  isAuthenticated: localStorage.getItem('gca_auth') === 'true',
+  isAuthenticated: false,
+  adminEmail: null,
+  admins: [],
   leads: [],
   marcas: [],
   blogPosts: [],
@@ -25,6 +28,21 @@ export const useAdminStore = create((set, get) => ({
   // Inicialização e Listeners
   init: () => {
     console.log('Iniciando GCA Cloud Sync...');
+
+    // Observar sessão real do Firebase
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        set({ isAuthenticated: true, adminEmail: user.email });
+      } else {
+        set({ isAuthenticated: false, adminEmail: null });
+      }
+    });
+
+    // 0. Monitorar Administradores
+    onSnapshot(collection(db, 'admins'), (snapshot) => {
+      const admins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      set({ admins });
+    });
     
     // 1. Monitorar Leads
     onSnapshot(query(collection(db, 'leads'), orderBy('data', 'desc')), (snapshot) => {
@@ -53,18 +71,43 @@ export const useAdminStore = create((set, get) => ({
     });
   },
 
-  // Auth
-  login: (email, password) => {
-    if (email === 'admin@admin.com' && password === 'admin123') {
-      localStorage.setItem('gca_auth', 'true');
-      set({ isAuthenticated: true });
+  // Auth Reais
+  login: async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // O estado se atualiza pelo onAuthStateChanged do init()
       return true;
+    } catch (error) {
+      console.error('Erro de Login Firebase:', error);
+      throw error;
     }
-    return false;
   },
-  logout: () => {
-    localStorage.removeItem('gca_auth');
-    set({ isAuthenticated: false });
+  logout: async () => {
+    await signOut(auth);
+  },
+
+  changePassword: async (newPassword) => {
+    if(!auth.currentUser) throw new Error('Não há usuário logado para trocar de senha.');
+    await updatePassword(auth.currentUser, newPassword);
+  },
+
+  createNewAdmin: async (email, password, name) => {
+    try {
+      // Usar a instância secundária para não deslogar o admin atual
+      const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+      // Salvar os dados na collection admins para a tabela do painel
+      await setDoc(doc(db, 'admins', userCredential.user.uid), {
+        email: userCredential.user.email,
+        name: name,
+        createdAt: new Date().toISOString()
+      });
+      // Importante: deslogar o secundário para evitar polução
+      await signOut(secondaryAuth);
+      return true;
+    } catch (error) {
+      console.error('Erro ao Criar Sub-Admin:', error);
+      throw error;
+    }
   },
 
   // Storage Actions
@@ -80,7 +123,7 @@ export const useAdminStore = create((set, get) => ({
 
       uploadTask.on(
         'state_changed',
-        (snapshot) => {
+        () => {
           // Progress can be monitored here if needed
         },
         (error) => reject(error),

@@ -11,12 +11,12 @@ const AdminAuth = () => {
   const login = useAdminStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const success = login(email, password);
-    if (success) {
+    try {
+      await login(email, password);
       navigate('/admin/dashboard');
-    } else {
+    } catch (err) {
       setError(true);
     }
   };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -10,7 +10,8 @@ const AdminDashboard = () => {
         isAuthenticated, logout, marcas, siteMedia, blogPosts, siteContent, leads,
         adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
         adicionarPost, editarPost, removerPost, atualizarConteudo, atualizarArrayConteudo,
-        removerLead, marcarLeadLido, marcarTodosLidos, uploadFileToStorage
+        removerLead, marcarLeadLido, marcarTodosLidos, uploadFileToStorage,
+        admins, changePassword, createNewAdmin, adminEmail
     } = useAdminStore();
     
     // States gerais
@@ -39,6 +40,11 @@ const AdminDashboard = () => {
     const [postConteudo, setPostConteudo] = useState('');
     const [postImage, setPostImage] = useState('');
 
+    // States de Segurança
+    const [newPass, setNewPass] = useState('');
+    const [newPassLoading, setNewPassLoading] = useState(false);
+    const [adminForm, setAdminForm] = useState({ name: '', email: '', password: '' });
+    const [adminFormLoading, setAdminFormLoading] = useState(false);
     // States de Leads
     const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
     const [selectedLead, setSelectedLead] = useState(null);
@@ -142,6 +148,36 @@ const AdminDashboard = () => {
 
     const toggleMarcaExpand = (id) => {
         setExpandedMarcaId(prev => prev === id ? null : id);
+    };
+
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        setNewPassLoading(true);
+        try {
+            await changePassword(newPass);
+            alert('Senha alterada com sucesso! Use a nova senha no próximo login.');
+            setNewPass('');
+        } catch (err) {
+            alert('Erro ao alterar senha. Talvez seja necessário deslogar e logar novamente por segurança.');
+            console.error(err);
+        } finally {
+            setNewPassLoading(false);
+        }
+    };
+
+    const handleCreateAdmin = async (e) => {
+        e.preventDefault();
+        setAdminFormLoading(true);
+        try {
+            await createNewAdmin(adminForm.email, adminForm.password, adminForm.name);
+            alert('Novo administrador registrado com sucesso na nuvem!');
+            setAdminForm({ name: '', email: '', password: '' });
+        } catch (err) {
+            alert('Falha ao criar administrador. Verifique as regras do Firebase.');
+            console.error(err);
+        } finally {
+            setAdminFormLoading(false);
+        }
     };
 
     const handleFileUpload = async (e, chave, type, pathFolder = 'uploads') => {
@@ -469,7 +505,15 @@ const AdminDashboard = () => {
                         )}
                     </button>
                 </nav>
-                <div className="p-4 border-t border-white/10">
+                <div className="p-4 border-t border-white/10 space-y-2">
+                    <button 
+                        onClick={() => setActiveTab('security')}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'security' ? 'bg-emerald-500/20 text-emerald-400 shadow-lg' : 'bg-transparent text-gray-400 hover:bg-white/5'}`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <ShieldCheck size={18} /> Segurança & Acessos
+                        </div>
+                    </button>
                     <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg cursor-pointer hover:bg-red-500/20 transition-colors" onClick={logout}>
                         <LogOut size={18} /> Encerrar Sessão
                     </div>
@@ -1108,6 +1152,107 @@ const AdminDashboard = () => {
                                     )}
                                 </div>
                             </div>
+                        </div>
+                    </FadeIn>
+                )}
+
+                {/* TAB: SECURITY E ADMINISTRAÇÃO */}
+                {activeTab === 'security' && (
+                    <FadeIn>
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Formulario Senha */}
+                                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                        <KeyRound size={20} className="text-primary"/> Alterar Minha Senha
+                                    </h3>
+                                    <p className="text-sm text-gray-500 mb-6 font-medium">Troque a senha da sua conta de administrador atual ({adminEmail}).</p>
+                                    <form onSubmit={handlePasswordChange} className="space-y-4">
+                                        <div>
+                                            <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Nova Senha</label>
+                                            <input type="password" required minLength="6"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                                placeholder="Mínimo 6 caracteres"
+                                                value={newPass} onChange={e => setNewPass(e.target.value)} />
+                                        </div>
+                                        <button disabled={newPassLoading} type="submit" className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                            {newPassLoading ? 'Alterando...' : 'Salvar Nova Senha'}
+                                        </button>
+                                    </form>
+                                </div>
+
+                                {/* Formulario Novo Admin */}
+                                <div className="bg-gradient-to-br from-emerald-900/5 to-primary/5 rounded-2xl shadow-sm border border-gray-100 p-8 relative overflow-hidden">
+                                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                        <UserPlus size={20} className="text-emerald-600"/> Cadastrar Novo Admin
+                                    </h3>
+                                    <form onSubmit={handleCreateAdmin} className="space-y-4 relative z-10">
+                                        <div>
+                                            <label className="block text-xs font-black uppercase text-gray-600 tracking-widest mb-1">Nome</label>
+                                            <input type="text" required placeholder="Ex: Felipe Costa"
+                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-900 focus:outline-none focus:border-emerald-500"
+                                                value={adminForm.name} onChange={e => setAdminForm({...adminForm, name: e.target.value})} />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black uppercase text-gray-600 tracking-widest mb-1">E-mail</label>
+                                            <input type="email" required placeholder="admin@gca.com.br"
+                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-900 focus:outline-none focus:border-emerald-500"
+                                                value={adminForm.email} onChange={e => setAdminForm({...adminForm, email: e.target.value})} />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black uppercase text-gray-600 tracking-widest mb-1">Senha (Mín 6)</label>
+                                            <input type="password" required minLength="6"
+                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-900 focus:outline-none focus:border-emerald-500"
+                                                value={adminForm.password} onChange={e => setAdminForm({...adminForm, password: e.target.value})} />
+                                        </div>
+                                        <button disabled={adminFormLoading} type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
+                                            {adminFormLoading ? 'Cadastrando na Nuvem...' : 'Registrar Usuário'}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            {/* Tabela de Admins Atuais */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                    <ShieldCheck size={20} className="text-gray-400"/> Lista de Administradores Cadastrados
+                                </h3>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="border-b border-gray-100 uppercase text-[10px] font-black tracking-widest text-gray-400">
+                                                <th className="pb-3 px-2">Nome</th>
+                                                <th className="pb-3 px-2">E-mail (Login)</th>
+                                                <th className="pb-3 px-2">Data de Criação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-sm border-b border-gray-100">
+                                            {admins.map(admin => (
+                                                <tr key={admin.id} className="hover:bg-gray-50 border-b border-gray-50 last:border-transparent transition-colors">
+                                                    <td className="py-4 px-2 font-bold text-gray-800 flex items-center gap-2">
+                                                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-primary font-black uppercase shrink-0">
+                                                            {admin.name?.charAt(0) || '?'}
+                                                        </div>
+                                                        {admin.name}
+                                                    </td>
+                                                    <td className="py-4 px-2 font-mono text-gray-600">{admin.email}</td>
+                                                    <td className="py-4 px-2 text-gray-400 font-medium">
+                                                        {admin.createdAt ? new Date(admin.createdAt).toLocaleDateString('pt-BR') : 'Legado'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {admins.length === 0 && (
+                                                <tr>
+                                                    <td colSpan="3" className="py-8 text-center text-gray-400 text-xs italic">
+                                                        Nenhum admin adicional registrado manualmente no banco de dados.
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
                     </FadeIn>
                 )}
