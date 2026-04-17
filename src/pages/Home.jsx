@@ -304,12 +304,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Divisor SVG Técnico 1 */}
-      <div className="relative h-16 bg-white overflow-hidden">
-        <svg className="absolute bottom-0 w-full h-16 text-[#0c0e12] fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
-          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
-        </svg>
-      </div>
+
 
       {/* Seção de Estatísticas (Stats Section) */}
       <StatsSection stats={homeContent?.stats || []} />
@@ -317,12 +312,7 @@ const Home = () => {
       {/* Carousel Inovador de Marcas (Marcas atendidas) */}
       <InnovativeBrandsCarousel />
 
-      {/* Divisor SVG Técnico 2 */}
-      <div className="relative h-16 bg-white overflow-hidden pointer-events-none">
-        <svg className="absolute top-0 w-full h-16 text-white fill-current transform rotate-180" preserveAspectRatio="none" viewBox="0 0 1440 54">
-          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
-        </svg>
-      </div>
+
 
       {/* Botão WhatsApp Flutuante (Lead Focus) */}
       <a 
