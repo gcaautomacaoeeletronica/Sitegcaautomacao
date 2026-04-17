@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FadeIn, SlideIn } from '../components/ui/AnimWrapper';
-import { MapPin, Phone, Mail, Send, ShieldAlert } from 'lucide-react';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import { MapPin, Phone, Mail, Send, ShieldAlert, Clock, MessageSquare } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
@@ -13,6 +13,10 @@ const Contact = () => {
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [contactMode, setContactMode] = useState('message'); // 'message' | 'whatsapp'
+
+  const { scrollY } = useScroll();
+  const yHero = useTransform(scrollY, [0, 500], [0, 150]);
+  const yImage = useTransform(scrollY, [0, 500], [0, 100]);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -44,9 +48,13 @@ const Contact = () => {
 
   const heroContent = (
     <section className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-primary overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay" style={{ backgroundImage: `url(${siteMedia.contact?.url})` }}></div>
+      <motion.div 
+        style={{ y: yImage }}
+        className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay" 
+        style={{ backgroundImage: `url(${siteMedia.contact?.url})` }}
+      />
       <div className="absolute inset-0 bg-gradient-to-br from-primary-dark via-primary to-[#18426d] opacity-90"></div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <SlideIn direction="up">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 uppercase tracking-tight">
             <EditableText pagina="contact" path="heroTitle" tag="span">Fale com a <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-accent underline decoration-8 decoration-accent/50 underline-offset-8">GCA</span></EditableText>
@@ -55,7 +63,7 @@ const Contact = () => {
             Máquina parada? Precisando de um orçamento comissionado? Preencha os campos ou acione nosso plantão iminente.
           </EditableText>
         </SlideIn>
-      </div>
+      </motion.div>
     </section>
   );
 
@@ -72,6 +80,13 @@ const Contact = () => {
       {siteMedia.contact?.link ? (
         <a href={siteMedia.contact.link} target="_self">{heroContent}</a>
       ) : heroContent}
+
+      {/* Divisor Técnico */}
+      <div className="relative h-16 bg-[#f6f8f8] overflow-hidden -mt-16 z-20">
+        <svg className="absolute bottom-0 w-full h-16 text-[#f6f8f8] fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
 
       <section className="py-20 relative z-10 -mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

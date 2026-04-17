@@ -1,5 +1,5 @@
-import React from 'react';
-import { Target, Lightbulb, CheckCircle2, Eye } from 'lucide-react';
+import { Target, Lightbulb, CheckCircle2, Eye, ShieldCheck, Cpu } from 'lucide-react';
+import { useScroll, useTransform, motion } from 'framer-motion';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
@@ -8,13 +8,20 @@ import EditableText from '../components/ui/EditableText';
 const About = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const aboutContent = useAdminStore((state) => state.siteContent?.about);
+
+  const { scrollY } = useScroll();
+  const yHero = useTransform(scrollY, [0, 500], [0, 150]);
+  const yImage = useTransform(scrollY, [0, 500], [0, 100]);
   
   const bannerContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: `url(${siteMedia.about?.url})` }}></div>
+      <motion.div 
+        className="absolute inset-0 bg-cover bg-center opacity-80 shadow-inner" 
+        style={{ y: yImage, backgroundImage: `url(${siteMedia.about?.url})` }}
+      />
       <div className="absolute inset-0 bg-gray-900/80"></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SlideIn direction="up">
           <span className="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-bold tracking-widest uppercase mb-6 backdrop-blur-sm">
             Nossa História
@@ -28,7 +35,7 @@ const About = () => {
             {aboutContent?.heroSubtitle || ''}
           </EditableText>
         </SlideIn>
-      </div>
+      </motion.div>
     </section>
   );
 
@@ -48,6 +55,13 @@ const About = () => {
       {siteMedia.about?.link ? (
         <a href={siteMedia.about.link} target="_self">{bannerContent}</a>
       ) : bannerContent}
+
+      {/* Divisor Técnico */}
+      <div className="relative h-16 bg-slate-50 overflow-hidden -mt-16 z-20">
+        <svg className="absolute bottom-0 w-full h-16 text-slate-50 fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
 
       {/* Institucional (Split Screen Style) */}
       <section className="py-24 relative z-10">
@@ -131,6 +145,11 @@ const About = () => {
               <EditableText pagina="about" path="mission" tag="p" className="text-gray-600 leading-relaxed relative z-10">
                 {aboutContent?.mission || ''}
               </EditableText>
+              
+              {/* Scanner Effect */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">
+                <div className="scanner-line"></div>
+              </div>
             </StaggerItem>
 
             <StaggerItem className="group relative bg-white p-10 rounded-sm border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 transform md:translate-y-8">
@@ -142,6 +161,11 @@ const About = () => {
               <EditableText pagina="about" path="vision" tag="p" className="text-gray-600 leading-relaxed relative z-10">
                 {aboutContent?.vision || ''}
               </EditableText>
+
+              {/* Scanner Effect */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">
+                <div className="scanner-line"></div>
+              </div>
             </StaggerItem>
 
             <StaggerItem className="group relative bg-white p-10 rounded-sm border border-gray-200 shadow-sm hover:border-accent hover:shadow-md transition-all duration-300 hover:-translate-y-1">

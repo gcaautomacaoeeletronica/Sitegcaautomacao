@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useScroll, useTransform, motion } from 'framer-motion';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
 import {
@@ -61,6 +62,11 @@ const SensorCard = ({ icon: Icon, title, value, unit, color, bg, description, de
         {value}<span className="text-2xl ml-1 font-bold text-gray-400">{unit}</span>
       </div>
       <p className="text-sm text-gray-500 mt-4 leading-relaxed">{description}</p>
+      
+      {/* Scanner Effect */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">
+        <div className="scanner-line" style={{ filter: 'hue-rotate(180deg)', opacity: 0.5 }}></div>
+      </div>
     </div>
   </StaggerItem>
 );
@@ -81,6 +87,9 @@ const FeatureRow = ({ icon: Icon, title, text, color }) => (
 // ─── Main Component ───────────────────────────────────────────────────────
 const IoT = () => {
   const [activeTab, setActiveTab] = useState('nivel');
+  const { scrollY } = useScroll();
+  const yBg = useTransform(scrollY, [0, 1000], [0, 200]);
+  const yHero = useTransform(scrollY, [0, 1000], [0, -100]);
 
   const sensors = {
     nivel: {
@@ -114,16 +123,18 @@ const IoT = () => {
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Grid bg */}
-        <div className="absolute inset-0"
+        <motion.div 
+          style={{ y: yBg }}
+          className="absolute inset-0"
           style={{
             backgroundImage: 'linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px)',
             backgroundSize: '60px 60px'
           }}>
-        </div>
+        </motion.div>
         {/* Radial glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/8 blur-[80px] rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/8 blur-[100px] rounded-full pointer-events-none"></div>
+        <motion.div style={{ y: yHero }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none"></motion.div>
+        <motion.div style={{ y: yBg }} className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/8 blur-[80px] rounded-full pointer-events-none"></motion.div>
+        <motion.div style={{ y: yHero }} className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/8 blur-[100px] rounded-full pointer-events-none"></motion.div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -278,6 +289,13 @@ const IoT = () => {
           </div>
         </div>
       </section>
+
+      {/* Divisor Técnico */}
+      <div className="relative h-16 bg-[#030712] overflow-hidden">
+        <svg className="absolute bottom-0 w-full h-16 text-[#050d1a] fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
 
       {/* ── SOLUÇÕES IoT ── */}
       <section className="py-32 relative">

@@ -1,12 +1,22 @@
-import { useState } from 'react';
-import { ChevronDown, ArrowRight, Zap, Activity, Cpu, Settings, Wrench, Shield, Plus, X, Layers, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import { 
+  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor,
+  ChevronDown, ArrowRight, Wrench, Shield, X, HelpCircle as HelpIcon
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
-import * as Icons from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
+
+const ICON_MAP = {
+  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor,
+  ChevronDown, ArrowRight, Wrench, Shield, X, HelpCircle: HelpIcon
+};
 
 const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -14,7 +24,7 @@ const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = fal
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
   
-  const Icon = Icons[iconName] || Icons.HelpCircle;
+  const Icon = ICON_MAP[iconName] || ICON_MAP.HelpCircle;
 
   return (
     <div className={`mb-4 rounded border transition-all duration-300 overflow-hidden relative group ${isOpen ? 'bg-white border-accent/30 shadow-sm' : 'bg-white/50 border-gray-100 hover:border-gray-200'}`}>
@@ -82,12 +92,20 @@ const Services = () => {
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
 
+  const { scrollY } = useScroll();
+  const yHero = useTransform(scrollY, [0, 500], [0, 150]);
+  const yImage = useTransform(scrollY, [0, 500], [0, 100]);
+
   const heroContent = (
     <section className="relative pt-32 pb-24 top-0 bg-[#0a0f18] overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center opacity-70 shadow-inner" style={{ backgroundImage: `url(${siteMedia.services?.url})` }}></div>
+      <motion.div 
+        style={{ y: yImage }}
+        className="absolute inset-0 bg-cover bg-center opacity-70 shadow-inner" 
+        style={{ backgroundImage: `url(${siteMedia.services?.url})` }}
+      />
       <div className="absolute inset-0 pattern-grid opacity-10"></div>
       <div className="absolute inset-0 bg-[#0a0f18]/80"></div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+      <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <SlideIn direction="up">
           <EditableText pagina="services" path="hero.badge" tag="span" className="inline-block py-1.5 px-4 rounded-full bg-accent/20 border border-accent/30 text-accent font-bold tracking-widest uppercase mb-6 text-xs">
             {servicesContent?.hero?.badge || ''}
@@ -100,7 +118,7 @@ const Services = () => {
             {servicesContent?.hero?.desc || ''}
           </EditableText>
         </SlideIn>
-      </div>
+      </motion.div>
     </section>
   );
 
@@ -119,6 +137,13 @@ const Services = () => {
       {siteMedia.services?.link ? (
         <a href={siteMedia.services.link} target="_self">{heroContent}</a>
       ) : heroContent}
+
+      {/* Divisor Técnico */}
+      <div className="relative h-16 bg-[#f8fafb] overflow-hidden -mt-16 z-20">
+        <svg className="absolute bottom-0 w-full h-16 text-[#f8fafb] fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
 
       {/* Accordion Sections - Catalog */}
       <section className="py-24 relative z-10">

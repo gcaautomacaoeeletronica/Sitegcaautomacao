@@ -1,11 +1,19 @@
 import React from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
-import * as Icons from 'lucide-react';
+import { useScroll, useTransform, motion } from 'framer-motion';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
-import { Plus, Trash2, Zap, Activity, Cpu } from 'lucide-react';
+import { 
+  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor
+} from 'lucide-react';
+
+const ICON_MAP = {
+  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor
+};
 
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
@@ -14,12 +22,20 @@ const Laboratory = () => {
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
 
+  const { scrollY } = useScroll();
+  const yHero = useTransform(scrollY, [0, 500], [0, 200]);
+  const yImage = useTransform(scrollY, [0, 500], [0, 100]);
+
   const heroContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-primary overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay" style={{ backgroundImage: `url(${siteMedia.laboratory?.url})` }}></div>
+      <motion.div 
+        style={{ y: yImage }}
+        className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay" 
+        style={{ backgroundImage: `url(${siteMedia.laboratory?.url})` }}
+      />
       <div className="absolute inset-0 bg-primary-dark/80 mix-blend-overlay"></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SlideIn>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter">
             <EditableText pagina="laboratory" path="hero.title" tag="span">{labContent?.hero?.title || ''}</EditableText> <br/>
@@ -29,7 +45,7 @@ const Laboratory = () => {
             {labContent?.hero?.desc || ''}
           </EditableText>
         </SlideIn>
-      </div>
+      </motion.div>
     </section>
   );
 
@@ -47,6 +63,13 @@ const Laboratory = () => {
       {siteMedia.laboratory?.link ? (
         <a href={siteMedia.laboratory.link} target="_self">{heroContent}</a>
       ) : heroContent}
+
+      {/* Divisor Técnico */}
+      <div className="relative h-16 bg-[#f6f8f8] overflow-hidden -mt-16 z-20">
+        <svg className="absolute bottom-0 w-full h-16 text-[#f6f8f8] fill-current" preserveAspectRatio="none" viewBox="0 0 1440 54">
+          <path d="M0 54L120 45C240 36 480 18 720 18C960 18 1200 36 1320 45L1440 54V0H1320C1200 0 960 0 720 0C480 0 240 0 120 0H0V54Z"></path>
+        </svg>
+      </div>
 
       <section className="py-24 relative z-10">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,7 +101,7 @@ const Laboratory = () => {
             {/* Feature Cards Modernos Dinâmicos */}
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {(labContent?.features || []).map((feature, idx) => {
-                  const DynamicIcon = Icons[feature.icon] || Icons.HelpCircle;
+                  const DynamicIcon = ICON_MAP[feature.icon] || ICON_MAP.HelpCircle;
                   return (
                     <StaggerItem key={idx} className={`group ${idx === 1 ? 'mt-0 md:mt-8' : idx === 2 ? 'mt-0 md:mt-16' : ''}`}>
                       <div className={`bg-white rounded-sm p-10 shadow-sm hover:shadow-md border border-gray-200 h-full transition-all duration-300 hover:-translate-y-1 relative ${isVisualEditorActive ? 'overflow-visible' : 'overflow-hidden'}`}>
@@ -110,6 +133,11 @@ const Laboratory = () => {
                          <EditableText pagina="laboratory" path={`features.${idx}.desc`} tag="p" className="text-gray-600 font-light leading-relaxed">
                             {feature.desc}
                          </EditableText>
+
+                         {/* Scanner Effect */}
+                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">
+                            <div className="scanner-line"></div>
+                         </div>
                       </div>
                     </StaggerItem>
                   );
