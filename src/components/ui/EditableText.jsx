@@ -5,6 +5,7 @@ import { Check, Loader2 } from 'lucide-react';
 const EditableText = ({ pagina, path, children, className = "", tag = "span" }) => {
   const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
   const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
+  const isAuthLoading = useAdminStore((state) => state.isAuthLoading);
   const saveText = useAdminStore((state) => state.saveText);
   
   const [isEditing, setIsEditing] = useState(false);
@@ -19,7 +20,7 @@ const EditableText = ({ pagina, path, children, className = "", tag = "span" }) 
     }
   }, [children, isEditing]);
 
-  const canEdit = isAuthenticated && isVisualEditorActive;
+  const canEdit = !isAuthLoading && isAuthenticated && isVisualEditorActive;
 
   const handleBlur = async () => {
     setIsEditing(false);

@@ -18,6 +18,7 @@ import {
 export const useAdminStore = create((set, get) => ({
   isAuthenticated: false,
   adminEmail: null,
+  isAuthLoading: true,
   isVisualEditorActive: false,
   toggleVisualEditor: () => set(state => ({ isVisualEditorActive: !state.isVisualEditorActive })),
   admins: [],
@@ -34,9 +35,9 @@ export const useAdminStore = create((set, get) => ({
     // Observar sessão real do Firebase
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        set({ isAuthenticated: true, adminEmail: user.email });
+        set({ isAuthenticated: true, adminEmail: user.email, isAuthLoading: false });
       } else {
-        set({ isAuthenticated: false, adminEmail: null });
+        set({ isAuthenticated: false, adminEmail: null, isAuthLoading: false });
       }
     });
 

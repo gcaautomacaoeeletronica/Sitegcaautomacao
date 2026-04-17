@@ -106,7 +106,10 @@ const Footer = () => {
           <p className="text-xs text-gray-600 font-medium">
             &copy; {new Date().getFullYear()} GCA Automação e Eletrônica Industrial.
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-6 items-center">
+            <Link to="/admin" className="text-xs text-gray-700 hover:text-accent font-bold uppercase tracking-widest transition-colors border border-gray-800 px-3 py-1 rounded-md bg-white/5">
+              Acesso Restrito
+            </Link>
             <span className="text-xs text-gray-600 hover:text-gray-300 cursor-pointer transition-colors">Política de Privacidade</span>
             <span className="text-xs text-gray-600 hover:text-gray-300 cursor-pointer transition-colors">Termos de Uso</span>
           </div>

@@ -4,10 +4,10 @@ import { Edit3, Eye, ShieldCheck, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const EditorFloatingPanel = () => {
-  const { isVisualEditorActive, toggleVisualEditor, isAuthenticated } = useAdminStore();
+  const { isVisualEditorActive, toggleVisualEditor, isAuthenticated, isAuthLoading } = useAdminStore();
   const navigate = useNavigate();
 
-  if (!isAuthenticated) return null;
+  if (isAuthLoading || !isAuthenticated) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3">

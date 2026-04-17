@@ -52,9 +52,7 @@ const Header = () => {
                <EditableText pagina="global" path="email" tag="span">{global?.email || ''}</EditableText>
             </div>
           </div>
-          <NavLink to="/admin" className="hidden sm:block text-[10px] text-gray-500 hover:text-accent uppercase tracking-widest font-mono transition-colors cursor-pointer">
-            Painel Técnico Avançado
-          </NavLink>
+          </div>
         </div>
       </div>
 
