@@ -68,19 +68,36 @@ export const useAdminStore = create((set, get) => ({
 
     // 4. Monitorar Conteúdo Global e Mídias
     onSnapshot(doc(db, 'config', 'siteData'), (snapshot) => {
-      // Função Auxiliar para Mescla Profunda (Merging)
+
+      // Converte objetos Firestore com chaves numéricas de volta para arrays
+      const sanitize = (data) => {
+        if (Array.isArray(data)) {
+          return data.map(sanitize);
+        }
+        if (data && typeof data === 'object') {
+          const keys = Object.keys(data);
+          const isNumericObject = keys.length > 0 && keys.every(k => !isNaN(parseInt(k)));
+          if (isNumericObject) {
+            return keys.sort((a, b) => parseInt(a) - parseInt(b)).map(k => sanitize(data[k]));
+          }
+          const result = {};
+          keys.forEach(k => { result[k] = sanitize(data[k]); });
+          return result;
+        }
+        return data;
+      };
+
+      // Mescla profunda preferindo dados da nuvem, mas mantendo defaults para campos novos
       const deepMerge = (target, source) => {
+        if (Array.isArray(source)) return source; // Arrays da nuvem sempre vencem
+        if (Array.isArray(target) && !Array.isArray(source)) return target; // Mantém array default se nuvem não tem
         const output = { ...target };
         if (source && typeof source === 'object') {
           Object.keys(source).forEach(key => {
             if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-              if (!(key in target)) {
-                Object.assign(output, { [key]: source[key] });
-              } else {
-                output[key] = deepMerge(target[key], source[key]);
-              }
+              output[key] = deepMerge(target?.[key] ?? {}, source[key]);
             } else {
-              Object.assign(output, { [key]: source[key] });
+              output[key] = source[key];
             }
           });
         }
@@ -89,17 +106,14 @@ export const useAdminStore = create((set, get) => ({
 
       if (snapshot.exists()) {
         const cloudData = snapshot.data();
-        
-        // MESCLAR: Dados Iniciais + Dados da Nuvem (Nuvem ganha se existir)
-        const mergedContent = deepMerge(SITE_CONTENT_DEFAULT, cloudData.siteContent || {});
-        const mergedMedia = deepMerge(SITE_MEDIA_DEFAULT, cloudData.siteMedia || {});
-        
+        const cleanContent = sanitize(cloudData.siteContent || {});
+        const cleanMedia   = sanitize(cloudData.siteMedia   || {});
+
         set({ 
-          siteMedia: mergedMedia, 
-          siteContent: mergedContent 
+          siteMedia:   deepMerge(SITE_MEDIA_DEFAULT,   cleanMedia),
+          siteContent: deepMerge(SITE_CONTENT_DEFAULT, cleanContent)
         });
       } else {
-        // Se nem o documento existe, usa só os defaults
         set({ siteMedia: SITE_MEDIA_DEFAULT, siteContent: SITE_CONTENT_DEFAULT });
       }
     });
