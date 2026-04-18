@@ -844,7 +844,15 @@ const AdminDashboard = () => {
                                 
                                 <div className="space-y-8">
                                     {renderMediaInput("Logomarca da Empresa (Circular)", "logo")}
-                                    {renderMediaInput("Página Inicial (Hero Principal)", "home")}
+                                    {renderMediaInput("Banner Padrão Home (Fallback)", "home")}
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-gray-100 pt-8">
+                                        <div className="md:col-span-3">
+                                            <h4 className="text-[10px] font-black uppercase text-accent tracking-[.2em] mb-4">Imagens Individuais dos Slides</h4>
+                                        </div>
+                                        {renderMediaInput("Slide 1", "home_1")}
+                                        {renderMediaInput("Slide 2", "home_2")}
+                                        {renderMediaInput("Slide 3", "home_3")}
+                                    </div>
                                     {renderMediaInput("Sobre Nós (Banner Superior)", "about")}
                                     {renderMediaInput("Sobre Nós (Imagem Lateral)", "aboutSide")}
                                     {renderMediaInput("Serviços (Banner Superior)", "services")}

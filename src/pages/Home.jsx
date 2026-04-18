@@ -156,7 +156,11 @@ const Home = () => {
               />
               
               <div className="absolute inset-0 bg-cover bg-center transition-all duration-1000" 
-                   style={{ backgroundImage: `url(${siteMedia.home?.url})`, opacity: index === currentSlide ? 0.8 : 0 }}></div>
+                   style={{ 
+                     backgroundImage: `url(${siteMedia[`home_${index + 1}`]?.url || siteMedia.home?.url})`, 
+                     opacity: index === currentSlide ? 0.8 : 0 
+                   }}>
+              </div>
               <div className="absolute inset-0 bg-[#0a0c10] opacity-60"></div>
               
               <motion.div 
