@@ -1,12 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAdminStore } from '../store/adminStore';
-import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import SEO from '../components/ui/SEO';
-import { Calendar, User, ArrowRight, Newspaper } from 'lucide-react';
+import Skeleton from '../components/ui/Skeleton';
 
 const Blog = () => {
-  const { blogPosts } = useAdminStore();
+  const { blogPosts, isInitialLoading } = useAdminStore();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -40,7 +35,18 @@ const Blog = () => {
       <section className="py-20 flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
+            {isInitialLoading ? (
+              [1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-white border border-gray-100 rounded-sm overflow-hidden p-6 space-y-4">
+                  <Skeleton height="224px" rounded="rounded-sm" />
+                  <div className="space-y-2">
+                    <Skeleton width="40%" height="14px" />
+                    <Skeleton width="80%" height="24px" />
+                    <Skeleton width="100%" height="60px" />
+                  </div>
+                </div>
+              ))
+            ) : blogPosts.filter(p => new Date(p.data) <= new Date()).map((post) => (
               <StaggerItem key={post.id}>
                 <Link to={`/blog/${post.id}`} className="group block h-full bg-white border border-gray-200 rounded-sm overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-primary/30">
                   {/* Container da Imagem */}
@@ -81,7 +87,7 @@ const Blog = () => {
             ))}
           </StaggerContainer>
 
-          {blogPosts.length === 0 && (
+          {blogPosts.filter(p => new Date(p.data) <= new Date()).length === 0 && (
             <div className="text-center py-20 bg-white rounded border border-dashed border-gray-200">
                <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
                <p className="text-gray-500 font-bold text-xl uppercase tracking-widest">Nenhum artigo publicado ainda.</p>

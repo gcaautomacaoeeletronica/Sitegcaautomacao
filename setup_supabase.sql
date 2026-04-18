@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS public.blog_posts (
     summary TEXT,
     content TEXT NOT NULL,
     image_url TEXT,
-    author TEXT
+    author TEXT,
+    published_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- 3. Criar tabela de marcas
@@ -162,7 +163,7 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Leitura pública de perfis" ON public.profiles;
 DROP POLICY IF EXISTS "Escrita autenticada em perfis" ON public.profiles;
 
-CREATE POLICY "Leitura pública de perfis" ON public.profiles FOR SELECT TO public USING (true);
+CREATE POLICY "Leitura autenticada de perfis" ON public.profiles FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Escrita autenticada em perfis" ON public.profiles FOR ALL TO authenticated USING (true);
 
 -- Ativar Realtime para perfis

@@ -8,7 +8,7 @@ import { Calendar, User, ArrowLeft, Share2, Clock } from 'lucide-react';
 const BlogPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { blogPosts } = useAdminStore();
+  const { blogPosts, isAuthenticated } = useAdminStore();
   
   const post = blogPosts.find(p => p.id === id);
 
@@ -16,8 +16,15 @@ const BlogPost = () => {
     window.scrollTo(0, 0);
     if (!post) {
       navigate('/blog');
+      return;
     }
-  }, [post, navigate]);
+
+    // Proteção de Agendamento: Se o post for futuro e não estiver logado, bloqueia acesso
+    const isFuturePost = new Date(post.data) > new Date();
+    if (isFuturePost && !isAuthenticated) {
+      navigate('/blog');
+    }
+  }, [post, navigate, isAuthenticated]);
 
   if (!post) return null;
 
@@ -77,23 +84,10 @@ const BlogPost = () => {
             </div>
 
             {/* Corpo do Texto */}
-            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed font-light">
-               <p className="text-2xl font-bold text-gray-900 border-l-4 border-primary pl-6 mb-12 italic">
-                  {post.resumo}
-               </p>
-               
-               {/* Transforma quebras de linha em parágrafos */}
-               {post.conteudo.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx} className="mb-8 last:mb-0">
-                    {paragraph.split('\n').map((line, lIdx) => (
-                      <React.Fragment key={lIdx}>
-                        {line}
-                        {lIdx !== paragraph.split('\n').length - 1 && <br />}
-                      </React.Fragment>
-                    ))}
-                  </p>
-               ))}
-            </div>
+            <div 
+              className="prose prose-lg max-w-none text-gray-700 leading-relaxed font-light prose-headings:text-gray-900 prose-a:text-primary prose-a:font-bold prose-strong:text-gray-900"
+              dangerouslySetInnerHTML={{ __html: post.conteudo }}
+            />
 
             {/* Footer do Artigo / Share */}
             <div className="mt-20 pt-10 border-t border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">

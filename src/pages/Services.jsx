@@ -8,6 +8,7 @@ import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
+import Skeleton from '../components/ui/Skeleton';
 
 /* ─────────────── ACCORDION ITEM (lógica 100% preservada) ─────────────── */
 const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
@@ -132,6 +133,7 @@ const Services = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const servicesContent = useAdminStore((state) => state.siteContent?.services);
   const globalContent = useAdminStore((state) => state.siteContent?.global);
+  const isInitialLoading = useAdminStore((state) => state.isInitialLoading);
   const isVisualEditorActive = useAdminStore((state) => state.isVisualEditorActive);
   const addItemToArray = useAdminStore((state) => state.addItemToArray);
   const removeItemFromArray = useAdminStore((state) => state.removeItemFromArray);
@@ -270,7 +272,16 @@ const Services = () => {
           </FadeIn>
 
           <StaggerContainer>
-             {(servicesContent?.catalog || []).map((cat, idx) => (
+             {isInitialLoading ? (
+               [1, 2, 3].map(i => (
+                 <div key={i} className="mb-4 bg-white p-6 rounded-xl border border-gray-100 space-y-3">
+                   <div className="flex items-center gap-4">
+                     <Skeleton width="44px" height="44px" />
+                     <Skeleton width="60%" height="24px" />
+                   </div>
+                 </div>
+               ))
+             ) : (servicesContent?.catalog || []).map((cat, idx) => (
                 <StaggerItem key={idx} className="relative group">
                    {isVisualEditorActive && (
                      <button 

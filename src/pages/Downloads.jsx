@@ -3,20 +3,22 @@ import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui
 import { Search, FolderDown, Download, FileText, X, ExternalLink } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
+import Skeleton from '../components/ui/Skeleton';
 
 const Downloads = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrandId, setSelectedBrandId] = useState(null);
-  const marcas = useAdminStore((state) => state.marcas);
+  const { marcas, isInitialLoading } = useAdminStore();
 
   const selectedBrand = marcas.find(m => m.id === selectedBrandId);
   const filtered = marcas
     .filter(m => {
-       const matchName = m.nome.toLowerCase().includes(searchTerm.toLowerCase());
+       const nameToSearch = (m.nome || m.name || '').toLowerCase();
+       const matchName = nameToSearch.includes(searchTerm.toLowerCase());
        const matchFile = Array.isArray(m.manuais) && m.manuais.some(man => man.titulo.toLowerCase().includes(searchTerm.toLowerCase()));
        return matchName || matchFile;
     })
-    .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    .sort((a, b) => (a.nome || a.name || '').localeCompare(b.nome || b.name || '', 'pt-BR'));
 
   return (
     <div className="w-full bg-[#f6f8f8] min-h-screen relative overflow-hidden">
@@ -139,22 +141,31 @@ const Downloads = () => {
 
                      {/* Grid de Marcas */}
                      <StaggerContainer className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                        {filtered.map((marca) => (
+                        {isInitialLoading ? (
+                           [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                              <div key={i} className="w-full bg-white border border-gray-100 rounded shadow-sm p-8 flex flex-col items-center gap-4">
+                                 <Skeleton width="48px" height="48px" rounded="rounded-sm" />
+                                 <div className="w-full space-y-2">
+                                    <Skeleton width="60%" height="16px" className="mx-auto" />
+                                    <Skeleton width="40%" height="12px" className="mx-auto" />
+                                 </div>
+                              </div>
+                           ))
+                        ) : filtered.map((marca) => (
                            <StaggerItem key={marca.id}>
                               <button 
                                 onClick={() => setSelectedBrandId(marca.id)}
-                                className="w-full group relative bg-white border border-gray-200 hover:border-primary/50 rounded shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center gap-4 h-full text-center overflow-hidden hover:-translate-y-1"
+                                className="w-full group relative bg-white border border-gray-200 hover:border-primary/50 rounded shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center gap-4 h-full text-center overflow-hidden hover:-translate-y-1 p-6"
                               >
                                  <div className={`h-12 w-12 rounded-sm ${marca.iconColor || 'bg-slate-50'} text-white flex items-center justify-center font-bold transition-all transform group-hover:scale-110 shadow-sm`}>
-                                    {marca.nome.charAt(0)}
+                                    {(marca.nome || marca.name || '?').charAt(0)}
                                  </div>
-                                 <div>
-                                    <h3 className="text-sm md:text-base font-black text-gray-900 group-hover:text-primary transition-colors uppercase tracking-widest">{marca.nome}</h3>
+                                 <div className="min-w-0 w-full px-2">
+                                    <h3 className="text-sm md:text-base font-black text-gray-900 group-hover:text-primary transition-colors uppercase tracking-widest truncate">{marca.nome || marca.name}</h3>
                                     
                                     <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500 font-bold transition-all">
                                        <FileText size={12} /> {Array.isArray(marca.manuais) ? marca.manuais.length : 0} Arquivos
                                     </div>
-
                                  </div>
                               </button>
                            </StaggerItem>

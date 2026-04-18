@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
+import Skeleton from '../components/ui/Skeleton';
+import RichTextEditor from '../components/ui/RichTextEditor';
+import SEOPanel from '../components/ui/SEOPanel';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const { 
-        isAuthenticated, logout, marcas, siteMedia, blogPosts, siteContent, leads,
+        isAuthenticated, isAuthLoading, isInitialLoading, logout, marcas, siteMedia, blogPosts, siteContent, leads,
         adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
         adicionarPost, editarPost, removerPost, atualizarConteudo, atualizarArrayConteudo,
         removerLead, marcarLeadLido, marcarTodosLidos, uploadFileToStorage,
@@ -39,6 +42,8 @@ const AdminDashboard = () => {
     const [postResumo, setPostResumo] = useState('');
     const [postConteudo, setPostConteudo] = useState('');
     const [postImage, setPostImage] = useState('');
+    const [postAutor, setPostAutor] = useState('GCA Equipe');
+    const [postData, setPostData] = useState(new Date().toISOString().slice(0, 16));
 
     // States de Segurança
     const [newPass, setNewPass] = useState('');
@@ -49,11 +54,52 @@ const AdminDashboard = () => {
     const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
     const [selectedLead, setSelectedLead] = useState(null);
 
+    // Cálculos do Dashboard de Leads
+    const leadStats = useMemo(() => {
+        if (!leads || leads.length === 0) return null;
+
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        
+        const unread = leads.filter(l => !l.lido).length;
+        const last7Days = leads.filter(l => new Date(l.data) >= sevenDaysAgo).length;
+        
+        // Distribuição por Assunto
+        const subjects = {};
+        leads.forEach(l => {
+            const s = l.subject || 'Sem Assunto';
+            subjects[s] = (subjects[s] || 0) + 1;
+        });
+        const topSubjects = Object.entries(subjects)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3);
+
+        // Atividade Diária (últimos 7 dias)
+        const daily = [];
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+            const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+            const count = leads.filter(l => {
+                const lDate = new Date(l.data);
+                return lDate.getDate() === date.getDate() && lDate.getMonth() === date.getMonth();
+            }).length;
+            daily.push({ label: dateStr, value: count });
+        }
+
+        return { unread, total: leads.length, last7Days, topSubjects, daily };
+    }, [leads]);
+
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated && !isAuthLoading) {
             navigate('/admin');
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, isAuthLoading, navigate]);
+
+    if (isAuthLoading) return (
+        <div className="min-h-screen bg-[#0a0f18] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </div>
+    );
 
     if (!isAuthenticated) return null;
 
@@ -107,12 +153,16 @@ const AdminDashboard = () => {
             setPostResumo(post.resumo);
             setPostConteudo(post.conteudo);
             setPostImage(post.imageUrl);
+            setPostAutor(post.autor || 'GCA Equipe');
+            setPostData(new Date(post.data).toISOString().slice(0, 16));
             setEditingPostId(post.id);
         } else {
             setPostTitle('');
             setPostResumo('');
             setPostConteudo('');
             setPostImage('');
+            setPostAutor('GCA Equipe');
+            setPostData(new Date().toISOString().slice(0, 16));
             setEditingPostId(null);
         }
         setIsBlogModalOpen(true);
@@ -120,18 +170,19 @@ const AdminDashboard = () => {
 
     const handleSavePost = (e) => {
         e.preventDefault();
-        const postData = {
+        const postPayload = {
             titulo: postTitle,
             resumo: postResumo,
             conteudo: postConteudo,
             imageUrl: postImage,
-            autor: 'GCA Admin'
+            autor: postAutor,
+            data: new Date(postData).toISOString()
         };
 
         if (editingPostId) {
-            editarPost(editingPostId, postData);
+            editarPost(editingPostId, postPayload);
         } else {
-            adicionarPost(postData);
+            adicionarPost(postPayload);
         }
         
         setIsBlogModalOpen(false);
@@ -345,7 +396,7 @@ const AdminDashboard = () => {
             {isBlogModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <FadeIn delay={0}>
-                        <div className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                        <div className="bg-white rounded-2xl w-full max-w-6xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
                             <div className="bg-gray-50 border-b border-gray-100 p-6 flex justify-between items-center shrink-0">
                                 <h3 className="font-black text-gray-900 text-lg uppercase tracking-tight">
                                     {editingPostId ? 'Editar Artigo' : 'Nova Publicação no Blog'}
@@ -353,45 +404,68 @@ const AdminDashboard = () => {
                                 <button onClick={() => setIsBlogModalOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors bg-white p-2 border border-gray-200 rounded-full shadow-sm"><X size={20}/></button>
                             </div>
                             <form onSubmit={handleSavePost} className="p-8 space-y-6 overflow-y-auto">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="md:col-span-2">
-                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Título do Artigo</label>
-                                        <input type="text" placeholder="Ex: O futuro da robótica industrial..." required
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                            value={postTitle} onChange={e => setPostTitle(e.target.value)} />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Resumo (Chamada rápida)</label>
-                                        <input type="text" placeholder="Uma frase curta para atrair o leitor..." required
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                            value={postResumo} onChange={e => setPostResumo(e.target.value)} />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <div className="flex items-end justify-between mb-2">
-                                            <label className="block text-xs font-black uppercase text-gray-400 tracking-widest">URL da Imagem de Destaque ou Upload</label>
-                                            <div className="relative overflow-hidden">
-                                                <button type="button" className="text-[10px] font-bold bg-primary text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-red-700 transition-colors disabled:opacity-50" disabled={uploadingKeys['blogRef']}>
-                                                    {uploadingKeys['blogRef'] ? 'Enviando...' : <><UploadCloud size={12} /> Upload PC</>}
-                                                </button>
-                                                <input 
-                                                    type="file" 
-                                                    accept="image/*"
-                                                    onChange={(e) => handleModalFileUpload(e, 'blog')}
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                    <div className="lg:col-span-2 space-y-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Título do Artigo</label>
+                                                <input type="text" placeholder="Ex: O futuro da robótica industrial..." required
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                                    value={postTitle} onChange={e => setPostTitle(e.target.value)} />
+                                            </div>
+                                            <div className="md:col-span-1">
+                                                <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Resumo (Chamada rápida)</label>
+                                                <input type="text" placeholder="Uma frase curta para atrair o leitor..." required
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                                    value={postResumo} onChange={e => setPostResumo(e.target.value)} />
+                                            </div>
+                                            <div className="md:col-span-1">
+                                                <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2 flex items-center gap-2">
+                                                    <Calendar size={12} className="text-primary"/> Data de Publicação (Agendamento)
+                                                </label>
+                                                <input type="datetime-local" required
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                                    value={postData} onChange={e => setPostData(e.target.value)} />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <div className="flex items-end justify-between mb-2">
+                                                    <label className="block text-xs font-black uppercase text-gray-400 tracking-widest">URL da Imagem de Destaque ou Upload</label>
+                                                    <div className="relative overflow-hidden">
+                                                        <button type="button" className="text-[10px] font-bold bg-primary text-white px-2 py-1 rounded flex items-center gap-1 hover:bg-red-700 transition-colors disabled:opacity-50" disabled={uploadingKeys['blogRef']}>
+                                                            {uploadingKeys['blogRef'] ? 'Enviando...' : <><UploadCloud size={12} /> Upload PC</>}
+                                                        </button>
+                                                        <input 
+                                                            type="file" 
+                                                            accept="image/*"
+                                                            onChange={(e) => handleModalFileUpload(e, 'blog')}
+                                                            disabled={uploadingKeys['blogRef']}
+                                                            className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <input type="url" placeholder="https://unsplash.com/foto... ou Upload Automático" required
                                                     disabled={uploadingKeys['blogRef']}
-                                                    className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:text-gray-400"
+                                                    value={postImage} onChange={e => setPostImage(e.target.value)} />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-4">Conteúdo do Artigo</label>
+                                                <RichTextEditor 
+                                                    content={postConteudo} 
+                                                    onChange={(html) => setPostConteudo(html)} 
                                                 />
                                             </div>
                                         </div>
-                                        <input type="url" placeholder="https://unsplash.com/foto... ou Upload Automático" required
-                                            disabled={uploadingKeys['blogRef']}
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:text-gray-400"
-                                            value={postImage} onChange={e => setPostImage(e.target.value)} />
                                     </div>
-                                    <div className="md:col-span-2">
-                                        <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Conteúdo do Artigo</label>
-                                        <textarea rows={8} placeholder="Escreva o texto completo do blog aqui..." required
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 font-light leading-relaxed"
-                                            value={postConteudo} onChange={e => setPostConteudo(e.target.value)} />
+                                    <div className="lg:col-span-1">
+                                        <div className="sticky top-0">
+                                            <SEOPanel 
+                                                title={postTitle}
+                                                summary={postResumo}
+                                                content={postConteudo}
+                                                imageUrl={postImage}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <button type="submit" className="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 uppercase tracking-widest text-xs">
@@ -610,7 +684,17 @@ const AdminDashboard = () => {
                                     <h3 className="text-lg font-bold text-gray-900">Diretórios Ativos ({marcas.length})</h3>
                                 </div>
                                 <div className="divide-y divide-gray-100 h-[600px] overflow-y-auto">
-                                    {marcas.map((marca) => (
+                                    {isInitialLoading ? (
+                                        [1, 2, 3, 4, 5].map(i => (
+                                            <div key={i} className="p-6 flex items-center gap-4">
+                                                <Skeleton width="48px" height="48px" rounded="rounded-xl" />
+                                                <div className="flex-1 space-y-2">
+                                                    <Skeleton width="40%" height="20px" />
+                                                    <Skeleton width="20%" height="12px" />
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : marcas.map((marca) => (
                                         <StaggerItem key={marca.id} className="p-4 hover:bg-gray-50/80 transition-colors flex flex-col gap-4 group">
                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                                 <div className="flex items-center gap-4">
@@ -759,7 +843,17 @@ const AdminDashboard = () => {
                             </div>
 
                             <div className="grid grid-cols-1 gap-4">
-                                {blogPosts.map(post => (
+                                {isInitialLoading ? (
+                                    [1, 2, 3].map(i => (
+                                        <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center gap-6">
+                                            <Skeleton width="128px" height="96px" rounded="rounded-lg" />
+                                            <div className="flex-1 space-y-2">
+                                                <Skeleton width="60%" height="24px" />
+                                                <Skeleton width="30%" height="16px" />
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : blogPosts.map(post => (
                                     <div key={post.id} className="bg-white p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center gap-6 group hover:shadow-lg transition-all">
                                         <div className="w-full md:w-32 h-24 rounded-lg overflow-hidden shrink-0 border border-gray-100">
                                             <img src={post.imageUrl} alt="" className="w-full h-full object-cover" />
@@ -769,6 +863,11 @@ const AdminDashboard = () => {
                                             <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs text-gray-400 font-bold uppercase tracking-wider">
                                                 <span className="flex items-center gap-1"><Calendar size={12} className="text-accent"/> {new Date(post.data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                                                 <span className="flex items-center gap-1"><User size={12}/> {post.autor}</span>
+                                                {new Date(post.data) > new Date() ? (
+                                                    <span className="px-2 py-0.5 bg-amber-100 text-amber-600 rounded text-[10px] font-black uppercase">Agendado</span>
+                                                ) : (
+                                                    <span className="px-2 py-0.5 bg-emerald-100 text-emerald-600 rounded text-[10px] font-black uppercase">Publicado</span>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
@@ -1107,9 +1206,101 @@ const AdminDashboard = () => {
                 {activeTab === 'leads' && (
                     <FadeIn>
                         <div className="space-y-6">
+                            {/* DASHBOARD DE LEADS */}
+                            {!isInitialLoading && leadStats && (
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    {/* Cartões de Métricas */}
+                                    <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="p-2 bg-blue-50 text-primary rounded-lg"><Mail size={20} /></div>
+                                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total</span>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-3xl font-black text-gray-900">{leadStats.total}</h4>
+                                                <p className="text-xs text-gray-500 font-bold uppercase mt-1">Mensagens</p>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm shadow-blue-50 flex flex-col justify-between ring-2 ring-primary/5">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="p-2 bg-primary text-white rounded-lg"><Zap size={20} /></div>
+                                                <span className="text-[10px] font-black text-primary uppercase tracking-widest">Novas</span>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-3xl font-black text-primary">{leadStats.unread}</h4>
+                                                <p className="text-xs text-primary/70 font-bold uppercase mt-1">Não Lidas</p>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><BarChart3 size={20} /></div>
+                                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Atividade</span>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-3xl font-black text-emerald-600">+{leadStats.last7Days}</h4>
+                                                <p className="text-xs text-gray-500 font-bold uppercase mt-1">Últimos 7 dias</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Gráfico de Atividade Semanal */}
+                                    <div className="bg-[#0a0f18] p-6 rounded-2xl border border-white/5 shadow-xl relative overflow-hidden">
+                                        <div className="absolute inset-0 pattern-grid opacity-5" />
+                                        <div className="relative z-10 h-full flex flex-col">
+                                            <h5 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-6">Frequência Semanal (Leads/Dia)</h5>
+                                            <div className="flex-1 flex items-end justify-between gap-2 px-2">
+                                                {leadStats.daily.map((d, i) => {
+                                                    const maxVal = Math.max(...leadStats.daily.map(x => x.value), 1);
+                                                    const heightPct = (d.value / maxVal) * 100;
+                                                    return (
+                                                        <div key={i} className="flex-1 flex flex-col items-center group">
+                                                            <div className="w-full relative">
+                                                                <div 
+                                                                    className="w-full bg-primary rounded-t-sm transition-all duration-700 ease-out group-hover:bg-accent"
+                                                                    style={{ height: `${Math.max(heightPct, 5)}%` }}
+                                                                />
+                                                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-white text-[10px] font-black text-primary px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                                                    {d.value}
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-[8px] font-black text-gray-600 mt-2 uppercase">{d.label}</span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="p-6 border-b border-gray-50 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="text-lg font-bold text-gray-900">Mensagens Recebidas</h3>
+                                        <span className="px-2 py-0.5 bg-gray-100 text-[10px] font-black text-gray-500 rounded-full">{leads.length}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <button 
+                                            onClick={marcarTodosLidos}
+                                            className="px-4 py-2 text-xs font-bold text-gray-500 hover:text-primary transition-colors flex items-center gap-2"
+                                        >
+                                            <CheckCheck size={16} /> Marcar tudo como lido
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="divide-y divide-gray-100 h-[650px] overflow-y-auto">
-                                    {leads.map((lead) => (
+                                    {isInitialLoading ? (
+                                        [1, 2, 3, 4].map(i => (
+                                            <div key={i} className="p-6 flex flex-col gap-3">
+                                                <div className="flex gap-4">
+                                                    <Skeleton width="60px" height="18px" rounded="rounded-full" />
+                                                    <Skeleton width="120px" height="18px" />
+                                                </div>
+                                                <Skeleton width="40%" height="24px" />
+                                                <Skeleton width="70%" height="18px" />
+                                            </div>
+                                        ))
+                                    ) : leads.map((lead) => (
                                         <div 
                                             key={lead.id} 
                                             className={`p-6 transition-all border-l-4 ${lead.lido ? 'border-transparent bg-white hover:bg-gray-50' : 'border-primary bg-blue-50/30'}`}
@@ -1235,7 +1426,20 @@ const AdminDashboard = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="text-sm border-b border-gray-100">
-                                            {admins.map(admin => (
+                                            {isInitialLoading ? (
+                                                [1, 2].map(i => (
+                                                    <tr key={i} className="border-b border-gray-50">
+                                                        <td className="py-4 px-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <Skeleton width="32px" height="32px" rounded="rounded-full" />
+                                                                <Skeleton width="100px" height="16px" />
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4 px-2"><Skeleton width="150px" height="16px" /></td>
+                                                        <td className="py-4 px-2"><Skeleton width="80px" height="16px" /></td>
+                                                    </tr>
+                                                ))
+                                            ) : admins.map(admin => (
                                                 <tr key={admin.id} className="hover:bg-gray-50 border-b border-gray-50 last:border-transparent transition-colors">
                                                     <td className="py-4 px-2 font-bold text-gray-800 flex items-center gap-2">
                                                         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-primary font-black uppercase shrink-0">

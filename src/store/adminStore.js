@@ -23,7 +23,17 @@ export const useAdminStore = create((set, get) => ({
   },
   fetchBlog: async () => {
     const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false });
-    if (data) set({ blogPosts: data.map(p => ({ ...p, titulo: p.title, resumo: p.summary, conteudo: p.content, imageUrl: p.image_url, autor: p.author, data: p.created_at })) });
+    if (data) set({ 
+        blogPosts: data.map(p => ({ 
+            id: p.id, 
+            titulo: p.title, 
+            resumo: p.summary, 
+            conteudo: p.content, 
+            imageUrl: p.image_url, 
+            autor: p.author, 
+            data: p.published_at || p.created_at 
+        })) 
+    });
   },
   fetchMarcas: async () => {
     const { data: marcasData } = await supabase.from('marcas').select('*, downloads(*)');
@@ -120,16 +130,58 @@ export const useAdminStore = create((set, get) => ({
     return data;
   },
 
+  // Helper de Compressão de Imagem (Canvas)
+  compressImage: async (file, maxWidth = 1920, quality = 0.8) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth) {
+            height = (maxWidth / width) * height;
+            width = maxWidth;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          }, 'image/jpeg', quality);
+        };
+      };
+    });
+  },
+
   // Storage Actions (Supabase Storage)
   uploadFileToStorage: async (file, pathFolder = 'uploads') => {
     if (!file) throw new Error('Nenhum arquivo providenciado.');
     
+    // Otimização automática para imagens
+    let fileToUpload = file;
+    if (file.type.startsWith('image/')) {
+        console.log('🖼️ Comprimindo imagem...');
+        fileToUpload = await get().compressImage(file);
+    }
+
     const uniqueName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
     const filePath = `${pathFolder}/${uniqueName}`;
 
     const { error: uploadError } = await supabase.storage
-      .from('site-assets') // Bucket name padrão, ajuste se necessário
-      .upload(filePath, file);
+      .from('site-assets')
+      .upload(filePath, fileToUpload);
 
     if (uploadError) throw uploadError;
 
@@ -142,94 +194,170 @@ export const useAdminStore = create((set, get) => ({
 
   // Leads Actions
   adicionarLead: async (lead) => {
-    const { error } = await supabase.from('leads').insert([{
-      name: lead.name, email: lead.email, subject: lead.subject, message: lead.message
-    }]);
-    if (error) console.error(error);
+    try {
+      const { error } = await supabase.from('leads').insert([{
+        name: lead.name, email: lead.email, subject: lead.subject, message: lead.message
+      }]);
+      if (error) throw error;
+    } catch (err) {
+      console.error('Erro ao adicionar lead:', err);
+    }
   },
   removerLead: async (id) => {
-    const { error } = await supabase.from('leads').delete().eq('id', id);
-    if (error) console.error(error);
+    try {
+      const { error } = await supabase.from('leads').delete().eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.error('Erro ao remover lead:', err);
+      alert('Falha ao remover mensagem.');
+    }
   },
   marcarLeadLido: async (id) => {
-    const { error } = await supabase.from('leads').update({ read: true }).eq('id', id);
-    if (error) console.error(error);
+    try {
+      const { error } = await supabase.from('leads').update({ read: true }).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.error('Erro ao marcar como lido:', err);
+    }
   },
   marcarTodosLidos: async () => {
-    const { error } = await supabase.from('leads').update({ read: true }).eq('read', false);
-    if (error) console.error(error);
+    try {
+      const { error } = await supabase.from('leads').update({ read: true }).eq('read', false);
+      if (error) throw error;
+    } catch (err) {
+      console.error('Erro ao marcar todos como lidos:', err);
+    }
   },
 
   // Marcas / Manuais Actions
   adicionarMarca: async (nome) => {
-    const { error } = await supabase.from('marcas').insert([{ name: nome.toUpperCase(), icon_color: 'bg-primary' }]);
-    if (error) { console.error(error); alert('Erro ao adicionar marca: ' + error.message); }
-    else get().fetchMarcas();
+    try {
+      const { error } = await supabase.from('marcas').insert([{ name: nome.toUpperCase(), icon_color: 'bg-primary' }]);
+      if (error) throw error;
+      get().fetchMarcas();
+    } catch (err) {
+      console.error('Erro ao adicionar marca:', err);
+      alert('Erro ao adicionar marca: ' + err.message);
+    }
   },
   removerMarca: async (id) => {
-    const { error } = await supabase.from('marcas').delete().eq('id', id);
-    if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
-    else get().fetchMarcas();
+    try {
+      const { error } = await supabase.from('marcas').delete().eq('id', id);
+      if (error) throw error;
+      get().fetchMarcas();
+    } catch (err) {
+      console.error('Erro ao remover marca:', err);
+      alert('Erro ao remover: ' + err.message);
+    }
   },
   adicionarManual: async (idMarca, titulo, link) => {
-    const { error } = await supabase.from('downloads').insert([{ marca_id: idMarca, title: titulo, link: link }]);
-    if (error) { console.error(error); alert('Erro ao adicionar arquivo: ' + error.message); }
-    else get().fetchMarcas();
+    try {
+      const { error } = await supabase.from('downloads').insert([{ marca_id: idMarca, title: titulo, link: link }]);
+      if (error) throw error;
+      get().fetchMarcas();
+    } catch (err) {
+      console.error('Erro ao adicionar arquivo:', err);
+      alert('Erro ao adicionar arquivo: ' + err.message);
+    }
   },
   removerManual: async (_idMarca, manualId) => {
-    const { error } = await supabase.from('downloads').delete().eq('id', manualId);
-    if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
-    else get().fetchMarcas();
+    try {
+      const { error } = await supabase.from('downloads').delete().eq('id', manualId);
+      if (error) throw error;
+      get().fetchMarcas();
+    } catch (err) {
+      console.error('Erro ao remover manual:', err);
+      alert('Erro ao remover: ' + err.message);
+    }
   },
   editarManual: async (_idMarca, manualId, novoTitulo, novoLink) => {
-    const { error } = await supabase.from('downloads').update({ title: novoTitulo, link: novoLink }).eq('id', manualId);
-    if (error) { console.error(error); alert('Erro ao editar arquivo: ' + error.message); }
-    else get().fetchMarcas();
+    try {
+      const { error } = await supabase.from('downloads').update({ title: novoTitulo, link: novoLink }).eq('id', manualId);
+      if (error) throw error;
+      get().fetchMarcas();
+    } catch (err) {
+      console.error('Erro ao editar manual:', err);
+      alert('Erro ao editar arquivo: ' + err.message);
+    }
   },
 
   // Blog Actions
   adicionarPost: async (post) => {
-    const { error } = await supabase.from('blog_posts').insert([{
-      title: post.titulo, summary: post.resumo, content: post.conteudo, image_url: post.imageUrl, author: post.autor
-    }]);
-    if (error) { console.error(error); alert('Erro ao salvar post: ' + error.message); }
-    else get().fetchBlog();
+    try {
+      const { error } = await supabase.from('blog_posts').insert([{
+        title: post.titulo, 
+        summary: post.resumo, 
+        content: post.conteudo, 
+        image_url: post.imageUrl, 
+        author: post.autor,
+        published_at: post.data || new Date().toISOString()
+      }]);
+      if (error) throw error;
+      get().fetchBlog();
+    } catch (err) {
+      console.error('Erro ao salvar post:', err);
+      alert('Erro ao salvar post: ' + err.message);
+    }
   },
   removerPost: async (id) => {
-    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
-    if (error) { console.error(error); alert('Erro ao remover: ' + error.message); }
-    else get().fetchBlog();
+    try {
+      const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+      if (error) throw error;
+      get().fetchBlog();
+    } catch (err) {
+      console.error('Erro ao remover post:', err);
+      alert('Erro ao remover: ' + err.message);
+    }
   },
   editarPost: async (id, updatedPost) => {
-    const { error } = await supabase.from('blog_posts').update({
-      title: updatedPost.titulo, summary: updatedPost.resumo, content: updatedPost.conteudo, image_url: updatedPost.imageUrl, author: updatedPost.autor
-    }).eq('id', id);
-    if (error) { console.error(error); alert('Erro ao editar post: ' + error.message); }
-    else get().fetchBlog();
+    try {
+      const { error } = await supabase.from('blog_posts').update({
+        title: updatedPost.titulo, 
+        summary: updatedPost.resumo, 
+        content: updatedPost.conteudo, 
+        image_url: updatedPost.imageUrl, 
+        author: updatedPost.autor,
+        published_at: updatedPost.data
+      }).eq('id', id);
+      if (error) throw error;
+      get().fetchBlog();
+    } catch (err) {
+      console.error('Erro ao editar post:', err);
+      alert('Erro ao editar post: ' + err.message);
+    }
   },
 
   // CMS Actions (Content & Media)
   atualizarMedia: async (chave, tipo, valor) => {
-    const { siteMedia } = get();
-    const newMedia = { ...siteMedia, [chave]: { ...siteMedia[chave], [tipo]: valor } };
-    set({ siteMedia: newMedia }); // Atualização imediata do estado local
-    const { error } = await supabase.from('site_config').upsert({ key: 'siteMedia', data: newMedia }, { onConflict: 'key' });
-    if (error) console.error('Erro ao salvar mídia:', error);
+    try {
+      const { siteMedia } = get();
+      const newMedia = { ...siteMedia, [chave]: { ...siteMedia[chave], [tipo]: valor } };
+      set({ siteMedia: newMedia });
+      const { error } = await supabase.from('site_config').upsert({ key: 'siteMedia', data: newMedia }, { onConflict: 'key' });
+      if (error) throw error;
+    } catch (err) {
+      console.error('Erro ao salvar mídia:', err);
+      alert('Erro ao salvar alteração de mídia.');
+    }
   },
   atualizarConteudo: async (pagina, chave, valor) => {
-    const { siteContent } = get();
-    let newPageContent = { ...siteContent[pagina], [chave]: valor };
-    
-    // Auto-sincronizar whatsappNumber quando o whatsapp formatado mudar
-    if (pagina === 'global' && chave === 'whatsapp') {
-      const cleanNumber = valor.replace(/\D/g, '');
-      const finalNumber = cleanNumber.startsWith('55') || cleanNumber.length > 11 ? cleanNumber : `55${cleanNumber}`;
-      newPageContent = { ...newPageContent, whatsappNumber: finalNumber };
-    }
+    try {
+      const { siteContent } = get();
+      let newPageContent = { ...siteContent[pagina], [chave]: valor };
+      
+      if (pagina === 'global' && chave === 'whatsapp') {
+        const cleanNumber = valor.replace(/\D/g, '');
+        const finalNumber = cleanNumber.startsWith('55') || cleanNumber.length > 11 ? cleanNumber : `55${cleanNumber}`;
+        newPageContent = { ...newPageContent, whatsappNumber: finalNumber };
+      }
 
-    const newContent = { ...siteContent, [pagina]: newPageContent };
-    await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
-    set({ siteContent: newContent });
+      const newContent = { ...siteContent, [pagina]: newPageContent };
+      set({ siteContent: newContent });
+      const { error } = await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
+      if (error) throw error;
+    } catch (err) {
+      console.error('Erro ao atualizar conteúdo:', err);
+    }
   },
   saveText: async (pagina, path, newValue) => {
     const { siteContent, fetchConfig } = get();
