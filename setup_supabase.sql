@@ -168,3 +168,39 @@ CREATE POLICY "Escrita autenticada em perfis" ON public.profiles FOR ALL TO auth
 
 -- Ativar Realtime para perfis
 ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
+
+-- ==========================================
+-- 6. Funções RPC de Gestão de Usuários Segura
+-- ==========================================
+
+-- Habilitar pgcrypto para hash de senhas (necessário caso não exista)
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Função para deletar um usuário (somente outro admin pode chamar)
+CREATE OR REPLACE FUNCTION public.admin_delete_user(target_user_id UUID)
+RETURNS void AS $$
+BEGIN
+  -- Verifica se quem está chamando é um admin autenticado na tabela profiles
+  IF EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid()) THEN
+    -- Deleta o usuário da tabela auth.users. 
+    -- O ON DELETE CASCADE na tabela profiles fará a limpeza automática.
+    DELETE FROM auth.users WHERE id = target_user_id;
+  ELSE
+    RAISE EXCEPTION 'Acesso negado: Você não tem permissão de administrador.';
+  END IF;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Função para redefinir a senha de um usuário (somente outro admin pode chamar)
+CREATE OR REPLACE FUNCTION public.admin_reset_password(target_user_id UUID, new_password TEXT)
+RETURNS void AS $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid()) THEN
+    UPDATE auth.users 
+    SET encrypted_password = crypt(new_password, gen_salt('bf')) 
+    WHERE id = target_user_id;
+  ELSE
+    RAISE EXCEPTION 'Acesso negado: Você não tem permissão de administrador.';
+  END IF;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

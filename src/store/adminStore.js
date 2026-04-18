@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { SITE_CONTENT_DEFAULT, SITE_MEDIA_DEFAULT } from '../data/initialData';
 
 export const useAdminStore = create((set, get) => ({
@@ -109,14 +110,21 @@ export const useAdminStore = create((set, get) => ({
   },
 
   createNewAdmin: async (email, password, name) => {
-    const { data, error } = await supabase.auth.signUp({ 
+    // Cliente secundário isolado para não substituir a sessão atual do administrador.
+    const adminSupabase = createClient(
+      import.meta.env.VITE_SUPABASE_URL,
+      import.meta.env.VITE_SUPABASE_ANON_KEY,
+      { auth: { persistSession: false, autoRefreshToken: false } }
+    );
+
+    const { data, error } = await adminSupabase.auth.signUp({ 
       email, 
       password, 
       options: { data: { name } } 
     });
     if (error) throw error;
     
-    // Inserir no profile também para listagem no dashboard
+    // Inserir no profile usando a conexão original já autenticada do admin.
     if (data.user) {
       const { error: profileError } = await supabase.from('profiles').upsert([{
         id: data.user.id,
@@ -128,6 +136,20 @@ export const useAdminStore = create((set, get) => ({
 
     get().fetchAdmins();
     return data;
+  },
+
+  deleteAdmin: async (userId) => {
+    const { error } = await supabase.rpc('admin_delete_user', { target_user_id: userId });
+    if (error) throw error;
+    get().fetchAdmins();
+  },
+
+  resetAdminPassword: async (userId, newPassword) => {
+    const { error } = await supabase.rpc('admin_reset_password', { 
+      target_user_id: userId, 
+      new_password: newPassword 
+    });
+    if (error) throw error;
   },
 
   // Helper de Compressão de Imagem (Canvas)

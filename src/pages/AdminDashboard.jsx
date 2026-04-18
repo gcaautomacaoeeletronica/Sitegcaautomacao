@@ -14,7 +14,7 @@ const AdminDashboard = () => {
         adicionarMarca, removerMarca, adicionarManual, editarManual, removerManual, atualizarMedia,
         adicionarPost, editarPost, removerPost, atualizarConteudo, atualizarArrayConteudo,
         removerLead, marcarLeadLido, marcarTodosLidos, uploadFileToStorage,
-        admins, changePassword, createNewAdmin, adminEmail
+        admins, changePassword, createNewAdmin, deleteAdmin, resetAdminPassword, adminEmail
     } = useAdminStore();
     
     // States gerais
@@ -228,6 +228,34 @@ const AdminDashboard = () => {
             console.error(err);
         } finally {
             setAdminFormLoading(false);
+        }
+    };
+
+    const handleDeleteAdmin = async (id, name) => {
+        if(window.confirm(`ATENÇÃO: Você tem certeza que deseja EXCLUIR PERMANENTEMENTE o usuário "${name}"?`)) {
+            try {
+                await deleteAdmin(id);
+                alert('Usuário apagado com sucesso.');
+            } catch (error) {
+                alert('Erro ao apagar: ' + error.message);
+                console.error(error);
+            }
+        }
+    };
+
+    const handleResetAdminPassword = async (id, name) => {
+        const newPass = window.prompt(`Digite a nova senha para o usuário "${name}" (mínimo 6 caracteres):`);
+        if (newPass === null) return; // cancelado
+        if (newPass.length < 6) {
+            alert('A senha deve ter pelo menos 6 caracteres.');
+            return;
+        }
+        try {
+            await resetAdminPassword(id, newPass);
+            alert('Senha redefinida com sucesso!');
+        } catch (error) {
+            alert('Erro ao redefinir: ' + error.message);
+            console.error(error);
         }
     };
 
@@ -1423,6 +1451,7 @@ const AdminDashboard = () => {
                                                 <th className="pb-3 px-2">Nome</th>
                                                 <th className="pb-3 px-2">E-mail (Login)</th>
                                                 <th className="pb-3 px-2">Data de Criação</th>
+                                                <th className="pb-3 px-2 text-right">Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody className="text-sm border-b border-gray-100">
@@ -1437,6 +1466,7 @@ const AdminDashboard = () => {
                                                         </td>
                                                         <td className="py-4 px-2"><Skeleton width="150px" height="16px" /></td>
                                                         <td className="py-4 px-2"><Skeleton width="80px" height="16px" /></td>
+                                                        <td className="py-4 px-2"><Skeleton width="60px" height="16px" /></td>
                                                     </tr>
                                                 ))
                                             ) : admins.map(admin => (
@@ -1451,11 +1481,30 @@ const AdminDashboard = () => {
                                                     <td className="py-4 px-2 text-gray-400 font-medium">
                                                         {admin.createdAt ? new Date(admin.createdAt).toLocaleDateString('pt-BR') : 'Legado'}
                                                     </td>
+                                                    <td className="py-4 px-2 text-right">
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            {admin.email !== adminEmail && (
+                                                                <>
+                                                                    <button onClick={() => handleResetAdminPassword(admin.id, admin.name)} title="Resetar Senha"
+                                                                        className="p-2 text-amber-500 hover:bg-amber-100 bg-amber-50 rounded transition-colors shadow-sm">
+                                                                        <KeyRound size={16} />
+                                                                    </button>
+                                                                    <button onClick={() => handleDeleteAdmin(admin.id, admin.name)} title="Excluir Conta"
+                                                                        className="p-2 text-red-500 hover:bg-red-100 bg-red-50 rounded transition-colors shadow-sm">
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                            {admin.email === adminEmail && (
+                                                                <span className="text-xs uppercase tracking-widest text-primary font-black bg-primary/10 px-2 py-1 rounded">Você</span>
+                                                            )}
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))}
                                             {admins.length === 0 && (
                                                 <tr>
-                                                    <td colSpan="3" className="py-8 text-center text-gray-400 text-xs italic">
+                                                    <td colSpan="4" className="py-8 text-center text-gray-400 text-xs italic">
                                                         Nenhum admin adicional registrado manualmente no banco de dados.
                                                     </td>
                                                 </tr>
