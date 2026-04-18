@@ -218,9 +218,10 @@ const Home = () => {
                 </div>
                 <div className="md:w-1/2">
                    <FadeIn delay={0.2}>
-                      <EditableText pagina="home" path="expertise.text" tag="p" className="text-gray-600 text-lg leading-relaxed border-l-2 border-gray-200 pl-6">
-                        {homeContent?.expertise?.text || ''}
-                      </EditableText>
+<div 
+   className="text-gray-600 text-lg leading-relaxed border-l-2 border-gray-200 pl-6 cms-content"
+   dangerouslySetInnerHTML={{ __html: homeContent?.expertise?.text || '' }}
+/>
                    </FadeIn>
                 </div>
             </div>

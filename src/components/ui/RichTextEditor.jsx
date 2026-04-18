@@ -91,23 +91,37 @@ const RichTextEditor = ({ content, onChange, placeholder }) => {
         <div className="w-px h-6 bg-gray-200 mx-1" />
 
         <MenuButton
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          isActive={editor.isActive('heading', { level: 1 })}
+          title="Título Extra Grande (H1)"
+        >
+          <span className="font-black text-xs">H1</span>
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           isActive={editor.isActive('heading', { level: 2 })}
-          title="Título H2"
+          title="Título Grande (H2)"
         >
           <Heading2 size={18} />
         </MenuButton>
         <MenuButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           isActive={editor.isActive('heading', { level: 3 })}
-          title="Título H3"
+          title="Título Médio (H3)"
         >
           <Heading3 size={18} />
         </MenuButton>
         <MenuButton
+          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+          isActive={editor.isActive('heading', { level: 4 })}
+          title="Título Pequeno (H4)"
+        >
+          <span className="font-bold text-xs">H4</span>
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().setParagraph().run()}
           isActive={editor.isActive('paragraph')}
-          title="Parágrafo"
+          title="Texto Normal (Parágrafo)"
         >
           <Type size={18} />
         </MenuButton>

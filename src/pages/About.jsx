@@ -32,9 +32,10 @@ const About = () => {
               {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
             </EditableText>
           </h1>
-          <EditableText pagina="about" path="heroSubtitle" tag="p" className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed">
-            {aboutContent?.heroSubtitle || ''}
-          </EditableText>
+          <div 
+             className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed cms-content"
+             dangerouslySetInnerHTML={{ __html: aboutContent?.heroSubtitle || '' }}
+          />
         </SlideIn>
       </motion.div>
     </section>
@@ -82,12 +83,13 @@ const About = () => {
                     {(aboutContent?.historyTitle || '').split(' ').map((word, i) => i >= 4 ? <span key={i} className="text-primary font-light block md:inline"> {word}</span> : i === 3 ? word + ' ' : word + ' ')}
                   </EditableText>
                 </h3>
-                <EditableText pagina="about" path="historyText" tag="p" className="text-gray-600 mb-6 leading-relaxed text-lg">
-                  {aboutContent?.historyText || ''}
-                </EditableText>
+                <div 
+                  className="text-gray-600 mb-6 leading-relaxed text-lg cms-content"
+                  dangerouslySetInnerHTML={{ __html: aboutContent?.historyText || '' }}
+                />
                 <div className="relative pl-8 py-4 my-10 bg-white border border-gray-200 shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-1.5 before:bg-accent">
                   <p className="text-gray-800 italic text-lg leading-relaxed font-medium">
-                    "<EditableText pagina="about" path="quote" tag="span">{aboutContent?.quote || ''}</EditableText>"
+                    "<span className="cms-content italic" dangerouslySetInnerHTML={{ __html: aboutContent?.quote || '' }}></span>"
                   </p>
                 </div>
               </FadeIn>
@@ -143,9 +145,10 @@ const About = () => {
                 <Target size={32} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Missão</h3>
-              <EditableText pagina="about" path="mission" tag="p" className="text-gray-600 leading-relaxed relative z-10">
-                {aboutContent?.mission || ''}
-              </EditableText>
+              <div 
+                className="text-gray-600 leading-relaxed relative z-10 cms-content"
+                dangerouslySetInnerHTML={{ __html: aboutContent?.mission || '' }}
+              />
               
               {/* Scanner Effect */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">
@@ -159,9 +162,10 @@ const About = () => {
                 <Eye size={32} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Visão</h3>
-              <EditableText pagina="about" path="vision" tag="p" className="text-gray-600 leading-relaxed relative z-10">
-                {aboutContent?.vision || ''}
-              </EditableText>
+              <div 
+                className="text-gray-600 leading-relaxed relative z-10 cms-content"
+                dangerouslySetInnerHTML={{ __html: aboutContent?.vision || '' }}
+              />
 
               {/* Scanner Effect */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 overflow-hidden">

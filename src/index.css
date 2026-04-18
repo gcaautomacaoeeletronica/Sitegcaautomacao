@@ -102,3 +102,45 @@
 .group:hover .group-hover\:pause {
   animation-play-state: paused;
 }
+
+/* CMS Rich Text Content Styling */
+.cms-content {
+  @apply leading-relaxed text-gray-700;
+}
+
+.cms-content h1 {
+  @apply text-4xl font-black text-gray-900 mb-6 tracking-tighter uppercase border-l-8 border-accent pl-6;
+}
+
+.cms-content h2 {
+  @apply text-3xl font-bold text-gray-900 mb-4 tracking-tight;
+}
+
+.cms-content h3 {
+  @apply text-2xl font-bold text-primary mb-3;
+}
+
+.cms-content h4 {
+  @apply text-xl font-bold text-gray-800 mb-2 uppercase tracking-wide;
+}
+
+.cms-content p {
+  @apply mb-4 leading-relaxed;
+}
+
+.cms-content ul {
+  @apply list-disc pl-6 mb-4 space-y-2;
+}
+
+.cms-content ol {
+  @apply list-decimal pl-6 mb-4 space-y-2;
+}
+
+.cms-content a {
+  @apply text-accent font-bold underline decoration-2 underline-offset-4 hover:text-accent-dark transition-colors;
+}
+
+.cms-content b, .cms-content strong {
+  @apply font-black text-gray-900;
+}
+

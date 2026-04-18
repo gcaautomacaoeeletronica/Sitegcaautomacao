@@ -1075,10 +1075,11 @@ const AdminDashboard = () => {
                                                         onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent?.home?.expertise, title: e.target.value })}
                                                         placeholder="Título principal"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 font-bold" />
-                                                    <textarea rows={3} value={siteContent?.home?.expertise?.text || ''} 
-                                                        onChange={(e) => atualizarConteudo('home', 'expertise', { ...siteContent?.home?.expertise, text: e.target.value })}
-                                                        placeholder="Texto de descrição"
-                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto de descrição (Expertise)</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.home?.expertise?.text || ''} 
+                                                        onChange={(html) => atualizarConteudo('home', 'expertise', { ...siteContent?.home?.expertise, text: html })}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -1102,9 +1103,10 @@ const AdminDashboard = () => {
                                                 </div>
                                                 <div className="md:col-span-2">
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Subtítulo do Hero</label>
-                                                    <textarea rows={2} value={siteContent?.about?.heroSubtitle || ''} 
-                                                        onChange={(e) => atualizarConteudo('about', 'heroSubtitle', e.target.value)}
-                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
+                                                    <RichTextEditor 
+                                                        content={siteContent?.about?.heroSubtitle || ''} 
+                                                        onChange={(html) => atualizarConteudo('about', 'heroSubtitle', html)}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -1115,29 +1117,33 @@ const AdminDashboard = () => {
                                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                             </div>
                                             <div>
-                                                <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto Institucional (Descrição)</label>
-                                                <textarea rows={4} value={siteContent?.about?.historyText || ''} 
-                                                    onChange={(e) => atualizarConteudo('about', 'historyText', e.target.value)}
-                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto Institucional (História)</label>
+                                                <RichTextEditor 
+                                                    content={siteContent?.about?.historyText || ''} 
+                                                    onChange={(html) => atualizarConteudo('about', 'historyText', html)}
+                                                />
                                             </div>
                                             <div>
                                                 <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Frase em Destaque (Citação)</label>
-                                                <textarea rows={2} value={siteContent?.about?.quote || ''} 
-                                                    onChange={(e) => atualizarConteudo('about', 'quote', e.target.value)}
-                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 italic focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                <RichTextEditor 
+                                                    content={siteContent?.about?.quote || ''} 
+                                                    onChange={(html) => atualizarConteudo('about', 'quote', html)}
+                                                />
                                             </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Nossa Missão</label>
-                                                    <textarea rows={3} value={siteContent?.about?.mission || ''} 
-                                                        onChange={(e) => atualizarConteudo('about', 'mission', e.target.value)}
-                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                    <RichTextEditor 
+                                                        content={siteContent?.about?.mission || ''} 
+                                                        onChange={(html) => atualizarConteudo('about', 'mission', html)}
+                                                    />
                                                 </div>
                                                 <div>
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Nossa Visão</label>
-                                                    <textarea rows={3} value={siteContent?.about?.vision || ''} 
-                                                        onChange={(e) => atualizarConteudo('about', 'vision', e.target.value)}
-                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                    <RichTextEditor 
+                                                        content={siteContent?.about?.vision || ''} 
+                                                        onChange={(html) => atualizarConteudo('about', 'vision', html)}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -1158,9 +1164,11 @@ const AdminDashboard = () => {
                                                     <input type="text" value={siteContent?.services?.hero?.highlight || ''} 
                                                         onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, highlight: e.target.value })}
                                                         placeholder="Destaque" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
-                                                    <textarea rows={2} value={siteContent?.services?.hero?.desc || ''} 
-                                                        onChange={(e) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, desc: e.target.value })}
-                                                        placeholder="Descrição" className="w-full md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Descrição do Hero</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.services?.hero?.desc || ''} 
+                                                        onChange={(html) => atualizarConteudo('services', 'hero', { ...siteContent?.services?.hero, desc: html })}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -1170,9 +1178,11 @@ const AdminDashboard = () => {
                                                     <input type="text" value={siteContent?.services?.laboratoryMini?.title || ''} 
                                                         onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, title: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-bold" />
-                                                    <textarea rows={2} value={siteContent?.services?.laboratoryMini?.desc || ''} 
-                                                        onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, desc: e.target.value })}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Descrição do Laboratório Mini</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.services?.laboratoryMini?.desc || ''} 
+                                                        onChange={(html) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, desc: html })}
+                                                    />
                                                     
                                                     <div className="space-y-2 mt-4">
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase">Itens de Rack (Lista)</label>
@@ -1199,9 +1209,11 @@ const AdminDashboard = () => {
                                                     <input type="text" value={siteContent?.laboratory?.hero?.highlight || ''} 
                                                         onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent?.laboratory?.hero, highlight: e.target.value })}
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
-                                                    <textarea rows={2} value={siteContent?.laboratory?.hero?.desc || ''} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'hero', { ...siteContent?.laboratory?.hero, desc: e.target.value })}
-                                                        className="w-full md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Descrição do Hero (Laboratório)</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.laboratory?.hero?.desc || ''} 
+                                                        onChange={(html) => atualizarConteudo('laboratory', 'hero', { ...siteContent?.laboratory?.hero, desc: html })}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -1214,12 +1226,16 @@ const AdminDashboard = () => {
                                                     <input type="text" value={siteContent?.laboratory?.performance?.highlight || ''} 
                                                         onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, highlight: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
-                                                    <textarea rows={2} value={siteContent?.laboratory?.performance?.text1 || ''} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, text1: e.target.value })}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
-                                                    <textarea rows={2} value={siteContent?.laboratory?.performance?.text2 || ''} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, text2: e.target.value })}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto Performance 1</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.laboratory?.performance?.text1 || ''} 
+                                                        onChange={(html) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, text1: html })}
+                                                    />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Texto Performance 2</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.laboratory?.performance?.text2 || ''} 
+                                                        onChange={(html) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, text2: html })}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

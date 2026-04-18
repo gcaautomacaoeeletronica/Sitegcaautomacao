@@ -166,9 +166,10 @@ const Services = () => {
             <EditableText pagina="services" path="hero.title" tag="span">{servicesContent?.hero?.title || ''}</EditableText>{' '}
             <EditableText pagina="services" path="hero.highlight" tag="span" className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400">{servicesContent?.hero?.highlight || ''}</EditableText>
           </h1>
-          <EditableText pagina="services" path="hero.desc" tag="p" className="text-lg text-gray-400 font-light max-w-2xl leading-relaxed">
-            {servicesContent?.hero?.desc || ''}
-          </EditableText>
+          <div 
+            className="text-lg text-gray-400 font-light max-w-2xl leading-relaxed cms-content"
+            dangerouslySetInnerHTML={{ __html: servicesContent?.hero?.desc || '' }}
+          />
 
           {/* Quick CTA */}
           <div className="flex flex-wrap gap-4 mt-10">
@@ -337,9 +338,10 @@ const Services = () => {
                     <EditableText pagina="services" path="laboratoryMini.title" tag="span">{servicesContent?.laboratoryMini?.title || ''}</EditableText>{' '}
                     <EditableText pagina="services" path="laboratoryMini.highlight" tag="span" className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{servicesContent?.laboratoryMini?.highlight || ''}</EditableText>
                   </h2>
-                  <EditableText pagina="services" path="laboratoryMini.desc" tag="p" className="text-lg text-gray-500 mb-8 leading-relaxed font-light">
-                    {servicesContent?.laboratoryMini?.desc || ''}
-                  </EditableText>
+                  <div 
+                    className="text-lg text-gray-500 mb-8 leading-relaxed font-light cms-content"
+                    dangerouslySetInnerHTML={{ __html: servicesContent?.laboratoryMini?.desc || '' }}
+                  />
                   
                   <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl border border-gray-100 mb-8 shadow-sm">
                      <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm uppercase tracking-widest">

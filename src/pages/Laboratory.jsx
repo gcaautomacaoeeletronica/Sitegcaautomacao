@@ -33,9 +33,10 @@ const Laboratory = () => {
             <EditableText pagina="laboratory" path="hero.title" tag="span">{labContent?.hero?.title || ''}</EditableText> <br/>
             <EditableText pagina="laboratory" path="hero.highlight" tag="span" className="font-light">{labContent?.hero?.highlight || ''}</EditableText>
           </h1>
-          <EditableText pagina="laboratory" path="hero.desc" tag="p" className="text-xl text-blue-100 max-w-2xl font-light">
-            {labContent?.hero?.desc || ''}
-          </EditableText>
+          <div 
+             className="text-xl text-blue-100 max-w-2xl font-light cms-content"
+             dangerouslySetInnerHTML={{ __html: labContent?.hero?.desc || '' }}
+          />
         </SlideIn>
       </motion.div>
     </section>
@@ -72,12 +73,14 @@ const Laboratory = () => {
                     <EditableText pagina="laboratory" path="performance.title" tag="span">{labContent?.performance?.title || ''}</EditableText> <br/>
                     <EditableText pagina="laboratory" path="performance.highlight" tag="span" className="text-accent underline decoration-4 underline-offset-4">{labContent?.performance?.highlight || ''}</EditableText>
                   </h2>
-                  <EditableText pagina="laboratory" path="performance.text1" tag="p" className="text-lg text-gray-600 leading-relaxed mb-6 font-light">
-                    {labContent?.performance?.text1 || ''}
-                  </EditableText>
-                  <EditableText pagina="laboratory" path="performance.text2" tag="p" className="text-lg text-gray-600 leading-relaxed font-light">
-                    {labContent?.performance?.text2 || ''}
-                  </EditableText>
+                  <div 
+                    className="text-lg text-gray-600 leading-relaxed mb-6 font-light cms-content"
+                    dangerouslySetInnerHTML={{ __html: labContent?.performance?.text1 || '' }}
+                  />
+                  <div 
+                    className="text-lg text-gray-600 leading-relaxed font-light cms-content"
+                    dangerouslySetInnerHTML={{ __html: labContent?.performance?.text2 || '' }}
+                  />
                </FadeIn>
                
                <div className="order-1 lg:order-2 w-full aspect-square md:aspect-video lg:aspect-square bg-gray-100 rounded-sm border border-gray-200 flex items-center justify-center shadow-sm">
