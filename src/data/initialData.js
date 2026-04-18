@@ -43,6 +43,8 @@ export const SITE_CONTENT_DEFAULT = {
     linkedin: "https://linkedin.com/company/gca-automacao",
     instagram: "https://instagram.com/gca.automacao",
     facebook: "https://facebook.com/gca.automacao",
+    city: "Americana",
+    state: "SP",
     cityState: "Americana/SP"
   },
   home: {
@@ -89,26 +91,41 @@ export const SITE_CONTENT_DEFAULT = {
   },
   services: {
     hero: {
-      badge: "Especialistas em Manutenção",
-      title: "Reparos Eletrônicos",
-      highlight: "Industriais",
-      desc: "Manutenção Eletrônica Industrial avançada."
+      badge: "Especialistas em Automação Industrial",
+      title: "Soluções Completas em",
+      highlight: "Automação & Eletrônica",
+      desc: "Manutenção eletrônica industrial, montagens elétricas, painéis de automação e controle IoT — um parceiro completo para a sua planta."
     },
     catalog: [
       { 
-        title: "Reparo Geral de Equipamentos Eletrônicos", 
-        icon: "Settings", 
+        title: "Manutenção de Inversores & Eletrônica Industrial", 
+        icon: "Wrench", 
         items: ["Inversores de frequência", "Servodrives", "Conversores CA/CC", "Retificadores comuns ou regenerativos", "Soft Starter", "IHM", "CLP", "Controladores em geral", "Placas eletrônicas em geral"] 
       },
       { 
-        title: "Servodrives", 
+        title: "Montagens Elétricas Industriais", 
+        icon: "Cable", 
+        items: ["Instalações elétricas industriais NR-10", "Cabeamento de força e controle", "Identificação e organização de fiação", "Aterramento técnico e DPS", "Passagem de cabos em eletrocalhas e eletrodutos", "Montagem de quadros de distribuição", "Comissionamento e startup elétrico", "Reforma e modernização de instalações"] 
+      },
+      { 
+        title: "Controle IoT & Monitoramento Remoto", 
+        icon: "Wifi", 
+        items: ["Desenvolvimento de dashboards industriais", "Aquisição de dados via MQTT e OPC-UA", "Integração com PLCs Siemens, Allen-Bradley e WEG", "Alertas e alarmes remotos via WhatsApp/e-mail", "Monitoramento de temperatura, vibração e corrente", "Automação de relatórios de produção", "Gateways de protocolos industriais", "Integração com sistemas SCADA e MES"] 
+      },
+      { 
+        title: "Montagem de Painéis Elétricos & Automação", 
+        icon: "LayoutGrid", 
+        items: ["Painéis de comando e controle", "Centros de controle de motores (CCM)", "Painéis de distribuição de energia (QDC/QGBT)", "Painéis de automação com CLP e IHM", "Painéis à prova de explosão (Ex)", "Projeto e documentação elétrica NBR 5410", "Painéis para inversores e softstarters", "Retrofit e modernização de painéis antigos"] 
+      },
+      { 
+        title: "Servodrives — Linhas Especializadas", 
         icon: "Activity", 
-        items: ["Sinamics", "Simodrive", "Parker SPD, LVD, SLVD", "Bosch Rexroth Indradrive, EcoDrive", "Allen-Bradley Kinetix6000, 6500, 5500, 5700, Ultra3000", "Axor Minimagnum", "Mitsubishi", "Panasonic", "SEW Movidrive", "Simovert Masterdrives MC"] 
+        items: ["Sinamics & Simodrive (Siemens)", "Parker SPD, LVD, SLVD", "Bosch Rexroth Indradrive, EcoDrive", "Allen-Bradley Kinetix 6000, 6500, 5500, 5700, Ultra3000", "Axor Minimagnum", "Mitsubishi & Panasonic", "SEW Movidrive", "Simovert Masterdrives MC"] 
       },
       { 
         title: "Reparo e Reforma de Retificadores (Galvanoplastia)", 
         icon: "Zap", 
-        items: ["Retificador a tiristor", "Retificadores a transistor (chaveado)"] 
+        items: ["Retificador a tiristor", "Retificadores a transistor (chaveado)", "Retificadores para galvanoplastia e tratamento de superfície", "Reforma e modernização de fontes industriais"] 
       },
       { 
         title: "Máquinas e Equipamentos Gráficos KBA", 
@@ -119,11 +136,13 @@ export const SITE_CONTENT_DEFAULT = {
     laboratoryMini: {
       title: "Laboratório de",
       highlight: "Reparos Eletrônicos",
-      desc: "Ambiente climatizado limpo e organizado.",
+      desc: "Ambiente ESD climatizado com bancadas dedicadas, instrumentos calibrados e simulação de carga real para validação 100% antes da entrega.",
       items: [
          "Rack de Testes Contrologix, Compactologix, SLC500...",
          "Rack de Testes para S7-200, S7-300, ET200L...",
-         "Rack Atos 4004 e Rack OMRON"
+         "Rack Atos 4004 e Rack OMRON",
+         "Analisador de espectro e osciloscópio digital",
+         "Estação de retrabalho BGA/SMD certificada"
       ]
     }
   },

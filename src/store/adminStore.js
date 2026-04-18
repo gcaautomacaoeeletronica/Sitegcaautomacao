@@ -46,6 +46,10 @@ export const useAdminStore = create((set, get) => ({
       set({ siteContent: content, siteMedia: media });
     }
   },
+  fetchAdmins: async () => {
+    const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+    if (data) set({ admins: data.map(a => ({ id: a.id, name: a.name, email: a.email, createdAt: a.created_at })) });
+  },
 
   // Inicialização e Listeners
   init: async () => {
@@ -59,8 +63,8 @@ export const useAdminStore = create((set, get) => ({
     });
 
     // 2. Fetch Inicial
-    const { fetchLeads, fetchBlog, fetchMarcas, fetchConfig } = get();
-    await Promise.all([fetchLeads(), fetchBlog(), fetchMarcas(), fetchConfig()]);
+    const { fetchLeads, fetchBlog, fetchMarcas, fetchConfig, fetchAdmins } = get();
+    await Promise.all([fetchLeads(), fetchBlog(), fetchMarcas(), fetchConfig(), fetchAdmins()]);
     set({ isInitialLoading: false });
 
     // 3. Listeners Realtime (se falhar, temos os fetchers diretos agindo nos botões)
@@ -74,6 +78,8 @@ export const useAdminStore = create((set, get) => ({
       .on('postgres_changes', { event: '*', schema: 'public', table: 'downloads' }, fetchMarcas).subscribe();
     supabase.channel('public_config')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'site_config' }, fetchConfig).subscribe();
+    supabase.channel('public_profiles')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, get().fetchAdmins).subscribe();
   },
 
   // Auth Supabase
@@ -93,14 +99,24 @@ export const useAdminStore = create((set, get) => ({
   },
 
   createNewAdmin: async (email, password, name) => {
-    // No Supabase, a criação de usuários costuma ser via Edge Functions ou pela Dashboard
-    // mas podemos usar o signUp direto se as políticas permitirem.
     const { data, error } = await supabase.auth.signUp({ 
       email, 
       password, 
       options: { data: { name } } 
     });
     if (error) throw error;
+    
+    // Inserir no profile também para listagem no dashboard
+    if (data.user) {
+      const { error: profileError } = await supabase.from('profiles').upsert([{
+        id: data.user.id,
+        email: email,
+        name: name
+      }]);
+      if (profileError) console.error('Erro ao criar perfil:', profileError);
+    }
+
+    get().fetchAdmins();
     return data;
   },
 

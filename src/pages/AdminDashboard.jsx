@@ -173,7 +173,7 @@ const AdminDashboard = () => {
             alert('Novo administrador registrado com sucesso na nuvem!');
             setAdminForm({ name: '', email: '', password: '' });
         } catch (err) {
-            alert('Falha ao criar administrador. Verifique as regras do Firebase.');
+            alert('Falha ao criar administrador. Verifique as regras do Supabase.');
             console.error(err);
         } finally {
             setAdminFormLoading(false);
@@ -194,7 +194,7 @@ const AdminDashboard = () => {
             }
         } catch (error) {
             console.error('Erro no upload:', error);
-            alert('Falha ao enviar arquivo. Verifique sua conexão ou regras do Firebase.');
+            alert('Falha ao enviar arquivo. Verifique sua conexão ou regras do Supabase.');
         } finally {
             setUploadingKeys(prev => ({ ...prev, [chave]: false }));
         }
@@ -1213,7 +1213,7 @@ const AdminDashboard = () => {
                                                 value={adminForm.password} onChange={e => setAdminForm({...adminForm, password: e.target.value})} />
                                         </div>
                                         <button disabled={adminFormLoading} type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
-                                            {adminFormLoading ? 'Cadastrando na Nuvem...' : 'Registrar Usuário'}
+                                            {adminFormLoading ? 'Cadastrando no Supabase...' : 'Registrar Usuário'}
                                         </button>
                                     </form>
                                 </div>

@@ -146,3 +146,24 @@ USING (bucket_id = 'site-assets');
 UPDATE storage.buckets
 SET file_size_limit = 157286400
 WHERE id = 'site-assets';
+
+-- ==========================================
+-- 5. Criar tabela de perfis (Admins)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS public.profiles (
+    id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT
+);
+
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Leitura pública de perfis" ON public.profiles;
+DROP POLICY IF EXISTS "Escrita autenticada em perfis" ON public.profiles;
+
+CREATE POLICY "Leitura pública de perfis" ON public.profiles FOR SELECT TO public USING (true);
+CREATE POLICY "Escrita autenticada em perfis" ON public.profiles FOR ALL TO authenticated USING (true);
+
+-- Ativar Realtime para perfis
+ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
