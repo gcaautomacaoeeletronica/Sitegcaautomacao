@@ -867,6 +867,13 @@ const AdminDashboard = () => {
                                                         placeholder="5519971206717"
                                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                                                 </div>
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Cidade / UF</label>
+                                                    <input type="text" value={siteContent?.global?.cityState || ''} 
+                                                        onChange={(e) => atualizarConteudo('global', 'cityState', e.target.value)}
+                                                        placeholder="Americana/SP"
+                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                </div>
                                             </div>
 
                                             {/* Google Search Console */}
