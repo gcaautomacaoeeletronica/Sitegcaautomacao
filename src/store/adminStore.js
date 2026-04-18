@@ -95,7 +95,9 @@ export const useAdminStore = create((set, get) => ({
 
   // Auth Supabase
   login: async (email, password) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const cleanEmail = email?.trim() || '';
+    const cleanPass = password?.trim() || '';
+    const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password: cleanPass });
     if (error) throw error;
     return true;
   },
