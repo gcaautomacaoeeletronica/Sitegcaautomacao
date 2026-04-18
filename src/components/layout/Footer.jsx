@@ -5,6 +5,7 @@ import EditableText from '../ui/EditableText';
 
 const Footer = () => {
   const global = useAdminStore((state) => state.siteContent.global);
+  const siteMedia = useAdminStore((state) => state.siteMedia);
   const homeContent = useAdminStore((state) => state.siteContent.home);
 
   return (
@@ -25,9 +26,16 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="space-y-8 col-span-1 md:col-span-1">
             <Link to="/" className="inline-block group">
-              <h3 className="text-3xl font-black text-white tracking-tighter group-hover:text-accent transition-colors duration-500">
-                GCA <br/><span className="text-xl font-light text-accent/80 group-hover:text-white transition-colors duration-500">Automação</span>
-              </h3>
+              <div className="flex items-center gap-4 mb-4">
+                {siteMedia.logo?.url && (
+                  <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 group-hover:border-accent/30 transition-all bg-white/5 p-1.5 flex items-center justify-center shrink-0">
+                    <img src={siteMedia.logo.url} alt="Logo GCA" className="w-full h-full object-contain" />
+                  </div>
+                )}
+                <h3 className="text-3xl font-black text-white tracking-tighter group-hover:text-accent transition-colors duration-500">
+                  GCA <br/><span className="text-xl font-light text-accent/80 group-hover:text-white transition-colors duration-500">Automação</span>
+                </h3>
+              </div>
             </Link>
             <p className="text-sm text-gray-500 leading-relaxed max-w-xs font-light">
               <EditableText pagina="home" path="expertise.text" tag="span">

@@ -731,6 +731,7 @@ const AdminDashboard = () => {
                                 </h3>
                                 
                                 <div className="space-y-8">
+                                    {renderMediaInput("Logomarca da Empresa (Circular)", "logo")}
                                     {renderMediaInput("Página Inicial (Hero Principal)", "home")}
                                     {renderMediaInput("Sobre Nós (Banner Superior)", "about")}
                                     {renderMediaInput("Sobre Nós (Imagem Lateral)", "aboutSide")}

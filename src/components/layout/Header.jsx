@@ -6,6 +6,7 @@ import EditableText from '../ui/EditableText';
 
 const Header = () => {
   const global = useAdminStore((state) => state.siteContent.global);
+  const siteMedia = useAdminStore((state) => state.siteMedia);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -61,7 +62,12 @@ const Header = () => {
           <div className="flex justify-between items-center h-full">
             {/* Logo com Glow Sutil no hover */}
             <div className="flex-shrink-0 flex items-center group cursor-pointer">
-              <div className="relative flex items-center">
+              <div className="relative flex items-center gap-3">
+                 {siteMedia.logo?.url && (
+                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/10 group-hover:border-primary/30 transition-all bg-white flex items-center justify-center p-1 shrink-0 shadow-sm">
+                     <img src={siteMedia.logo.url} alt="Logo GCA" className="w-full h-full object-contain" />
+                   </div>
+                 )}
                  <span className="font-extrabold text-lg md:text-xl xl:text-2xl text-primary tracking-tight uppercase">
                    <EditableText pagina="global" path="logoText" tag="span">GCA Automação</EditableText>
                  </span>
