@@ -5,7 +5,7 @@ import Skeleton from '../components/ui/Skeleton';
 import RichTextEditor from '../components/ui/RichTextEditor';
 import SEOPanel from '../components/ui/SEOPanel';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone, Zap } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
