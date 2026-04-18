@@ -6,6 +6,9 @@ import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 
+// Remove <p> wrapper tags that Tiptap inserts
+const stripP = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+
 const About = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const aboutContent = useAdminStore((state) => state.siteContent?.about);
@@ -34,7 +37,7 @@ const About = () => {
           </h1>
           <div 
              className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed cms-content"
-             dangerouslySetInnerHTML={{ __html: aboutContent?.heroSubtitle || '' }}
+             dangerouslySetInnerHTML={{ __html: stripP(aboutContent?.heroSubtitle) }}
           />
         </SlideIn>
       </motion.div>

@@ -83,6 +83,9 @@ const StatsSection = ({ stats = [] }) => (
   </section>
 );
 
+// Remove <p> wrapper tags that Tiptap inserts — used in single-line title fields
+const stripParagraph = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const homeContent = useAdminStore((state) => state.siteContent?.home);
@@ -157,8 +160,8 @@ const Home = () => {
               >
                 <div className="overflow-hidden mb-2 border-l-4 border-accent pl-6">
                     <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight transition-transform duration-1000 delay-100 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-                      <span className="cms-content-light" dangerouslySetInnerHTML={{ __html: slide.title || '' }}></span> <br/>
-                      <span className="text-accent cms-content-light" dangerouslySetInnerHTML={{ __html: slide.highlight || '' }}></span>
+                      <span className="cms-content-light" dangerouslySetInnerHTML={{ __html: stripParagraph(slide.title) }}></span><br/>
+                      <span className="text-accent cms-content-light" dangerouslySetInnerHTML={{ __html: stripParagraph(slide.highlight) }}></span>
                     </h1>
                  </div>
                  <div className={`mt-6 transition-all duration-1000 delay-300 ${index === currentSlide ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>

@@ -10,6 +10,9 @@ import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import Skeleton from '../components/ui/Skeleton';
 
+// Remove <p> wrapper tags that Tiptap inserts
+const stripP = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+
 /* ─────────────── ACCORDION ITEM (lógica 100% preservada) ─────────────── */
 const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -163,8 +166,8 @@ const Services = () => {
             {servicesContent?.hero?.badge || ''}
           </EditableText>
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-white mb-6 tracking-tight uppercase leading-[1.05]">
-            <EditableText pagina="services" path="hero.title" tag="span">{servicesContent?.hero?.title || ''}</EditableText>{' '}
-            <EditableText pagina="services" path="hero.highlight" tag="span" className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400">{servicesContent?.hero?.highlight || ''}</EditableText>
+            <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.title) }}></span>{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400 cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.highlight) }}></span>
           </h1>
           <div 
             className="text-lg text-gray-400 font-light max-w-2xl leading-relaxed cms-content"

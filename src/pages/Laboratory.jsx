@@ -7,6 +7,9 @@ import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import { ICON_MAP } from '../lib/icons';
 
+// Remove <p> wrapper tags that Tiptap inserts
+const stripP = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);
   const labContent = useAdminStore((state) => state.siteContent?.laboratory);
@@ -30,8 +33,8 @@ const Laboratory = () => {
       <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SlideIn>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter">
-            <EditableText pagina="laboratory" path="hero.title" tag="span">{labContent?.hero?.title || ''}</EditableText> <br/>
-            <EditableText pagina="laboratory" path="hero.highlight" tag="span" className="font-light">{labContent?.hero?.highlight || ''}</EditableText>
+            <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.title) }}></span> <br/>
+            <span className="font-light cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.highlight) }}></span>
           </h1>
           <div 
              className="text-xl text-blue-100 max-w-2xl font-light cms-content"
@@ -70,8 +73,8 @@ const Laboratory = () => {
                
                <FadeIn className="order-2 lg:order-1">
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    <span className="cms-content" dangerouslySetInnerHTML={{ __html: labContent?.performance?.title || '' }}></span> <br/>
-                    <span className="text-accent underline decoration-4 underline-offset-4 cms-content" dangerouslySetInnerHTML={{ __html: labContent?.performance?.highlight || '' }}></span>
+                    <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.title) }}></span> <br/>
+                    <span className="text-accent underline decoration-4 underline-offset-4 cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.highlight) }}></span>
                   </h2>
                   <div 
                     className="text-lg text-gray-600 leading-relaxed mb-6 font-light cms-content"
