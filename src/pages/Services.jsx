@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
+import { Zap, ChevronDown, X, Plus, ArrowRight } from 'lucide-react';
 import { ICON_MAP } from '../lib/icons';
 import { Link } from 'react-router-dom';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
