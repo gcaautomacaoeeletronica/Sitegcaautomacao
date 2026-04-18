@@ -28,7 +28,7 @@ const Footer = () => {
             <Link to="/" className="inline-block group">
               <div className="flex items-center gap-4 mb-4">
                 {siteMedia.logo?.url && (
-                  <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 group-hover:border-accent/30 transition-all bg-white/5 p-1.5 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 group-hover:border-accent/30 transition-all bg-white/5 p-0 flex items-center justify-center shrink-0">
                     <img src={siteMedia.logo.url} alt="Logo GCA" className="w-full h-full object-contain" />
                   </div>
                 )}

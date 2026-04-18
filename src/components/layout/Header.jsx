@@ -64,7 +64,7 @@ const Header = () => {
             <div className="flex-shrink-0 flex items-center group cursor-pointer">
               <div className="relative flex items-center gap-3">
                  {siteMedia.logo?.url && (
-                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/10 group-hover:border-primary/30 transition-all bg-white flex items-center justify-center p-1 shrink-0 shadow-sm">
+                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/10 group-hover:border-primary/30 transition-all bg-white flex items-center justify-center p-0 shrink-0 shadow-sm">
                      <img src={siteMedia.logo.url} alt="Logo GCA" className="w-full h-full object-contain" />
                    </div>
                  )}
