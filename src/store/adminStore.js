@@ -196,7 +196,9 @@ export const useAdminStore = create((set, get) => ({
   atualizarMedia: async (chave, tipo, valor) => {
     const { siteMedia } = get();
     const newMedia = { ...siteMedia, [chave]: { ...siteMedia[chave], [tipo]: valor } };
-    await supabase.from('site_config').upsert({ key: 'siteMedia', data: newMedia }, { onConflict: 'key' });
+    set({ siteMedia: newMedia }); // Atualização imediata do estado local
+    const { error } = await supabase.from('site_config').upsert({ key: 'siteMedia', data: newMedia }, { onConflict: 'key' });
+    if (error) console.error('Erro ao salvar mídia:', error);
   },
   atualizarConteudo: async (pagina, chave, valor) => {
     const { siteContent } = get();
@@ -252,10 +254,10 @@ export const useAdminStore = create((set, get) => ({
     }
   },
   addItemToArray: async (pagina, path, defaultItem) => {
-    const { siteContent, fetchConfig } = get();
+    const { siteContent } = get();
     try {
       const updateDeep = (obj, pathArray, value) => {
-        const newObj = JSON.parse(JSON.stringify(obj)); // Clone profundo para segurança em arrays
+        const newObj = JSON.parse(JSON.stringify(obj));
         let current = newObj;
         for (let i = 0; i < pathArray.length - 1; i++) {
           const key = pathArray[i];
@@ -271,18 +273,18 @@ export const useAdminStore = create((set, get) => ({
       const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), defaultItem);
       const newContent = { ...siteContent, [pagina]: newPageContent };
       
+      // Atualiza estado local IMEDIATAMENTE para resposta visual instantânea
       set({ siteContent: newContent });
+
       const { error } = await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
       if (error) throw error;
-
-      await fetchConfig();
     } catch (err) {
       console.error("Erro ao adicionar item:", err);
-      alert("Erro ao adicionar novo item ao site.");
+      alert("Erro ao adicionar novo item ao site. Verifique sua conexão.");
     }
   },
   removeItemFromArray: async (pagina, path, index) => {
-    const { siteContent, fetchConfig } = get();
+    const { siteContent } = get();
     try {
       const updateDeep = (obj, pathArray, idx) => {
         const newObj = JSON.parse(JSON.stringify(obj));
@@ -302,14 +304,14 @@ export const useAdminStore = create((set, get) => ({
       const newPageContent = updateDeep(siteContent[pagina] || {}, path.split('.'), index);
       const newContent = { ...siteContent, [pagina]: newPageContent };
       
+      // Atualiza estado local IMEDIATAMENTE para resposta visual instantânea
       set({ siteContent: newContent });
+
       const { error } = await supabase.from('site_config').upsert({ key: 'siteContent', data: newContent }, { onConflict: 'key' });
       if (error) throw error;
-
-      await fetchConfig();
     } catch (err) {
       console.error("Erro ao remover item:", err);
-      alert("Erro ao remover item do site.");
+      alert("Erro ao remover item do site. Verifique sua conexão.");
     }
   },
   atualizarArrayConteudo: async (pagina, chave, index, subChave, valor) => {

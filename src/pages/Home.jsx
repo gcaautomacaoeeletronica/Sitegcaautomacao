@@ -279,22 +279,21 @@ const Home = () => {
 
             {/* Add New Card Button */}
             {isVisualEditorActive && (
-              <StaggerItem className="flex items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-lg hover:border-primary/30 transition-all group min-h-[300px]">
-                <button 
-                  onClick={() => addItemToArray('home', 'services', { 
-                    title: 'Novo Serviço', 
-                    desc: 'Descrição do novo serviço industrial.', 
-                    link: '/manutencao-e-automacao-industrial', 
-                    icon: 'Settings' 
-                  })}
-                  className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-primary transition-colors w-full h-full"
-                >
+              <div className="flex items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-lg hover:border-primary/30 transition-all group min-h-[300px] cursor-pointer"
+                onClick={() => addItemToArray('home', 'services', { 
+                  title: 'Novo Serviço', 
+                  desc: 'Descrição do novo serviço industrial.', 
+                  link: '/manutencao-e-automacao-industrial', 
+                  icon: 'Settings' 
+                })}
+              >
+                <div className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-primary transition-colors w-full h-full justify-center">
                   <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-primary/10">
                     <Plus size={24} />
                   </div>
                   <span className="text-xs font-bold uppercase tracking-widest">Adicionar Card</span>
-                </button>
-              </StaggerItem>
+                </div>
+              </div>
             )}
           </StaggerContainer>
         </div>
