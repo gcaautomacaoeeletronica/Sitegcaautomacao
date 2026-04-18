@@ -144,6 +144,11 @@
   @apply font-black text-gray-900;
 }
 
+.cms-content span[style*="font-size"] {
+  font-size: inherit; /* Fallback */
+}
+
+
 /* CMS Content for dark backgrounds */
 .cms-content-light {
   @apply leading-relaxed text-blue-100;

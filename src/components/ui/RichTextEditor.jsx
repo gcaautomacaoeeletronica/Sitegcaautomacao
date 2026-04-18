@@ -1,15 +1,62 @@
 import React from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Extension } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
+import TextStyle from '@tiptap/extension-text-style';
 import { 
   Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, 
   Heading2, Heading3, Link as LinkIcon, Undo, Redo, 
-  Type, Eraser
+  Type, Eraser, ChevronDown
 } from 'lucide-react';
 
-const MenuButton = ({ onClick, isActive, disabled, children, title }) => (
+// Custom Extension for Font Size using TextStyle
+const FontSize = Extension.create({
+  name: 'fontSize',
+  addOptions() {
+    return {
+      types: ['textStyle'],
+    }
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: element => element.style.fontSize.replace(/['"]+/g, ''),
+            renderHTML: attributes => {
+              if (!attributes.fontSize) {
+                return {}
+              }
+              return {
+                style: `font-size: ${attributes.fontSize}`,
+              }
+            },
+          },
+        },
+      },
+    ]
+  },
+  addCommands() {
+    return {
+      setFontSize: fontSize => ({ chain }) => {
+        return chain()
+          .setMark('textStyle', { fontSize })
+          .run()
+      },
+      unsetFontSize: () => ({ chain }) => {
+        return chain()
+          .setMark('textStyle', { fontSize: null })
+          .removeEmptyTextStyle()
+          .run()
+      },
+    }
+  },
+})
+
+const MenuButton = ({ onClick, isActive, disabled, children, title, className = "" }) => (
   <button
     type="button"
     onClick={onClick}
@@ -19,7 +66,7 @@ const MenuButton = ({ onClick, isActive, disabled, children, title }) => (
       isActive 
         ? 'bg-primary text-white shadow-md' 
         : 'text-gray-500 hover:bg-gray-100'
-    } disabled:opacity-30 disabled:cursor-not-allowed`}
+    } disabled:opacity-30 disabled:cursor-not-allowed ${className}`}
   >
     {children}
   </button>
@@ -30,6 +77,8 @@ const RichTextEditor = ({ content, onChange, placeholder }) => {
     extensions: [
       StarterKit,
       Underline,
+      TextStyle,
+      FontSize,
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
@@ -125,6 +174,29 @@ const RichTextEditor = ({ content, onChange, placeholder }) => {
         >
           <Type size={18} />
         </MenuButton>
+
+        <div className="w-px h-6 bg-gray-200 mx-1" />
+        
+        {/* Font Size Selector */}
+        <div className="flex items-center gap-1 mx-1">
+          <select 
+            className="bg-white border border-gray-200 text-[10px] font-bold py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none pr-6 relative"
+            onChange={(e) => {
+              const size = e.target.value;
+              if (size === 'default') {
+                editor.chain().focus().unsetFontSize().run();
+              } else {
+                editor.chain().focus().setFontSize(`${size}px`).run();
+              }
+            }}
+            value={editor.getAttributes('textStyle').fontSize?.replace('px', '') || 'default'}
+          >
+            <option value="default">Tam.</option>
+            {[8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 24, 32, 48].map(size => (
+              <option key={size} value={size}>{size}px</option>
+            ))}
+          </select>
+        </div>
 
         <div className="w-px h-6 bg-gray-200 mx-1" />
 
