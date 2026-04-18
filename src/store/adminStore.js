@@ -79,18 +79,21 @@ export const useAdminStore = create((set, get) => ({
     set({ isInitialLoading: false });
 
     // 3. Listeners Realtime (se falhar, temos os fetchers diretos agindo nos botões)
-    supabase.channel('public_leads')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, fetchLeads).subscribe();
-    supabase.channel('public_blog')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts' }, fetchBlog).subscribe();
-    supabase.channel('public_marcas')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'marcas' }, fetchMarcas).subscribe();
-    supabase.channel('public_downloads')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'downloads' }, fetchMarcas).subscribe();
-    supabase.channel('public_config')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_config' }, fetchConfig).subscribe();
-    supabase.channel('public_profiles')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, get().fetchAdmins).subscribe();
+    const existingChannels = supabase.getChannels();
+    if (existingChannels.length === 0) {
+      supabase.channel('public_leads')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, fetchLeads).subscribe();
+      supabase.channel('public_blog')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts' }, fetchBlog).subscribe();
+      supabase.channel('public_marcas')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'marcas' }, fetchMarcas).subscribe();
+      supabase.channel('public_downloads')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'downloads' }, fetchMarcas).subscribe();
+      supabase.channel('public_config')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'site_config' }, fetchConfig).subscribe();
+      supabase.channel('public_profiles')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, get().fetchAdmins).subscribe();
+    }
   },
 
   // Auth Supabase
