@@ -64,9 +64,11 @@ const Header = () => {
             <div className="flex-shrink-0 flex items-center group cursor-pointer">
               <div className="relative flex items-center gap-3">
                  {siteMedia.logo?.url && (
-                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-gray-200 group-hover:border-gray-300 transition-all flex items-center justify-center p-0 shrink-0 shadow-sm">
-                     <img src={siteMedia.logo.url} alt="Logo GCA" className="w-full h-full object-cover rounded-full" />
-                   </div>
+                   <img 
+                     src={siteMedia.logo.url} 
+                     alt="Logo GCA" 
+                     className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover ring-1 ring-gray-200 group-hover:ring-gray-300 transition-all shadow-sm shrink-0" 
+                   />
                  )}
                  <span className="font-extrabold text-lg md:text-xl xl:text-2xl text-primary tracking-tight uppercase">
                    <EditableText pagina="global" path="logoText" tag="span">GCA Automação</EditableText>

@@ -28,9 +28,11 @@ const Footer = () => {
             <Link to="/" className="inline-block group">
               <div className="flex items-center gap-4 mb-4">
                 {siteMedia.logo?.url && (
-                  <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 group-hover:border-white/30 transition-all flex items-center justify-center p-0 shrink-0 shadow-lg">
-                    <img src={siteMedia.logo.url} alt="Logo GCA" className="w-full h-full object-cover rounded-full" />
-                  </div>
+                  <img 
+                    src={siteMedia.logo.url} 
+                    alt="Logo GCA" 
+                    className="w-12 h-12 rounded-full object-cover ring-1 ring-white/10 group-hover:ring-white/30 transition-all shadow-xl shrink-0" 
+                  />
                 )}
                 <h3 className="text-3xl font-black text-white tracking-tighter group-hover:text-accent transition-colors duration-500">
                   GCA <br/><span className="text-xl font-light text-accent/80 group-hover:text-white transition-colors duration-500">Automação</span>
