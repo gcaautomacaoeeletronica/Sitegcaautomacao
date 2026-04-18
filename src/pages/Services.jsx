@@ -335,8 +335,8 @@ const Services = () => {
                <FadeIn>
                   <span className="inline-block text-xs font-black tracking-[0.25em] uppercase text-accent mb-4">Infraestrutura Própria</span>
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight leading-tight">
-                    <EditableText pagina="services" path="laboratoryMini.title" tag="span">{servicesContent?.laboratoryMini?.title || ''}</EditableText>{' '}
-                    <EditableText pagina="services" path="laboratoryMini.highlight" tag="span" className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{servicesContent?.laboratoryMini?.highlight || ''}</EditableText>
+                    <span className="cms-content" dangerouslySetInnerHTML={{ __html: servicesContent?.laboratoryMini?.title || '' }}></span>{' '}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent cms-content" dangerouslySetInnerHTML={{ __html: servicesContent?.laboratoryMini?.highlight || '' }}></span>
                   </h2>
                   <div 
                     className="text-lg text-gray-500 mb-8 leading-relaxed font-light cms-content"

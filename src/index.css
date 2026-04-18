@@ -144,3 +144,25 @@
   @apply font-black text-gray-900;
 }
 
+/* CMS Content for dark backgrounds */
+.cms-content-light {
+  @apply leading-relaxed text-blue-100;
+}
+
+.cms-content-light h1, .cms-content-light h2, .cms-content-light h3, .cms-content-light h4 {
+  @apply text-white;
+}
+
+.cms-content-light p {
+  @apply text-blue-100/80 mb-4;
+}
+
+.cms-content-light b, .cms-content-light strong {
+  @apply font-black text-white;
+}
+
+.cms-content-light a {
+  @apply text-accent font-bold underline hover:text-white transition-colors;
+}
+
+

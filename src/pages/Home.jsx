@@ -157,14 +157,15 @@ const Home = () => {
               >
                 <div className="overflow-hidden mb-2 border-l-4 border-accent pl-6">
                     <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight transition-transform duration-1000 delay-100 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-                      <EditableText pagina="home" path={`slides.${index}.title`} tag="span">{slide.title}</EditableText> <br/>
-                      <EditableText pagina="home" path={`slides.${index}.highlight`} tag="span" className="text-accent">{slide.highlight}</EditableText>
+                      <span className="cms-content-light" dangerouslySetInnerHTML={{ __html: slide.title || '' }}></span> <br/>
+                      <span className="text-accent cms-content-light" dangerouslySetInnerHTML={{ __html: slide.highlight || '' }}></span>
                     </h1>
                  </div>
                  <div className={`mt-6 transition-all duration-1000 delay-300 ${index === currentSlide ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-                    <EditableText pagina="home" path={`slides.${index}.desc`} tag="p" className="text-gray-300 text-lg md:text-2xl font-medium max-w-2xl">
-                       {slide.desc}
-                    </EditableText>
+                    <div 
+                       className="text-gray-300 text-lg md:text-2xl font-medium max-w-2xl cms-content-light"
+                       dangerouslySetInnerHTML={{ __html: slide.desc || '' }}
+                    />
                  </div>
                 
                 <div className={`mt-10 flex gap-4 transition-all duration-1000 delay-500 ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>

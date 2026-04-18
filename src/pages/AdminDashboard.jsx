@@ -1042,21 +1042,24 @@ const AdminDashboard = () => {
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                             <div>
                                                                 <label className="text-[10px] font-bold text-gray-400 uppercase mb-2 block">Título</label>
-                                                                <input type="text" value={slide.title} 
-                                                                    onChange={(e) => atualizarArrayConteudo('home', 'slides', idx, 'title', e.target.value)}
-                                                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                                <RichTextEditor 
+                                                                    content={slide.title || ''} 
+                                                                    onChange={(html) => atualizarArrayConteudo('home', 'slides', idx, 'title', html)}
+                                                                />
                                                             </div>
                                                             <div>
                                                                 <label className="text-[10px] font-bold text-gray-400 uppercase mb-2 block">Destaque (Cor)</label>
-                                                                <input type="text" value={slide.highlight} 
-                                                                    onChange={(e) => atualizarArrayConteudo('home', 'slides', idx, 'highlight', e.target.value)}
-                                                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                                <RichTextEditor 
+                                                                    content={slide.highlight || ''} 
+                                                                    onChange={(html) => atualizarArrayConteudo('home', 'slides', idx, 'highlight', html)}
+                                                                />
                                                             </div>
                                                             <div className="md:col-span-2">
                                                                 <label className="text-[10px] font-bold text-gray-400 uppercase mb-2 block">Descrição Curta</label>
-                                                                <input type="text" value={slide.desc} 
-                                                                    onChange={(e) => atualizarArrayConteudo('home', 'slides', idx, 'desc', e.target.value)}
-                                                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                                <RichTextEditor 
+                                                                    content={slide.desc || ''} 
+                                                                    onChange={(html) => atualizarArrayConteudo('home', 'slides', idx, 'desc', html)}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1175,9 +1178,11 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Laboratórios Mini (Rodapé da página)</h4>
                                                 <div className="grid grid-cols-1 gap-4 p-6 bg-gray-50 rounded-2xl border border-gray-200">
-                                                    <input type="text" value={siteContent?.services?.laboratoryMini?.title || ''} 
-                                                        onChange={(e) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, title: e.target.value })}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-bold" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Título do Laboratório Mini</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.services?.laboratoryMini?.title || ''} 
+                                                        onChange={(html) => atualizarConteudo('services', 'laboratoryMini', { ...siteContent?.services?.laboratoryMini, title: html })}
+                                                    />
                                                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Descrição do Laboratório Mini</label>
                                                     <RichTextEditor 
                                                         content={siteContent?.services?.laboratoryMini?.desc || ''} 
@@ -1220,9 +1225,11 @@ const AdminDashboard = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-l-4 border-primary pl-4">Seção: Performance em Carga</h4>
                                                 <div className="grid grid-cols-1 gap-4 bg-gray-50 p-6 rounded-2xl border border-gray-200">
-                                                    <input type="text" value={siteContent?.laboratory?.performance?.title || ''} 
-                                                        onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, title: e.target.value })}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-bold" />
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Título Performance</label>
+                                                    <RichTextEditor 
+                                                        content={siteContent?.laboratory?.performance?.title || ''} 
+                                                        onChange={(html) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, title: html })}
+                                                    />
                                                     <input type="text" value={siteContent?.laboratory?.performance?.highlight || ''} 
                                                         onChange={(e) => atualizarConteudo('laboratory', 'performance', { ...siteContent?.laboratory?.performance, highlight: e.target.value })}
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm" />

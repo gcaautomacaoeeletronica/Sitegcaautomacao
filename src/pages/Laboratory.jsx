@@ -70,8 +70,8 @@ const Laboratory = () => {
                
                <FadeIn className="order-2 lg:order-1">
                   <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    <EditableText pagina="laboratory" path="performance.title" tag="span">{labContent?.performance?.title || ''}</EditableText> <br/>
-                    <EditableText pagina="laboratory" path="performance.highlight" tag="span" className="text-accent underline decoration-4 underline-offset-4">{labContent?.performance?.highlight || ''}</EditableText>
+                    <span className="cms-content" dangerouslySetInnerHTML={{ __html: labContent?.performance?.title || '' }}></span> <br/>
+                    <span className="text-accent underline decoration-4 underline-offset-4 cms-content" dangerouslySetInnerHTML={{ __html: labContent?.performance?.highlight || '' }}></span>
                   </h2>
                   <div 
                     className="text-lg text-gray-600 leading-relaxed mb-6 font-light cms-content"
