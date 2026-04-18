@@ -7,8 +7,13 @@ import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import { ICON_MAP } from '../lib/icons';
 
-// Remove <p> wrapper tags that Tiptap inserts
-const stripP = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+// Remove <p> wrapper e inline font-size do Tiptap em campos de título
+const stripP = (html) =>
+  (html || '')
+    .replace(/<\/?p[^>]*>/gi, '')
+    .replace(/\s*style\s*=\s*"[^"]*font-size[^"]*"/gi, '')
+    .trim();
+
 
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);

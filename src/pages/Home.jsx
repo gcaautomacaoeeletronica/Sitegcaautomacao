@@ -83,8 +83,13 @@ const StatsSection = ({ stats = [] }) => (
   </section>
 );
 
-// Remove <p> wrapper tags that Tiptap inserts — used in single-line title fields
-const stripParagraph = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+// Remove <p> wrapper e inline font-size do Tiptap — usados em campos de título de uma linha
+// Os tamanhos de fonte nesses campos são controlados pelo CSS do hero, não pelo editor
+const stripParagraph = (html) =>
+  (html || '')
+    .replace(/<\/?p[^>]*>/gi, '')
+    .replace(/\s*style\s*=\s*"[^"]*font-size[^"]*"/gi, '')
+    .trim();
 
 const Home = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);

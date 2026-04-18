@@ -10,8 +10,13 @@ import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import Skeleton from '../components/ui/Skeleton';
 
-// Remove <p> wrapper tags that Tiptap inserts
-const stripP = (html) => (html || '').replace(/<\/?p[^>]*>/gi, '').trim();
+// Remove <p> wrapper e inline font-size do Tiptap em campos de título
+const stripP = (html) =>
+  (html || '')
+    .replace(/<\/?p[^>]*>/gi, '')
+    .replace(/\s*style\s*=\s*"[^"]*font-size[^"]*"/gi, '')
+    .trim();
+
 
 /* ─────────────── ACCORDION ITEM (lógica 100% preservada) ─────────────── */
 const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
