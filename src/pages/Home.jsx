@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import ServiceCard from '../components/ui/ServiceCard';
 import SEO from '../components/ui/SEO';
-import { 
+import { ICON_MAP } from '../lib/icons';
+const { 
   Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
-  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle 
-} from 'lucide-react';
-
-// Mapa de ícones estático para garantir estabilidade no build da Vercel
-const ICON_MAP = {
-  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
-  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle
-};
+  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle,
+  Smartphone, Phone, Mail, MapPin
+} = ICON_MAP;
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';

@@ -5,15 +5,7 @@ import { useScroll, useTransform, motion } from 'framer-motion';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
-import { 
-  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
-  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor
-} from 'lucide-react';
-
-const ICON_MAP = {
-  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
-  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor
-};
+import { ICON_MAP } from '../lib/icons';
 
 const Laboratory = () => {
   const siteMedia = useAdminStore((state) => state.siteMedia);

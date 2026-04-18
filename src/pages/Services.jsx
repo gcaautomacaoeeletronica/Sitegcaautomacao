@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
-import { 
-  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
-  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor,
-  ChevronDown, ArrowRight, Wrench, Shield, X, HelpCircle as HelpIcon
-} from 'lucide-react';
+import { ICON_MAP } from '../lib/icons';
 import { Link } from 'react-router-dom';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
-
-const ICON_MAP = {
-  Settings, Zap, Cpu, Layers, Plus, Trash2, Clock, Workflow, 
-  ShieldCheck, MessagesSquare, MessageSquare, HelpCircle, Activity, Globe, Monitor,
-  ChevronDown, ArrowRight, Wrench, Shield, X, HelpCircle: HelpIcon
-};
 
 const AccordionItem = ({ title, items, iconName, path, pagina, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
