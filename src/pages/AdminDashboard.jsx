@@ -5,7 +5,7 @@ import Skeleton from '../components/ui/Skeleton';
 import RichTextEditor from '../components/ui/RichTextEditor';
 import SEOPanel from '../components/ui/SEOPanel';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone, Zap } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone, Zap, AlignLeft } from 'lucide-react';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -312,20 +312,20 @@ const AdminDashboard = () => {
     const totalManuais = marcas.reduce((acc, curr) => acc + (Array.isArray(curr.manuais) ? curr.manuais.length : 0), 0);
     const unreadLeadsCount = (leads || []).filter(l => !l.lido).length;
 
-    const renderMediaInput = (label, chave, placeholderImg = '') => (
+const renderMediaInput = (label, chave, placeholderImg = '') => (
         <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
             <h4 className="font-bold text-gray-900 border-l-4 border-primary pl-3 mb-4">{label}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL da Imagem</label>
+                        <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL da Imagem/Vídeo</label>
                         <div className="relative overflow-hidden cursor-pointer">
                             <span className="text-[10px] font-bold text-primary flex items-center gap-1 cursor-pointer hover:underline">
                                 {uploadingKeys[chave] ? 'Enviando...' : <><UploadCloud size={12}/> Enviar do PC</>}
                             </span>
                             <input 
                                 type="file" 
-                                accept="image/*"
+                                accept="image/*,video/*"
                                 disabled={uploadingKeys[chave]}
                                 onChange={(e) => handleFileUpload(e, chave, 'media', 'banners')}
                                 className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
@@ -354,12 +354,30 @@ const AdminDashboard = () => {
                             onChange={(e) => atualizarMedia(chave, 'link', e.target.value)}
                             className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
                     </div>
+                    <div className="relative">
+                        <Type className="absolute left-3 top-3 text-gray-400" size={16} />
+                        <input 
+                            type="text" 
+                            placeholder="Título da imagem"
+                            value={siteMedia[chave]?.title || ''} 
+                            onChange={(e) => atualizarMedia(chave, 'title', e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                    </div>
+                    <div className="relative">
+                        <AlignLeft className="absolute left-3 top-3 text-gray-400" size={16} />
+                        <input 
+                            type="text" 
+                            placeholder="Descrição breve"
+                            value={siteMedia[chave]?.desc || ''} 
+                            onChange={(e) => atualizarMedia(chave, 'desc', e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none text-sm transition-all" />
+                    </div>
                 </div>
             </div>
             {siteMedia[chave]?.url && (
                 <div className="mt-2 w-full h-24 rounded-lg bg-cover bg-center border border-gray-200 shadow-inner relative" 
-                     style={{ backgroundImage: `url(${siteMedia[chave].url})` }}>
-                     {uploadingKeys[chave] && <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg"><span className="text-white text-xs font-bold animate-pulse">Carregando...</span></div>}
+                     style={{ backgroundImage: siteMedia[chave]?.url?.match(/\.(mp4|webm|mov|avi)$/i) ? 'none' : `url(${siteMedia[chave].url})` }}>
+                      {uploadingKeys[chave] && <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg"><span className="text-white text-xs font-bold animate-pulse">Carregando...</span></div>}
                 </div>
             )}
         </div>
