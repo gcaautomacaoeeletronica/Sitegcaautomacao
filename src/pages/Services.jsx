@@ -168,7 +168,7 @@ const Services = () => {
           <EditableText pagina="services" path="hero.badge" tag="span" className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-accent/20 border border-accent/40 text-white font-black tracking-[0.3em] uppercase mb-8 text-xs backdrop-blur-md shadow-2xl">
             {servicesContent?.hero?.badge || ''}
           </EditableText>
-          <h1 className="text-5xl md:text-6xl lg:text-9xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.95] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
+          <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.95] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
             <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.title) }}></span>{' '} <br className="hidden lg:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400 cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.highlight) }}></span>
           </h1>

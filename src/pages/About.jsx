@@ -36,7 +36,7 @@ const About = () => {
           <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-white font-black tracking-[0.3em] uppercase mb-8 backdrop-blur-xl shadow-2xl">
             Nossa História
           </span>
-          <h1 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-none">
             <EditableText pagina="about" path="heroTitle" tag="span">
               {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent drop-shadow-[0_2px_10px_rgba(192,57,43,0.5)]">{word}</span> : word + ' ')}
             </EditableText>

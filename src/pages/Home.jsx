@@ -171,7 +171,7 @@ const Home = () => {
                 className="relative z-20 px-4 max-w-7xl mx-auto w-full flex flex-col justify-center translate-y-10"
               >
                 <div className="overflow-hidden mb-4 border-l-4 border-accent pl-8">
-                    <h1 className={`text-white text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter transition-all duration-1000 delay-100 ease-out leading-[0.95] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)] ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
+                    <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-black uppercase tracking-tighter transition-all duration-1000 delay-100 ease-out leading-[0.95] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)] ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
                       <span className="cms-content-light" dangerouslySetInnerHTML={{ __html: stripParagraph(slide.title) }}></span><br/>
                       <span className="text-accent cms-content-light" dangerouslySetInnerHTML={{ __html: stripParagraph(slide.highlight) }}></span>
                     </h1>

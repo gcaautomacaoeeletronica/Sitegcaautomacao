@@ -146,7 +146,7 @@ const IoT = () => {
                   <span className="text-xs font-black uppercase tracking-widest text-cyan-400">IoT Industrial em Tempo Real</span>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl lg:text-[9rem] font-black text-white mb-8 tracking-tighter leading-[0.9] uppercase drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.95] uppercase drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
                   Conecte sua<br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
                     Indústria
