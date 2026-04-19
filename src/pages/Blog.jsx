@@ -12,10 +12,10 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <SEO 
-        title="Blog GCA Insight | Automação e Manutenção Eletrônica Industrial"
-        description="Dicas técnicas, diagnósticos de falhas, artigos sobre inversores de frequência, servodrives e automação industrial 4.0. Conteúdo especializado do laboratório GCA."
+        title="Blog Técnico GCA | Automação e Inversores em Cuiabá MT"
+        description="Artigos sobre montagem de painéis, manutenção de inversores Weg/Danfoss e IoT industrial. Conteúdo técnico especializado da GCA Automação em Mato Grosso."
         canonical="/blog"
-        keywords="blog automação industrial, artigos manutenção eletrônica, dicas reparo inversor, diagnóstico servodrive, falha inversor WEG, erro siemens sinamics, industria 4.0"
+        keywords="blog automação cuiabá, dicas manutenção inversores mt, montagem painéis elétricos artigos, tecnologia iot industrial cuiabá"
         breadcrumbs={[{ name: 'Blog Técnico', path: '/blog' }]}
       />
       {/* Banner de Cabeçalho Corporativo */}

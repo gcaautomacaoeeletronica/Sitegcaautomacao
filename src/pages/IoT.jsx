@@ -114,10 +114,10 @@ const IoT = () => {
   return (
     <div className="w-full bg-[#030712] text-white overflow-hidden">
       <SEO
-        title="Plataforma IoT Industrial — Monitoramento em Tempo Real"
-        description="Soluções IoT industriais da GCA: monitoramento de nível de caixas d'água, temperatura, consumo elétrico, Broker MQTT próprio e plataforma ThingsBoard. Americana-SP."
+        title="Plataforma IoT Industrial | Teste Grátis 5 Equipamentos"
+        description="Monitore suas máquinas em tempo real em Cuiabá e MT. Plataforma IoT industrial com teste grátis para até 5 equipamentos. Reduza paradas e aumente a eficiência em Mato Grosso."
         canonical="/iot"
-        keywords="IoT industrial, monitoramento MQTT, ThingsBoard, sensor temperatura, nível caixa água, consumo elétrico, automação IoT, Americana SP"
+        keywords="plataforma iot industrial mt, monitoramento remoto cuiabá, teste grátis iot máquinas, telemetria industrial cuiabá, indústria 4.0 mt"
       />
 
       {/* ── HERO ── */}

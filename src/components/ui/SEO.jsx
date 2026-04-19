@@ -1,23 +1,22 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const SITE_URL = 'https://gcaautomacao.vercel.app';
+const SITE_URL = 'https://gcaautomacaoeeletronica.com.br';
 const SITE_NAME = 'GCA Automação Industrial';
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 const DEFAULT_KEYWORDS = [
-  'automação industrial',
-  'manutenção eletrônica industrial',
-  'reparo de inversores de frequência',
-  'conserto de servodrive',
-  'reparo inversor WEG americana SP',
-  'conserto servodrive Bosch Rexroth',
-  'manutenção inversor Siemens Sinamics',
-  'reparo Allen-Bradley Kinetix',
-  'laboratório eletrônica industrial',
-  'manutenção CLP Siemens S7',
-  'americana SP automação',
-  'GCA automação eletrônica industrial'
+  'automação industrial cuiabá',
+  'montagem de painéis elétricos industriais mt',
+  'manutenção de inversor de frequência cuiabá',
+  'conserto de inversor danfoss mt',
+  'venda de inversores weg mato grosso',
+  'plataforma iot industrial teste grátis',
+  'monitoramento de máquinas cuiabá',
+  'assistência técnica weg várzea grande',
+  'engenharia elétrica industrial cuiabá',
+  'painéis elétricos industriais raio 700km cuiabá',
+  'GCA automação mato grosso'
 ].join(', ');
 
 const SEO = ({

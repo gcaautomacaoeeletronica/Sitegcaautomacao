@@ -204,10 +204,10 @@ const Services = () => {
   return (
     <div className="w-full bg-[#f4f6f9] relative overflow-hidden">
       <SEO 
-        title="Manutenção Eletrônica Industrial | Inversores, Servodrives e CLPs"
-        description="Reparo especializado de servodrives Bosch Rexroth Indradrive, inversores WEG, Siemens Sinamics, Allen-Bradley Kinetix, Parker, CLPs e IHMs industriais."
+        title="Montagem de Painéis e Manutenção de Inversores | Cuiabá MT"
+        description="Montagem de painéis elétricos industriais NR-10 em Cuiabá. Manutenção e venda de inversores de frequência Weg e Danfoss. Atendemos raio de 700km de Cuiabá MT."
         canonical="/manutencao-e-automacao-industrial"
-        keywords="reparo servodrive bosch rexroth, conserto inversor siemens sinamics, manutenção inversor allen-bradley, reparo inversor weg americana, conserto CLP siemens s7, manutenção CLP allen-bradley, montagem de painéis elétricos, montagem elétrica industrial, controle IoT industrial"
+        keywords="montagem de painéis elétricos cuiabá mt, manutenção inversor weg cuiabá, conserto inversor danfoss mato grosso, quadros elétricos industriais cuiabá, automação industrial mt"
         breadcrumbs={[{ name: 'Serviços', path: '/manutencao-e-automacao-industrial' }]}
       />
 

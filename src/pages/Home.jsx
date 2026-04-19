@@ -126,10 +126,10 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-inter selection:bg-accent selection:text-white pt-20">
       <SEO 
-        title="GCA Automação Industrial | Excelência em Manutenção e Projetos"
-        description="GCA Automação Industrial — Especialistas em reparo de servodrives Bosch Rexroth, inversores WEG, Siemens Sinamics, Allen-Bradley Kinetix e CLPs. Americana-SP. Orçamento rápido 24h."
+        title="GCA Automação Industrial | Cuiabá, Várzea Grande e MT"
+        description="GCA Automação Industrial em Cuiabá-MT. Montagem de painéis, manutenção de inversores Weg/Danfoss e plataforma IoT (teste grátis 5 equipamentos). Atendemos raio de 700km."
         canonical="/"
-        keywords="conserto inversor de frequência americana sp, reparo servodrive bosch rexroth americana, manutenção eletrônica industrial americana sp, laboratório eletrônica industrial, GCA automação"
+        keywords="automação industrial cuiabá, montagem painéis elétricos mt, inversor weg cuiabá, inversor danfoss mato grosso, GCA automação"
         googleVerification={googleVerificationCode}
       />
 

@@ -71,8 +71,8 @@ const Contact = () => {
   return (
     <div className="w-full bg-[#f6f8f8] relative">
       <SEO
-        title="Contato e Localização | GCA Automação"
-        description="Fale com nosso plantão técnico, solicite orçamentos ou visite nosso laboratório em Americana-SP. Atendimento ágil para todo o parque industrial."
+        title="Contato e Localização | GCA Cuiabá MT"
+        description="Fale com nosso plantão técnico em Cuiabá-MT. Atendimento para montagem de painéis, manutenção de inversores e IoT em todo Mato Grosso e região (700km)."
         canonical="/entre-em-contato"
       />
       {/* Geometric bg pattern */}

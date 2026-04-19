@@ -52,10 +52,10 @@ const About = () => {
   return (
     <div className="w-full bg-slate-50 relative overflow-hidden">
       <SEO 
-        title="Sobre a GCA | 10 Anos de Excelência em Americana-SP"
-        description="Conheça a GCA Automação Industrial, fundada em 2013. Laboratório próprio em Americana-SP especializado em reparo de equipamentos eletrônicos industriais de alta complexidade."
+        title="Sobre a GCA | Especialistas em Automação em Cuiabá-MT"
+        description="Conheça a GCA Automação Industrial em Cuiabá-MT. Especialistas em montagem de painéis elétricos, manutenção de inversores Weg/Danfoss e soluções IoT para toda região de Mato Grosso."
         canonical="/sobre-nos"
-        keywords="GCA automação industrial americana sp, empresa reparo eletrônico industrial americana, manutençao eletrônica industrial SP"
+        keywords="GCA automação industrial cuiabá mt, empresa montagem painéis elétricos mt, manutenção eletrônica industrial cuiabá"
         breadcrumbs={[{ name: 'Sobre Nós', path: '/sobre-nos' }]}
       />
       

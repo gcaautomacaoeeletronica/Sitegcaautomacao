@@ -53,10 +53,10 @@ const Laboratory = () => {
   return (
     <div className="w-full bg-[#f6f8f8] relative overflow-hidden">
       <SEO 
-        title="Infraestrutura Laboratorial | Ambiente ESD e Gigas de Teste"
-        description="Nosso laboratório industrial em Americana-SP conta com ambiente ESD controlado, estações BGA robotizadas e gigas de teste dedicadas para Siemens S7, CompactLogix e Omron."
+        title="Infraestrutura e Laboratório | GCA Cuiabá MT"
+        description="Nosso laboratório em Cuiabá-MT conta com ambiente ESD controlado e gigas de teste para manutenção de inversores Weg, Danfoss e CLP. Atendimento de excelência em Mato Grosso."
         canonical="/estrutura"
-        keywords="laboratório eletrônica industrial americana sp, teste inversor frequencia, ambiente ESD reparo eletrônico, giga teste CLP, retrabalho BGA industrial"
+        keywords="laboratório eletrônica industrial cuiabá mt, conserto de inversores mato grosso, testes de clp cuiabá, reparo de painéis industriais mt"
         breadcrumbs={[{ name: 'Estrutura / Laboratório', path: '/estrutura' }]}
       />
       
