@@ -70,11 +70,11 @@ const StatsSection = ({ stats = [] }) => (
           const Icon = ICON_MAP[stat.icon] || ICON_MAP.Zap;
           return (
             <FadeIn key={idx} delay={idx * 0.1} className="text-center group flex flex-col items-center">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:scale-110 transition-all duration-500 border border-white/5 shadow-2xl">
+              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:scale-110 transition-all duration-500 border border-white/10 shadow-2xl backdrop-blur-sm">
                 <Icon className="text-accent group-hover:text-white" size={28} />
               </div>
-              <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">{stat.value}</div>
-              <div className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-[0.2em] leading-tight max-w-[120px]">{stat.label}</div>
+              <div className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter drop-shadow-md">{stat.value}</div>
+              <div className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-[0.3em] leading-tight max-w-[140px] drop-shadow-sm">{stat.label}</div>
             </FadeIn>
           );
         })}
@@ -160,25 +160,25 @@ const Home = () => {
                 alt={slide.title}
                 loading={index === 0 ? "eager" : "lazy"}
                 fetchpriority={index === 0 ? "high" : "low"}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-                  index === currentSlide ? 'opacity-80' : 'opacity-0'
+                className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${
+                  index === currentSlide ? 'opacity-50 scale-105' : 'opacity-0 scale-100'
                 }`}
               />
-              <div className="absolute inset-0 bg-[#0a0c10] opacity-60"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/60 to-transparent"></div>
               
               <motion.div 
                 style={{ y: yHero }}
-                className="relative z-20 px-4 max-w-5xl mx-auto w-full flex flex-col justify-center translate-y-10"
+                className="relative z-20 px-4 max-w-7xl mx-auto w-full flex flex-col justify-center translate-y-10"
               >
-                <div className="overflow-hidden mb-2 border-l-4 border-accent pl-6">
-                    <h1 className={`text-white text-5xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight transition-transform duration-1000 delay-100 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
+                <div className="overflow-hidden mb-4 border-l-4 border-accent pl-8">
+                    <h1 className={`text-white text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter transition-all duration-1000 delay-100 ease-out leading-[0.95] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)] ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
                       <span className="cms-content-light" dangerouslySetInnerHTML={{ __html: stripParagraph(slide.title) }}></span><br/>
                       <span className="text-accent cms-content-light" dangerouslySetInnerHTML={{ __html: stripParagraph(slide.highlight) }}></span>
                     </h1>
                  </div>
-                 <div className={`mt-6 transition-all duration-1000 delay-300 ${index === currentSlide ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
+                 <div className={`mt-8 transition-all duration-1000 delay-300 ${index === currentSlide ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
                     <div 
-                       className="text-gray-300 text-lg md:text-2xl font-medium max-w-2xl cms-content-light"
+                       className="text-slate-100 text-xl md:text-2xl font-semibold max-w-3xl cms-content-light drop-shadow-md leading-relaxed"
                        dangerouslySetInnerHTML={{ __html: slide.desc || '' }}
                     />
                  </div>

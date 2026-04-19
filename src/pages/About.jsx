@@ -23,25 +23,26 @@ const About = () => {
   const yImage = useTransform(scrollY, [0, 500], [0, 100]);
   
   const bannerContent = (
-    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a0f18] overflow-hidden">
+    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#070b14] overflow-hidden">
       <motion.div 
-        className="absolute inset-0 bg-cover bg-center opacity-80 shadow-inner" 
+        className="absolute inset-0 bg-cover bg-center opacity-50 contrast-125 grayscale-[20%]" 
         style={{ y: yImage, backgroundImage: `url(${siteMedia.about?.url})` }}
       />
-      <div className="absolute inset-0 bg-gray-900/80"></div>
+      {/* Precision Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-[#070b14]/70 to-[#070b14]/40"></div>
       
       <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SlideIn direction="up">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-bold tracking-widest uppercase mb-6 backdrop-blur-sm">
+          <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-white font-black tracking-[0.3em] uppercase mb-8 backdrop-blur-xl shadow-2xl">
             Nossa História
           </span>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
             <EditableText pagina="about" path="heroTitle" tag="span">
-              {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent">{word}</span> : word + ' ')}
+              {(aboutContent?.heroTitle || '').split(' ').map((word, i) => i === (aboutContent?.heroTitle || '').split(' ').length - 1 ? <span key={i} className="text-accent drop-shadow-[0_2px_10px_rgba(192,57,43,0.5)]">{word}</span> : word + ' ')}
             </EditableText>
           </h1>
           <div 
-             className="text-xl text-blue-100 max-w-2xl font-light leading-relaxed cms-content"
+             className="text-xl md:text-2xl text-slate-200 max-w-2xl font-medium leading-relaxed cms-content drop-shadow-md"
              dangerouslySetInnerHTML={{ __html: stripP(aboutContent?.heroSubtitle) }}
           />
         </SlideIn>

@@ -27,22 +27,24 @@ const Laboratory = () => {
   const yImage = useTransform(scrollY, [0, 500], [0, 100]);
 
   const heroContent = (
-    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-primary overflow-hidden">
+    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a111a] overflow-hidden">
+      {/* Background Image with improved blend and contrast */}
       <motion.div 
         style={{ y: yImage }}
-        className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay" 
+        className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity scale-110" 
         style={{ backgroundImage: `url(${siteMedia.laboratory?.url})` }}
       />
-      <div className="absolute inset-0 bg-primary-dark/80 mix-blend-overlay"></div>
+      {/* Dynamic Gradient Overlay for better text focus */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a111a] via-[#0a111a]/80 to-transparent z-0"></div>
       
       <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-<SlideIn>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter">
-            <span className="cms-content drop-shadow-lg" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.title) }}></span> <br/>
-            <span className="font-light cms-content text-accent drop-shadow-md" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.highlight) }}></span>
+        <SlideIn>
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-8 uppercase tracking-tighter leading-none">
+            <span className="cms-content drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.title) }}></span> <br/>
+            <span className="text-accent drop-shadow-[0_2px_8px_rgba(192,57,43,0.4)]" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.highlight) }}></span>
           </h1>
           <div 
-             className="text-xl text-white font-medium cms-content"
+             className="text-xl md:text-2xl text-slate-200 font-medium max-w-2xl leading-relaxed cms-content drop-shadow-md"
              dangerouslySetInnerHTML={{ __html: labContent?.hero?.desc || '' }}
            />
         </SlideIn>

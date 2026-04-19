@@ -146,7 +146,7 @@ const IoT = () => {
                   <span className="text-xs font-black uppercase tracking-widest text-cyan-400">IoT Industrial em Tempo Real</span>
                 </div>
 
-                <h1 className="text-5xl md:text-6xl xl:text-7xl font-black leading-none tracking-tight">
+                <h1 className="text-5xl md:text-7xl lg:text-[9rem] font-black text-white mb-8 tracking-tighter leading-[0.9] uppercase drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
                   Conecte sua<br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
                     Indústria
@@ -154,8 +154,8 @@ const IoT = () => {
                   ao Futuro
                 </h1>
 
-                <p className="text-gray-400 text-lg leading-relaxed max-w-lg">
-                  Monitoramento inteligente de <strong className="text-white">nível de caixas d'água</strong>, <strong className="text-white">temperatura</strong> e <strong className="text-white">consumo elétrico</strong> — tudo centralizado na nossa plataforma IoT com Broker MQTT próprio e dashboards em tempo real.
+                <p className="text-slate-200 text-xl font-medium leading-relaxed max-w-xl drop-shadow-md">
+                  Monitoramento inteligente de <strong className="text-white font-black underline decoration-cyan-500/50">nível de caixas d'água</strong>, <strong className="text-white font-black underline decoration-blue-500/50">temperatura</strong> e <strong className="text-white font-black underline decoration-purple-500/50">consumo elétrico</strong> — tudo centralizado na nossa plataforma IoT.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -210,8 +210,8 @@ const IoT = () => {
                       <span className="text-xs text-gray-500 font-mono">iotconects.com.br — Dashboard</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <SignalDot color="bg-green-400" />
-                      <span className="text-[10px] text-gray-400 font-mono">CONNECTED</span>
+                      <SignalDot color="bg-green-400" delay="0.5s" />
+                      <span className="text-[10px] text-green-400 font-mono">3 devices online</span>
                     </div>
                   </div>
 

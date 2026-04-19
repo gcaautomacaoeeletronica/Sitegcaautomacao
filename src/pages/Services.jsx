@@ -151,31 +151,29 @@ const Services = () => {
   const yImage = useTransform(scrollY, [0, 500], [0, 100]);
 
   const heroContent = (
-    <section className="relative pt-36 pb-32 top-0 bg-[#07090f] overflow-hidden min-h-[520px] flex items-end">
-      {/* Background image */}
+    <section className="relative pt-36 pb-32 top-0 bg-[#05070a] overflow-hidden min-h-[520px] flex items-end">
+      {/* Background image with enhanced scale and contrast */}
       <motion.div 
         style={{ y: yImage, backgroundImage: `url(${siteMedia.services?.url})` }}
-        className="absolute inset-0 bg-cover bg-center opacity-40"
+        className="absolute inset-0 bg-cover bg-center opacity-40 scale-110 grayscale-[30%] brightness-75"
       />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#07090f]/60 via-[#07090f]/70 to-[#07090f]" />
-      {/* Grid pattern */}
-      <div className="absolute inset-0 pattern-grid opacity-5" />
-
+      {/* Precision Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05070a] via-[#05070a]/80 to-transparent z-0" />
+      
       {/* Accent lines */}
-      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-accent to-transparent opacity-60" />
+      <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-transparent via-accent to-transparent opacity-40" />
 
       <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full pb-12">
         <SlideIn direction="up">
-          <EditableText pagina="services" path="hero.badge" tag="span" className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-accent/30 border border-accent/50 text-white font-bold tracking-widest uppercase mb-6 text-xs shadow-lg shadow-accent/20">
+          <EditableText pagina="services" path="hero.badge" tag="span" className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-accent/20 border border-accent/40 text-white font-black tracking-[0.3em] uppercase mb-8 text-xs backdrop-blur-md shadow-2xl">
             {servicesContent?.hero?.badge || ''}
           </EditableText>
-          <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-white mb-6 tracking-tight uppercase leading-[1.05]">
-            <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.title) }}></span>{' '}
+          <h1 className="text-5xl md:text-6xl lg:text-9xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.95] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
+            <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.title) }}></span>{' '} <br className="hidden lg:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400 cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.highlight) }}></span>
           </h1>
           <div 
-            className="text-xl text-white font-medium max-w-2xl leading-relaxed cms-content"
+            className="text-xl md:text-2xl text-white font-semibold max-w-3xl leading-relaxed cms-content drop-shadow-lg"
             dangerouslySetInnerHTML={{ __html: servicesContent?.hero?.desc || '' }}
           />
 
