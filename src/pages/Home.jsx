@@ -155,12 +155,15 @@ const Home = () => {
                 className="absolute inset-0 pattern-grid opacity-10 pointer-events-none"
               />
               
-              <div className="absolute inset-0 bg-cover bg-center transition-all duration-1000" 
-                   style={{ 
-                     backgroundImage: `url(${siteMedia[`home_${index + 1}`]?.url || siteMedia.home?.url})`, 
-                     opacity: index === currentSlide ? 0.8 : 0 
-                   }}>
-              </div>
+              <img 
+                src={siteMedia[`home_${index + 1}`]?.url || siteMedia.home?.url}
+                alt={slide.title}
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchpriority={index === 0 ? "high" : "low"}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  index === currentSlide ? 'opacity-80' : 'opacity-0'
+                }`}
+              />
               <div className="absolute inset-0 bg-[#0a0c10] opacity-60"></div>
               
               <motion.div 

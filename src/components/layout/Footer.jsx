@@ -48,15 +48,16 @@ const Footer = () => {
             {/* Social Matrix */}
             <div className="flex gap-3 pt-2">
               {[
-                { icon: 'linkedin', url: global?.linkedin, color: 'hover:text-[#0077B5]' },
-                { icon: 'instagram', url: global?.instagram, color: 'hover:text-[#E4405F]' },
-                { icon: 'facebook', url: global?.facebook, color: 'hover:text-[#1877F2]' }
+                { icon: 'linkedin', url: global?.linkedin, color: 'hover:text-[#0077B5]', label: 'Perfil do LinkedIn' },
+                { icon: 'instagram', url: global?.instagram, color: 'hover:text-[#E4405F]', label: 'Perfil do Instagram' },
+                { icon: 'facebook', url: global?.facebook, color: 'hover:text-[#1877F2]', label: 'Página do Facebook' }
               ].map((social) => (
                 <a 
                   key={social.icon} 
                   href={social.url} 
                   target="_blank" 
                   rel="noopener noreferrer" 
+                  aria-label={social.label}
                   className={`p-2.5 bg-white/5 rounded-xl border border-white/5 transition-all duration-300 group ${social.color} hover:bg-white/10 hover:-translate-y-1 block`}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 group-hover:opacity-100">
@@ -163,12 +164,12 @@ const Footer = () => {
 
           <div className="text-center md:text-left">
             <p className="text-[11px] text-gray-600 font-medium">
-              &copy; {new Date().getFullYear()} GCA Automação e Eletrônica Industrial Americana Ltda.
+              &copy; {new Date().getFullYear()} GCA Automação e Eletrônica Industrial Ltda.
             </p>
           </div>
 
           <div className="flex gap-8 items-center">
-            <Link to="/admin" className="text-[10px] text-gray-700 hover:text-accent font-black uppercase tracking-[0.2em] transition-all border border-gray-800/50 px-4 py-2 rounded-lg bg-white/[0.02] hover:border-accent/30">
+            <Link to="/admin" aria-label="Acessar painel administrativo" className="text-[10px] text-gray-700 hover:text-accent font-black uppercase tracking-[0.2em] transition-all border border-gray-800/50 px-4 py-2 rounded-lg bg-white/[0.02] hover:border-accent/30">
               Admin
             </Link>
             <div className="hidden sm:flex gap-6">
