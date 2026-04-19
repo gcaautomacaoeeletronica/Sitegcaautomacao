@@ -36,15 +36,15 @@ const Laboratory = () => {
       <div className="absolute inset-0 bg-primary-dark/80 mix-blend-overlay"></div>
       
       <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SlideIn>
+<SlideIn>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter">
-            <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.title) }}></span> <br/>
-            <span className="font-light cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.highlight) }}></span>
+            <span className="cms-content drop-shadow-lg" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.title) }}></span> <br/>
+            <span className="font-light cms-content text-accent drop-shadow-md" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.highlight) }}></span>
           </h1>
           <div 
-             className="text-xl text-blue-100 max-w-2xl font-light cms-content"
+             className="text-xl text-white/95 max-w-2xl font-medium cms-content"
              dangerouslySetInnerHTML={{ __html: labContent?.hero?.desc || '' }}
-          />
+           />
         </SlideIn>
       </motion.div>
     </section>
@@ -76,20 +76,20 @@ const Laboratory = () => {
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
                
-               <FadeIn className="order-2 lg:order-1">
-                  <h2 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
-                    <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.title) }}></span> <br/>
-                    <span className="text-accent underline decoration-4 underline-offset-4 cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.highlight) }}></span>
-                  </h2>
-                  <div 
-                    className="text-lg text-gray-600 leading-relaxed mb-6 font-light cms-content"
-                    dangerouslySetInnerHTML={{ __html: labContent?.performance?.text1 || '' }}
-                  />
-                  <div 
-                    className="text-lg text-gray-600 leading-relaxed font-light cms-content"
-                    dangerouslySetInnerHTML={{ __html: labContent?.performance?.text2 || '' }}
-                  />
-               </FadeIn>
+<FadeIn className="order-2 lg:order-1">
+                   <h2 className="text-3xl lg:text-5xl font-black text-primary mb-6 tracking-tight">
+                     <span className="cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.title) }}></span> <br/>
+                     <span className="text-accent underline decoration-4 underline-offset-4 cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.highlight) }}></span>
+                   </h2>
+                   <div 
+                     className="text-lg text-gray-700 leading-relaxed mb-6 font-medium cms-content"
+                     dangerouslySetInnerHTML={{ __html: labContent?.performance?.text1 || '' }}
+                   />
+                   <div 
+                     className="text-lg text-gray-700 leading-relaxed font-medium cms-content"
+                     dangerouslySetInnerHTML={{ __html: labContent?.performance?.text2 || '' }}
+                   />
+                </FadeIn>
                
                <div className="order-1 lg:order-2 w-full aspect-square md:aspect-video lg:aspect-square bg-gray-100 rounded-sm border border-gray-200 flex items-center justify-center shadow-sm">
                    <span className="text-gray-400 font-bold uppercase tracking-widest text-sm text-center px-4">

@@ -167,7 +167,7 @@ const Services = () => {
 
       <motion.div style={{ y: yHero }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full pb-12">
         <SlideIn direction="up">
-          <EditableText pagina="services" path="hero.badge" tag="span" className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-accent/20 border border-accent/40 text-accent font-bold tracking-widest uppercase mb-6 text-xs">
+          <EditableText pagina="services" path="hero.badge" tag="span" className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-accent/30 border border-accent/50 text-white font-bold tracking-widest uppercase mb-6 text-xs shadow-lg shadow-accent/20">
             {servicesContent?.hero?.badge || ''}
           </EditableText>
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-white mb-6 tracking-tight uppercase leading-[1.05]">
@@ -175,7 +175,7 @@ const Services = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400 cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.highlight) }}></span>
           </h1>
           <div 
-            className="text-lg text-gray-400 font-light max-w-2xl leading-relaxed cms-content"
+            className="text-xl text-white/90 font-medium max-w-2xl leading-relaxed cms-content"
             dangerouslySetInnerHTML={{ __html: servicesContent?.hero?.desc || '' }}
           />
 
@@ -221,10 +221,10 @@ const Services = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <FadeIn className="text-center mb-14">
             <span className="inline-block text-xs font-black tracking-[0.25em] uppercase text-accent mb-3">Nossas Áreas de Atuação</span>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tight">
               Expertise em <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">4 Pilares Industriais</span>
             </h2>
-            <p className="text-gray-500 mt-4 max-w-xl mx-auto text-lg">Da eletrônica ao IoT, da instalação ao painel — um parceiro completo para a sua indústria.</p>
+            <p className="text-gray-700 mt-4 max-w-xl mx-auto text-lg font-medium">Da eletrônica ao IoT, da instalação ao painel — um parceiro completo para a sua indústria.</p>
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -276,8 +276,8 @@ const Services = () => {
           
           <FadeIn className="mb-14 text-center">
             <span className="inline-block text-xs font-black tracking-[0.25em] uppercase text-accent mb-3">Catálogo Técnico</span>
-            <h2 className="text-4xl font-black text-gray-900 tracking-tight mb-3">Catálogo de <span className="text-accent underline decoration-4 underline-offset-4">Especialidades</span></h2>
-            <p className="text-gray-500 text-lg">Selecione a área e explore as frentes de reparo e serviço disponíveis.</p>
+            <h2 className="text-4xl font-black text-primary tracking-tight mb-3">Catálogo de <span className="text-accent underline decoration-4 underline-offset-4">Especialidades</span></h2>
+            <p className="text-gray-700 text-lg font-medium">Selecione a área e explore as frentes de reparo e serviço disponíveis.</p>
           </FadeIn>
 
           <StaggerContainer>
