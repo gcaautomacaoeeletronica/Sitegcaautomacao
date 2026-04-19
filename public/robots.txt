@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://gcaautomacao.vercel.app/sitemap.xml
+Sitemap: https://gcaautomacaoeeletronica.com.br/sitemap.xml
