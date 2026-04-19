@@ -857,6 +857,12 @@ const AdminDashboard = () => {
                                     {renderMediaInput("Sobre Nós (Imagem Lateral)", "aboutSide")}
                                     {renderMediaInput("Serviços (Banner Superior)", "services")}
                                     {renderMediaInput("Serviços (Seção Laboratório)", "servicesLab")}
+                                    {renderMediaInput("Serviços (Galeria - Imagem 1)", "servicesGallery_0")}
+                                    {renderMediaInput("Serviços (Galeria - Imagem 2)", "servicesGallery_1")}
+                                    {renderMediaInput("Serviços (Galeria - Imagem 3)", "servicesGallery_2")}
+                                    {renderMediaInput("Serviços (Galeria - Imagem 4)", "servicesGallery_3")}
+                                    {renderMediaInput("Serviços (Galeria - Imagem 5)", "servicesGallery_4")}
+                                    {renderMediaInput("Serviços (Galeria - Imagem 6)", "servicesGallery_5")}
                                     {renderMediaInput("Laboratório (Banner Superior)", "laboratory")}
                                     {renderMediaInput("Contato (Banner Superior)", "contact")}
                                 </div>
