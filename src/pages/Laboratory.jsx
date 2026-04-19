@@ -42,7 +42,7 @@ const Laboratory = () => {
             <span className="font-light cms-content text-accent drop-shadow-md" dangerouslySetInnerHTML={{ __html: stripP(labContent?.hero?.highlight) }}></span>
           </h1>
           <div 
-             className="text-xl text-white/95 max-w-2xl font-medium cms-content"
+             className="text-xl text-white font-medium cms-content"
              dangerouslySetInnerHTML={{ __html: labContent?.hero?.desc || '' }}
            />
         </SlideIn>
@@ -82,11 +82,11 @@ const Laboratory = () => {
                      <span className="text-accent underline decoration-4 underline-offset-4 cms-content" dangerouslySetInnerHTML={{ __html: stripP(labContent?.performance?.highlight) }}></span>
                    </h2>
                    <div 
-                     className="text-lg text-gray-700 leading-relaxed mb-6 font-medium cms-content"
+                     className="text-lg text-white leading-relaxed mb-6 font-medium cms-content drop-shadow-md"
                      dangerouslySetInnerHTML={{ __html: labContent?.performance?.text1 || '' }}
                    />
                    <div 
-                     className="text-lg text-gray-700 leading-relaxed font-medium cms-content"
+                     className="text-lg text-white leading-relaxed font-medium cms-content drop-shadow-md"
                      dangerouslySetInnerHTML={{ __html: labContent?.performance?.text2 || '' }}
                    />
                 </FadeIn>

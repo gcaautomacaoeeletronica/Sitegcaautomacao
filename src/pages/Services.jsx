@@ -175,7 +175,7 @@ const Services = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400 cms-content" dangerouslySetInnerHTML={{ __html: stripP(servicesContent?.hero?.highlight) }}></span>
           </h1>
           <div 
-            className="text-xl text-white/90 font-medium max-w-2xl leading-relaxed cms-content"
+            className="text-xl text-white font-medium max-w-2xl leading-relaxed cms-content"
             dangerouslySetInnerHTML={{ __html: servicesContent?.hero?.desc || '' }}
           />
 
@@ -224,7 +224,7 @@ const Services = () => {
             <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tight">
               Expertise em <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">4 Pilares Industriais</span>
             </h2>
-            <p className="text-gray-700 mt-4 max-w-xl mx-auto text-lg font-medium">Da eletrônica ao IoT, da instalação ao painel — um parceiro completo para a sua indústria.</p>
+            <p className="text-white mt-4 max-w-xl mx-auto text-lg font-medium drop-shadow-md">Da eletrônica ao IoT, da instalação ao painel — um parceiro completo para a sua indústria.</p>
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -277,7 +277,7 @@ const Services = () => {
           <FadeIn className="mb-14 text-center">
             <span className="inline-block text-xs font-black tracking-[0.25em] uppercase text-accent mb-3">Catálogo Técnico</span>
             <h2 className="text-4xl font-black text-primary tracking-tight mb-3">Catálogo de <span className="text-accent underline decoration-4 underline-offset-4">Especialidades</span></h2>
-            <p className="text-gray-700 text-lg font-medium">Selecione a área e explore as frentes de reparo e serviço disponíveis.</p>
+            <p className="text-white text-lg font-medium drop-shadow-md">Selecione a área e explore as frentes de reparo e serviço disponíveis.</p>
           </FadeIn>
 
           <StaggerContainer>
