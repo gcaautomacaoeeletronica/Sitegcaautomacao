@@ -1,44 +1,6 @@
-# Robots.txt - GCA Automação e Eletrônica Industrial
-# https://gcaautomacao.vercel.app
-
-# Regras para todos os robôs
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
 
-# Bloquear área administrativa (não indexar o painel)
-Disallow: /admin
-Disallow: /admin/dashboard
-
-# Bloquear arquivos desnecessários
-Disallow: /*.json$
-Disallow: /src/
-
-# Sitemap
+# Sitemaps
 Sitemap: https://gcaautomacao.vercel.app/sitemap.xml
-
-# Google
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 2
-
-# Google Images
-User-agent: Googlebot-Image
-Allow: /
-
-# Bing
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 5
-
-# DuckDuckGo
-User-agent: DuckDuckBot
-Allow: /
-
-# Yahoo
-User-agent: Slurp
-Allow: /
-
-# Yandex
-User-agent: YandexBot
-Allow: /
-Crawl-delay: 5
