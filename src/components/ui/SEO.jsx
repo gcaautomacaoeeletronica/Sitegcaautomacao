@@ -27,6 +27,7 @@ const SEO = ({
   ogImage,
   ogType = 'website',
   keywords,
+  googleVerification,
   article = null,
   breadcrumbs = null,
 }) => {
@@ -80,6 +81,7 @@ const SEO = ({
       <meta name="keywords" content={allKeywords} />
       <meta name="author" content={SITE_NAME} />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
       <link rel="canonical" href={pageUrl} />
 
       {/* === OPEN GRAPH (Facebook / LinkedIn / WhatsApp) === */}
