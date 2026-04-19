@@ -333,16 +333,14 @@ const Services = () => {
 
       {/* ── GALERIA DE FOTOS E VÍDEOS ── */}
       {siteMedia.servicesGallery_0?.url || siteMedia.servicesGallery_1?.url || siteMedia.servicesGallery_2?.url || siteMedia.servicesGallery_3?.url || siteMedia.servicesGallery_4?.url || siteMedia.servicesGallery_5?.url ? (
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent via-primary to-accent" />
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]" />
+      <section className="py-24 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FadeIn className="text-center mb-14">
             <span className="inline-block text-xs font-black tracking-[0.25em] uppercase text-accent mb-3">Galeria de Projetos</span>
-            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-3">Nossos <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-red-400">Trabalhos</span></h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">Veja alguns dos projetos executados pela GCA Automação Industrial.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-3">Nossos <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Trabalhos</span></h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">Veja alguns dos projetos executados pela GCA Automação Industrial.</p>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -356,7 +354,7 @@ const Services = () => {
               
               return (
                 <FadeIn key={idx} delay={idx * 0.1}>
-                  <div className="group relative overflow-hidden rounded-2xl bg-slate-800/50 border border-slate-700 hover:border-accent/50 shadow-xl hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500 hover:-translate-y-2">
+                  <div className="group relative overflow-hidden rounded-2xl bg-white border-2 border-gray-100 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 hover:-translate-y-2">
                     <div className="aspect-[4/3] relative overflow-hidden">
                       {isVideo ? (
                         <video 
@@ -373,28 +371,28 @@ const Services = () => {
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       {isVideo && (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform">
-                            <Play size={24} className="text-white ml-1" />
+                          <div className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <Play size={24} className="text-primary ml-1" />
                           </div>
                         </div>
                       )}
                     </div>
                     {hasText && (
-                      <div className="p-5 bg-gradient-to-r from-slate-800 to-slate-800/80 border-t border-slate-700/50">
+                      <div className="p-5 bg-white border-t border-gray-100">
                         {media.title && (
-                          <h4 className="font-bold text-white text-lg leading-tight">{media.title}</h4>
+                          <h4 className="font-bold text-gray-900 text-lg leading-tight">{media.title}</h4>
                         )}
                         {media.desc && (
-                          <p className="text-slate-400 text-sm mt-2 leading-relaxed">{media.desc}</p>
+                          <p className="text-gray-500 text-sm mt-2 leading-relaxed">{media.desc}</p>
                         )}
                       </div>
                     )}
                     {!hasText && (
-                      <div className="p-5 bg-slate-800/50 border-t border-slate-700/50">
-                        <p className="text-slate-500 text-sm font-medium">Projeto {idx + 1}</p>
+                      <div className="p-5 bg-gray-50 border-t border-gray-100">
+                        <p className="text-gray-400 text-sm font-medium">Projeto {idx + 1}</p>
                       </div>
                     )}
                     {media.link && (
