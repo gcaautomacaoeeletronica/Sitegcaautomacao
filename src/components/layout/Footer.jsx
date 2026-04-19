@@ -31,6 +31,7 @@ const Footer = () => {
                   <img 
                     src={siteMedia.logo.url} 
                     alt="Logo GCA" 
+                    loading="lazy"
                     className="w-12 h-12 rounded-full object-cover ring-1 ring-white/10 group-hover:ring-white/30 transition-all shadow-xl shrink-0" 
                   />
                 )}
