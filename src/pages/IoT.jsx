@@ -163,16 +163,25 @@ const IoT = () => {
                     href="https://iotconects.com.br/"
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black uppercase tracking-widest text-sm rounded-xl transition-all duration-300 hover:shadow-[0_15px_40px_rgba(6,182,212,0.35)] hover:-translate-y-1"
+                    className="group flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-900 border border-white/5 hover:border-white/20 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                   >
-                    <ExternalLink size={18} className="group-hover:rotate-12 transition-transform" />
+                    <ExternalLink size={16} className="group-hover:rotate-12 transition-transform" />
                     Acessar Plataforma
+                  </a>
+                  <a
+                    href="https://thingsboard.cloud/dashboard/231a5800-ce96-11ef-852e-bd51c2b30fde?publicId=7aa99e80-8acd-11ef-a59e-a9c993dbec14"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all duration-300 hover:shadow-[0_15px_40px_rgba(6,182,212,0.35)] hover:-translate-y-1"
+                  >
+                    <ExternalLink size={16} className="group-hover:rotate-12 transition-transform" />
+                    Ver Plataforma Online
                   </a>
                   <Link
                     to="/entre-em-contato"
-                    className="flex items-center justify-center gap-3 px-8 py-4 bg-transparent border border-gray-700 hover:border-cyan-500/50 text-gray-300 hover:text-white font-bold text-sm rounded-xl transition-all duration-300"
+                    className="flex items-center justify-center gap-3 px-8 py-4 bg-white/5 border border-gray-700 hover:border-cyan-500/50 text-gray-300 hover:text-white font-bold text-xs rounded-xl transition-all duration-300"
                   >
-                    Solicitar Demonstração <ChevronRight size={16} />
+                    Solicitar Demonstração <ChevronRight size={14} />
                   </Link>
                 </div>
 
