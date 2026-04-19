@@ -107,7 +107,7 @@ const Footer = () => {
               <div className="flex-1 text-sm text-gray-500 leading-relaxed font-light">
                 <EditableText pagina="global" path="address" tag="p" className="group-hover:text-gray-300 transition-colors">{global?.address || ''}</EditableText>
                 <span className="text-gray-600 font-mono text-[10px] mt-2 block tracking-widest uppercase">
-                  CEP <EditableText pagina="global" path="cep" tag="span">{global?.cep || ''}</EditableText> — <EditableText pagina="global" path="city" tag="span">{global?.city || ''}</EditableText> / <EditableText pagina="global" path="state" tag="span">{global?.state || ''}</EditableText>
+                  CEP <EditableText pagina="global" path="cep" tag="span">{global?.cep || ''}</EditableText> — <EditableText pagina="global" path="cityState" tag="span">{global?.cityState || ''}</EditableText>
                 </span>
               </div>
             </div>

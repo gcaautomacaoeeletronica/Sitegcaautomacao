@@ -218,7 +218,7 @@ const Contact = () => {
                     </div>
                     <div className="text-base font-light tracking-wide leading-relaxed text-gray-300">
                       <EditableText pagina="global" path="address" tag="p">{global?.address || ''}</EditableText>
-                      CEP <EditableText pagina="global" path="cep" tag="span">{global?.cep || ''}</EditableText> — <EditableText pagina="global" path="city" tag="span">{global?.city || ''}</EditableText> / <EditableText pagina="global" path="state" tag="span">{global?.state || ''}</EditableText>
+                      CEP <EditableText pagina="global" path="cep" tag="span">{global?.cep || ''}</EditableText> — <EditableText pagina="global" path="cityState" tag="span">{global?.cityState || ''}</EditableText>
                     </div>
                   </div>
                 </div>
