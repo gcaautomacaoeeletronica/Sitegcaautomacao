@@ -106,6 +106,7 @@ const BlogPost = () => {
                />
             </div>
 
+            <div
               className="prose prose-lg max-w-none text-gray-700 leading-relaxed font-light prose-headings:text-gray-900 prose-a:text-primary prose-a:font-bold prose-strong:text-gray-900"
               dangerouslySetInnerHTML={{ __html: post.conteudo }}
             />
