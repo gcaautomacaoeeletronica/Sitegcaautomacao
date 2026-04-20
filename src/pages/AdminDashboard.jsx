@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAdminStore } from '../store/adminStore';
 import Skeleton from '../components/ui/Skeleton';
 import RichTextEditor from '../components/ui/RichTextEditor';
+import TagInput from '../components/ui/TagInput';
 import SEOPanel from '../components/ui/SEOPanel';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone, Zap, AlignLeft } from 'lucide-react';
@@ -44,6 +45,7 @@ const AdminDashboard = () => {
     const [postImage, setPostImage] = useState('');
     const [postAutor, setPostAutor] = useState('GCA Equipe');
     const [postData, setPostData] = useState(new Date().toISOString().slice(0, 16));
+    const [postTags, setPostTags] = useState([]);
 
     // States de Segurança
     const [newPass, setNewPass] = useState('');
@@ -155,6 +157,7 @@ const AdminDashboard = () => {
             setPostImage(post.imageUrl);
             setPostAutor(post.autor || 'GCA Equipe');
             setPostData(new Date(post.data).toISOString().slice(0, 16));
+            setPostTags(post.tags || []);
             setEditingPostId(post.id);
         } else {
             setPostTitle('');
@@ -163,6 +166,7 @@ const AdminDashboard = () => {
             setPostImage('');
             setPostAutor('GCA Equipe');
             setPostData(new Date().toISOString().slice(0, 16));
+            setPostTags([]);
             setEditingPostId(null);
         }
         setIsBlogModalOpen(true);
@@ -176,7 +180,8 @@ const AdminDashboard = () => {
             conteudo: postConteudo,
             imageUrl: postImage,
             autor: postAutor,
-            data: new Date(postData).toISOString()
+            data: new Date(postData).toISOString(),
+            tags: postTags
         };
 
         if (editingPostId) {
@@ -493,6 +498,14 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                                                     disabled={uploadingKeys['blogRef']}
                                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:text-gray-400"
                                                     value={postImage} onChange={e => setPostImage(e.target.value)} />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">Palavras-chave (Tags para SEO)</label>
+                                                <TagInput 
+                                                    tags={postTags} 
+                                                    onChange={setPostTags} 
+                                                    placeholder="Ex: automação, robótica, manutenção..." 
+                                                />
                                             </div>
                                             <div className="md:col-span-2">
                                                 <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-4">Conteúdo do Artigo</label>

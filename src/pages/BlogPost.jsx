@@ -59,7 +59,7 @@ const BlogPost = () => {
         ogImage={post.imageUrl}
         ogType="article"
         canonical={`/blog/${post.id}`}
-        keywords={`${post.titulo}, automação industrial, manutenção eletrônica, reparo industrial, GCA automação`}
+        keywords={`${post.tags?.join(', ') || ''}, ${post.titulo}, automação industrial, manutenção eletrônica, reparo industrial, GCA automação`}
         breadcrumbs={[
           { name: 'Blog Técnico', path: '/blog' },
           { name: post.titulo, path: `/blog/${post.id}` }
@@ -106,11 +106,23 @@ const BlogPost = () => {
                />
             </div>
 
-            {/* Corpo do Texto */}
-            <div 
               className="prose prose-lg max-w-none text-gray-700 leading-relaxed font-light prose-headings:text-gray-900 prose-a:text-primary prose-a:font-bold prose-strong:text-gray-900"
               dangerouslySetInnerHTML={{ __html: post.conteudo }}
             />
+
+            {/* Palavras-chave / Tags Display */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="mt-12 flex flex-wrap gap-2">
+                {post.tags.map((tag, index) => (
+                  <span 
+                    key={index} 
+                    className="px-3 py-1 bg-gray-50 border border-gray-100 text-gray-500 text-[10px] font-black uppercase tracking-widest rounded transition-colors hover:bg-gray-100"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Footer do Artigo / Share */}
             <div className="mt-20 pt-10 border-t border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">

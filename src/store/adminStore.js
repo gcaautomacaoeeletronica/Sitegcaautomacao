@@ -32,7 +32,8 @@ export const useAdminStore = create((set, get) => ({
             conteudo: p.content, 
             imageUrl: p.image_url, 
             autor: p.author, 
-            data: p.published_at // published_at agora é mandatório no SQL
+            data: p.published_at,
+            tags: p.tags || [] // Suporte a palavras-chave
         })) 
     });
   },
@@ -317,7 +318,8 @@ export const useAdminStore = create((set, get) => ({
         content: post.conteudo, 
         image_url: post.imageUrl, 
         author: post.autor,
-        published_at: post.data || new Date().toISOString()
+        published_at: post.data || new Date().toISOString(),
+        tags: post.tags || []
       }]);
       if (error) throw error;
       get().fetchBlog();
@@ -344,7 +346,8 @@ export const useAdminStore = create((set, get) => ({
         content: updatedPost.conteudo, 
         image_url: updatedPost.imageUrl, 
         author: updatedPost.autor,
-        published_at: updatedPost.data
+        published_at: updatedPost.data,
+        tags: updatedPost.tags || []
       }).eq('id', id);
       if (error) throw error;
       get().fetchBlog();
