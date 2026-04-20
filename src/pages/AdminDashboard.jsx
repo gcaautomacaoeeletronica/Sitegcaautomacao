@@ -1036,6 +1036,35 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                                                 </div>
                                             </div>
 
+                                            {/* Redes Sociais */}
+                                            <div className="pt-6 border-t border-gray-100 flex items-center gap-3">
+                                                <Link2 size={18} className="text-primary" />
+                                                <h4 className="font-black text-gray-900 text-sm uppercase tracking-tight">Presença Digital (Redes Sociais)</h4>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">LinkedIn (URL completa)</label>
+                                                    <input type="url" value={siteContent?.global?.linkedin || ''} 
+                                                        onChange={(e) => atualizarConteudo('global', 'linkedin', e.target.value)}
+                                                        placeholder="https://linkedin.com/company/..."
+                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Instagram (URL completa)</label>
+                                                    <input type="url" value={siteContent?.global?.instagram || ''} 
+                                                        onChange={(e) => atualizarConteudo('global', 'instagram', e.target.value)}
+                                                        placeholder="https://instagram.com/..."
+                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2 block">Facebook (URL completa)</label>
+                                                    <input type="url" value={siteContent?.global?.facebook || ''} 
+                                                        onChange={(e) => atualizarConteudo('global', 'facebook', e.target.value)}
+                                                        placeholder="https://facebook.com/..."
+                                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                                </div>
+                                            </div>
+
                                             {/* Google Search Console */}
                                             <div className="pt-6 border-t border-gray-100 space-y-4">
                                                 <div className="flex items-start gap-4 p-5 bg-blue-50 rounded-2xl border border-blue-100">

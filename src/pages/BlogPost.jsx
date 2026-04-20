@@ -26,6 +26,29 @@ const BlogPost = () => {
     }
   }, [post, navigate, isAuthenticated]);
 
+   const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.titulo,
+          text: post.resumo,
+          url: window.location.href,
+        });
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Erro ao compartilhar:', err);
+        }
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Link do artigo copiado!');
+      } catch (err) {
+        console.error('Erro ao copiar link:', err);
+      }
+    }
+  };
+
   if (!post) return null;
 
   return (
@@ -101,7 +124,10 @@ const BlogPost = () => {
                   </div>
                </div>
                
-               <button className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded font-bold uppercase tracking-widest text-xs transition-colors">
+               <button 
+                onClick={handleShare}
+                className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded font-bold uppercase tracking-widest text-xs transition-colors shadow-sm active:scale-95"
+               >
                   <Share2 size={16} /> Compartilhar Artigo
                </button>
             </div>

@@ -37,7 +37,9 @@ const Sep = () => <div className="w-px h-5 bg-gray-200 mx-0.5 self-center" />;
 const RichTextEditor = ({ content, onChange }) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        history: true,
+      }),
       Underline,
       TextStyle,
       FontSize.configure({ types: ['textStyle'] }),

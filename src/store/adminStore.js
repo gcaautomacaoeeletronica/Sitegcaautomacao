@@ -23,7 +23,7 @@ export const useAdminStore = create((set, get) => ({
     if (data) set({ leads: data.map(l => ({ ...l, data: l.created_at, lido: l.read })) });
   },
   fetchBlog: async () => {
-    const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false });
+    const { data } = await supabase.from('blog_posts').select('*').order('published_at', { ascending: false });
     if (data) set({ 
         blogPosts: data.map(p => ({ 
             id: p.id, 
@@ -32,7 +32,7 @@ export const useAdminStore = create((set, get) => ({
             conteudo: p.content, 
             imageUrl: p.image_url, 
             autor: p.author, 
-            data: p.published_at || p.created_at 
+            data: p.published_at // published_at agora é mandatório no SQL
         })) 
     });
   },
@@ -519,7 +519,8 @@ export const useAdminStore = create((set, get) => ({
         content: p.conteudo,
         image_url: p.imageUrl,
         author: p.autor,
-        created_at: p.data
+        published_at: p.data || new Date().toISOString(),
+        created_at: p.data || new Date().toISOString()
       }));
       await supabase.from('blog_posts').insert(blogs);
 
