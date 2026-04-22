@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trash2, Plus } from 'lucide-react';
 import { FadeIn, SlideIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
 import SEO from '../components/ui/SEO';
 import { useScroll, useTransform, motion } from 'framer-motion';
