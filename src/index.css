@@ -97,6 +97,51 @@
     box-shadow: 0 0 30px -5px var(--color-accent);
     transform: translateY(-5px);
   }
+
+  /* Shimmer Skeleton */
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(to right, #f6f7f8 4%, #edeef1 25%, #f6f7f8 36%);
+    background-size: 1000px 100%;
+  }
+
+  /* Shimmer Text / Metalic Gradient */
+  .text-metallic {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-200 via-white to-slate-400 drop-shadow-sm;
+  }
+  .text-accent-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent-light drop-shadow-sm;
+  }
+
+  /* Noise Overlay */
+  .noise-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPiA8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC42NSIgbnVtT2N0YXZlcz0iMyIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPiA8L2ZpbHRlcj4gPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPiA8L3N2Zz4=");
+    mix-blend-mode: overlay;
+  }
+
+  /* Blur-Up Loading */
+  .blur-up {
+    filter: blur(20px);
+    transition: filter 0.5s ease-out, opacity 0.5s ease-out;
+  }
+  .blur-up.loaded {
+    filter: blur(0);
+  }
+
+  /* Custom Focus Ring para Acessibilidade */
+  .focus-ring-custom {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent transition-all duration-200;
+  }
 }
 
 .group:hover .group-hover\:pause {

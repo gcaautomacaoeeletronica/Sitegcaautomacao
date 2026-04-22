@@ -83,7 +83,7 @@ const Header = () => {
                   key={link.path}
                   to={link.path}
                   className={({ isActive }) =>
-                    `text-xs lg:text-sm font-semibold uppercase tracking-[0.15em] transition-all duration-300 relative group flex items-center h-full opacity-90 hover:opacity-100 ${
+                    `text-xs lg:text-sm font-semibold uppercase tracking-[0.15em] transition-all duration-300 relative group flex items-center h-full opacity-90 focus-ring-custom hover:opacity-100 ${
                       isActive ? 'text-accent' : 'text-gray-600 hover:text-primary'
                     }`
                   }

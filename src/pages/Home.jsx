@@ -108,6 +108,8 @@ const Home = () => {
   
   // Efeito Parallax para seções
   const yHero = useTransform(scrollY, [0, 1000], [0, 400]);
+  const opacityHero = useTransform(scrollY, [0, 500], [1, 0]);
+  const scaleHero = useTransform(scrollY, [0, 500], [1, 0.95]);
   const yPattern = useTransform(scrollY, [0, 1000], [0, -200]);
   
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -149,11 +151,12 @@ const Home = () => {
                 index === currentSlide ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'
               }`}
             >
-              {/* Background Parallax Pattern */}
+              {/* Background Parallax Pattern e Noise Premium */}
               <motion.div 
                 style={{ y: yPattern }}
                 className="absolute inset-0 pattern-grid opacity-10 pointer-events-none"
               />
+              <div className="noise-overlay"></div>
               
               <img 
                 src={siteMedia[`home_${index + 1}`]?.url || siteMedia.home?.url}
@@ -164,10 +167,10 @@ const Home = () => {
                   index === currentSlide ? 'opacity-50 scale-105' : 'opacity-0 scale-100'
                 }`}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/60 to-transparent backdrop-blur-[2px]"></div>
               
               <motion.div 
-                style={{ y: yHero }}
+                style={{ y: yHero, opacity: opacityHero, scale: scaleHero }}
                 className="relative z-20 px-4 max-w-7xl mx-auto w-full flex flex-col justify-center translate-y-10"
               >
                 <div className="overflow-hidden mb-4 border-l-4 border-accent pl-8">
@@ -184,12 +187,24 @@ const Home = () => {
                  </div>
                 
                 <div className={`mt-10 flex gap-4 transition-all duration-1000 delay-500 ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                   <a href="/manutencao-e-automacao-industrial" className="px-8 py-4 bg-accent hover:bg-red-700 text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center transition-all min-w-[200px]">
+                   <motion.a 
+                     whileHover={{ scale: 1.05 }}
+                     whileTap={{ scale: 0.95 }}
+                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                     href="/manutencao-e-automacao-industrial" 
+                     className="px-8 py-4 bg-accent hover:bg-accent-light focus-ring-custom text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center transition-colors min-w-[200px]"
+                   >
                      Soluções
-                   </a>
-                   <a href="/entre-em-contato" className="px-8 py-4 bg-transparent hover:bg-gray-800 border-2 border-white/50 hover:border-white text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center transition-all min-w-[200px]">
+                   </motion.a>
+                   <motion.a 
+                     whileHover={{ scale: 1.05 }}
+                     whileTap={{ scale: 0.95 }}
+                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                     href="/entre-em-contato" 
+                     className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md focus-ring-custom border border-white/20 hover:border-white/50 text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center transition-colors min-w-[200px]"
+                   >
                      Fale Conosco
-                   </a>
+                   </motion.a>
                 </div>
               </motion.div>
             </div>
