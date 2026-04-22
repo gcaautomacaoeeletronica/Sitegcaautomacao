@@ -9,6 +9,7 @@ import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import Skeleton from '../components/ui/Skeleton';
+import SmartImage from '../components/ui/SmartImage';
 
 // Remove <p> wrapper e inline font-size do Tiptap em campos de título
 const stripP = (html) =>
@@ -353,30 +354,13 @@ const Services = () => {
               return (
                 <FadeIn key={idx} delay={idx * 0.1}>
                   <div className="group relative overflow-hidden rounded-2xl bg-white border-2 border-gray-100 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 hover:-translate-y-2">
-                    <div className="aspect-[4/3] relative overflow-hidden">
-                      {isVideo ? (
-                        <video 
-                          src={media.url} 
-                          controls={false}
-                          autoPlay muted loop
-                          playsInline
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                      ) : (
-                        <img 
-                          src={media.url} 
-                          alt={media.title || `Projeto ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      {isVideo && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <Play size={24} className="text-primary ml-1" />
-                          </div>
-                        </div>
-                      )}
+                    <div className="aspect-[4/3] relative overflow-hidden bg-[#0a111a]">
+                      <SmartImage 
+                        src={media.url} 
+                        alt={media.title || `Projeto ${idx + 1}`}
+                        className="group-hover:scale-110 image-filter-premium group-hover:image-filter-premium-off"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                     </div>
                     {hasText && (
                       <div className="p-5 bg-white border-t border-gray-100">
@@ -448,11 +432,11 @@ const Services = () => {
                   <SlideIn direction="right">
                     {/* Decorative frame */}
                     <div className="absolute -top-4 -right-4 w-full h-full border-2 border-primary/10 rounded-2xl" />
-                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-200 group">
-                        <img 
+                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-200 group bg-[#0a111a]">
+                        <SmartImage 
                           src={siteMedia.servicesLab?.url || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"} 
                           alt="Laboratório Eletrônico GCA Automação" 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          className="group-hover:scale-105 image-filter-premium group-hover:image-filter-premium-off"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
                         {/* Lab badge */}

@@ -138,6 +138,16 @@
     filter: blur(0);
   }
 
+  /* Filtro Premium de Marca para mídias genéricas */
+  .image-filter-premium {
+    mix-blend-mode: luminosity;
+    filter: grayscale(10%) contrast(1.1) sepia(15%) hue-rotate(185deg);
+  }
+  .group:hover .group-hover\:image-filter-premium-off {
+    mix-blend-mode: normal;
+    filter: none;
+  }
+
   /* Custom Focus Ring para Acessibilidade */
   .focus-ring-custom {
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent transition-all duration-200;

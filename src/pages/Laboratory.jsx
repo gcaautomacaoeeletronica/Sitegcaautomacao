@@ -7,6 +7,7 @@ import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
 import IconSelector from '../components/ui/IconSelector';
 import { ICON_MAP } from '../lib/icons';
+import SmartImage from '../components/ui/SmartImage';
 
 // Remove <p> wrapper e inline font-size do Tiptap em campos de título
 const stripP = (html) =>
@@ -94,10 +95,10 @@ const Laboratory = () => {
                    />
                 </FadeIn>
                
-               <div className="order-1 lg:order-2 w-full aspect-square md:aspect-video lg:aspect-square bg-gray-100 rounded-sm border border-gray-200 flex items-center justify-center shadow-sm">
-                   <span className="text-gray-400 font-bold uppercase tracking-widest text-sm text-center px-4">
+               <div className="order-1 lg:order-2 w-full aspect-square md:aspect-video lg:aspect-square bg-[#0a111a] rounded-sm border border-gray-200 flex items-center justify-center shadow-sm relative overflow-hidden group">
+                   <span className="text-gray-400 font-bold uppercase tracking-widest text-sm text-center px-4 z-10 relative">
                       {siteMedia.laboratory?.url ? (
-                        <img src={siteMedia.laboratory.url} alt="Lab" className="w-full h-full object-cover rounded-sm absolute inset-0 mix-blend-multiply opacity-50" />
+                        <SmartImage src={siteMedia.laboratory.url} alt="Lab" className="absolute inset-0 image-filter-premium group-hover:image-filter-premium-off" />
                       ) : "Área Restrita (Laboratório)"}
                    </span>
                </div>
