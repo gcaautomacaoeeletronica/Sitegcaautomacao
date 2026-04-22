@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { useLocation, Routes, Route, Navigate, BrowserRouter as Router } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
+import { Toaster } from 'react-hot-toast';
 import Layout from './components/layout/Layout';
 
 // Lazy load pages
@@ -84,10 +85,10 @@ const AnimatedRoutes = () => {
 
 function App() {
   useDynamicFavicon();
-
   return (
     <HelmetProvider>
       <Router>
+        <Toaster position="bottom-right" toastOptions={{ style: { background: '#111827', color: '#fff', borderRadius: '8px' } }} />
         <AnimatedRoutes />
       </Router>
     </HelmetProvider>

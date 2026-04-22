@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import { FadeIn, SlideIn } from '../components/ui/AnimWrapper';
 import { MapPin, Phone, Mail, Send, ShieldAlert, Clock, MessageSquare } from 'lucide-react';
+import toast from 'react-hot-toast';
 import SEO from '../components/ui/SEO';
 import { useAdminStore } from '../store/adminStore';
 import EditableText from '../components/ui/EditableText';
@@ -41,6 +42,8 @@ const Contact = () => {
         window.open(`https://wa.me/${cleanPhone}?text=${txt}`, '_blank');
       }
     }
+
+    toast.success('Solicitação técnico-comercial enviada com sucesso!');
 
     setSubmitted(true);
     setFormData({ name: '', phone: '', email: '', subject: '', message: '' });
