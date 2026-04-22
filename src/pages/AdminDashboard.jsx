@@ -6,7 +6,8 @@ import RichTextEditor from '../components/ui/RichTextEditor';
 import TagInput from '../components/ui/TagInput';
 import SEOPanel from '../components/ui/SEOPanel';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/ui/AnimWrapper';
-import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone, Zap, AlignLeft } from 'lucide-react';
+import { LogOut, UploadCloud, FolderPlus, Trash2, Database, BarChart3, LayoutDashboard, Image as ImageIcon, Link2, X, Globe, Edit, ChevronDown, ChevronUp, Newspaper, Plus, Calendar, User, Type, Mail, CheckCheck, Eye, ShieldCheck, KeyRound, UserPlus, Phone, Zap, AlignLeft, Copy, Maximize2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -22,6 +23,10 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('manuais');
     const [activeTextSection, setActiveTextSection] = useState('global');
     const [uploadingKeys, setUploadingKeys] = useState({});
+    
+    // States UX Mídia
+    const [previewImage, setPreviewImage] = useState(null);
+    const [dragActive, setDragActive] = useState(null);
     
     // States de Formulario de Marca
     const [novaMarcaLoading, setNovaMarcaLoading] = useState(false);
@@ -264,11 +269,23 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleFileUpload = async (e, chave, type, pathFolder = 'uploads') => {
-        const file = e.target.files[0];
+    const handleFileUploadRaw = async (file, chave, type, pathFolder = 'uploads') => {
         if (!file) return;
 
+        // Validador Inteligente
+        if (!file.type.match(/image\/(jpeg|png|webp|gif|x-icon|vnd\.microsoft\.icon)|image\/svg\+xml|video\/.*/) && type !== 'manual') {
+            toast.error('Formato não suportado. Envie imagens JPG/PNG/WEBP/SVG/ICO ou vídeos.');
+            return;
+        }
+
+        const maxMb = type === 'favicon' ? 2 : 15;
+        if (file.size > maxMb * 1024 * 1024) {
+            toast.error(`Atenção: Arquivo com mais de ${maxMb}MB. Envie uma versão menor.`);
+            return;
+        }
+
         setUploadingKeys(prev => ({ ...prev, [chave]: true }));
+        const tId = toast.loading('Compactando e enviando seguro...');
         try {
             const downloadUrl = await uploadFileToStorage(file, pathFolder);
             if(type === 'media') {
@@ -276,12 +293,39 @@ const AdminDashboard = () => {
             } else if (type === 'favicon') {
                  atualizarMedia('favicon', 'url', downloadUrl);
             }
+            toast.success('Módulo atualizado!', { id: tId });
         } catch (error) {
             console.error('Erro no upload:', error);
-            alert('Falha ao enviar arquivo. Verifique sua conexão ou regras do Supabase.');
+            toast.error('Falha de rede ou timeout.', { id: tId });
         } finally {
             setUploadingKeys(prev => ({ ...prev, [chave]: false }));
+            setDragActive(null);
         }
+    };
+
+    const handleFileUpload = (e, chave, type, pathFolder = 'uploads') => {
+        handleFileUploadRaw(e.target.files[0], chave, type, pathFolder);
+    };
+
+    const handleDragEvent = (e, key, isActive) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(isActive ? key : null);
+    };
+
+    const handleDrop = (e, key, type, pathFolder) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(null);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleFileUploadRaw(e.dataTransfer.files[0], key, type, pathFolder);
+        }
+    };
+
+    const copyToClipboard = (url) => {
+        if (!url) return;
+        navigator.clipboard.writeText(url);
+        toast.success('Link copiado!');
     };
 
     const handleModalFileUpload = async (e, type) => {
@@ -318,7 +362,18 @@ const AdminDashboard = () => {
     const unreadLeadsCount = (leads || []).filter(l => !l.lido).length;
 
 const renderMediaInput = (label, chave, placeholderImg = '') => (
-        <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
+        <div 
+            className={`p-6 rounded-2xl border transition-all duration-300 space-y-4 relative ${dragActive === chave ? 'bg-red-50/50 border-primary border-dashed scale-[1.02] shadow-xl' : 'bg-gray-50 border-gray-100'}`}
+            onDragEnter={(e) => handleDragEvent(e, chave, true)}
+            onDragLeave={(e) => handleDragEvent(e, chave, false)}
+            onDragOver={(e) => handleDragEvent(e, chave, true)}
+            onDrop={(e) => handleDrop(e, chave, 'media', 'banners')}
+        >
+            {dragActive === chave && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none bg-white/50 backdrop-blur-sm rounded-2xl">
+                    <p className="font-black text-primary uppercase tracking-widest text-lg flex items-center gap-2 animate-bounce"><UploadCloud/> SOLTE PARA ENVIAR</p>
+                </div>
+            )}
             <h4 className="font-bold text-gray-900 border-l-4 border-primary pl-3 mb-4">{label}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -345,7 +400,8 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                             value={siteMedia[chave]?.url || ''} 
                             onChange={(e) => atualizarMedia(chave, 'url', e.target.value)}
                             disabled={uploadingKeys[chave]}
-                            className={`w-full pl-10 pr-4 py-2 border rounded-lg outline-none text-sm transition-all ${uploadingKeys[chave] ? 'bg-gray-100 border-gray-200 text-gray-400' : 'bg-white border-gray-200 focus:ring-2 focus:ring-primary/20'}`} />
+                            className={`w-full pl-10 pr-10 py-2 border rounded-lg outline-none text-sm transition-all ${uploadingKeys[chave] ? 'bg-gray-100 border-gray-200 text-gray-400' : 'bg-white border-gray-200 focus:ring-2 focus:ring-primary/20'}`} />
+                        <button type="button" onClick={() => copyToClipboard(siteMedia[chave]?.url)} className="absolute right-2 top-2 p-1 text-gray-400 hover:text-primary transition-colors bg-white rounded shadow-sm" title="Copiar Link"><Copy size={14}/></button>
                     </div>
                 </div>
                 <div className="space-y-2">
@@ -380,8 +436,14 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                 </div>
             </div>
             {siteMedia[chave]?.url && (
-                <div className="mt-2 w-full h-24 rounded-lg bg-cover bg-center border border-gray-200 shadow-inner relative" 
-                     style={{ backgroundImage: siteMedia[chave]?.url?.match(/\.(mp4|webm|mov|avi)$/i) ? 'none' : `url(${siteMedia[chave].url})` }}>
+                <div className="mt-2 w-full h-24 rounded-lg bg-cover bg-center border border-gray-200 shadow-inner relative group cursor-pointer overflow-hidden" 
+                     style={{ backgroundImage: siteMedia[chave]?.url?.match(/\.(mp4|webm|mov|avi)$/i) ? 'none' : `url(${siteMedia[chave].url})` }}
+                     onClick={() => siteMedia[chave]?.url?.match(/\.(mp4|webm|mov|avi)$/i) ? window.open(siteMedia[chave].url, '_blank') : setPreviewImage(siteMedia[chave].url)}
+                >
+                      {siteMedia[chave]?.url?.match(/\.(mp4|webm|mov|avi)$/i) && <video src={siteMedia[chave].url} className="w-full h-full object-cover opacity-50" />}
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Maximize2 size={24} className="text-white drop-shadow-md transition-transform group-hover:scale-110" />
+                      </div>
                       {uploadingKeys[chave] && <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg"><span className="text-white text-xs font-bold animate-pulse">Carregando...</span></div>}
                 </div>
             )}
@@ -830,8 +892,19 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                                     <Globe size={20} className="text-primary"/> Configurações Globais (SEO)
                                 </h3>
-                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
-                                    <div className="space-y-2">
+                                <div 
+                                    className={`p-6 rounded-2xl border transition-all duration-300 space-y-4 relative ${dragActive === 'favicon' ? 'bg-red-50/50 border-primary border-dashed scale-[1.02] shadow-xl' : 'bg-gray-50 border-gray-100'}`}
+                                    onDragEnter={(e) => handleDragEvent(e, 'favicon', true)}
+                                    onDragLeave={(e) => handleDragEvent(e, 'favicon', false)}
+                                    onDragOver={(e) => handleDragEvent(e, 'favicon', true)}
+                                    onDrop={(e) => handleDrop(e, 'favicon', 'favicon', 'favicon')}
+                                >
+                                    {dragActive === 'favicon' && (
+                                        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none bg-white/50 backdrop-blur-sm rounded-2xl">
+                                            <p className="font-black text-primary uppercase tracking-widest text-lg flex items-center gap-2 animate-bounce"><UploadCloud/> SOLTE PARA ENVIAR</p>
+                                        </div>
+                                    )}
+                                    <div className="space-y-2 relative z-0">
                                         <div className="flex items-center justify-between">
                                             <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">URL do Favicon (.ico / .png)</label>
                                             <div className="relative overflow-hidden cursor-pointer">
@@ -840,7 +913,7 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                                                 </span>
                                                 <input 
                                                     type="file" 
-                                                    accept=".ico,.png,.jpg,.jpeg"
+                                                    accept=".ico,.png,.jpg,.jpeg,.svg"
                                                     disabled={uploadingKeys['favicon']}
                                                     onChange={(e) => handleFileUpload(e, 'favicon', 'favicon', 'favicon')}
                                                     className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
@@ -855,12 +928,18 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                                                 value={siteMedia.favicon?.url || ''} 
                                                 onChange={(e) => atualizarMedia('favicon', 'url', e.target.value)}
                                                 disabled={uploadingKeys['favicon']}
-                                                className={`w-full pl-10 pr-4 py-2 border rounded-lg outline-none text-sm transition-all ${uploadingKeys['favicon'] ? 'bg-gray-100 border-gray-200 text-gray-400' : 'bg-white border-gray-200 focus:ring-2 focus:ring-primary/20'}`} />
+                                                className={`w-full pl-10 pr-10 py-2 border rounded-lg outline-none text-sm transition-all ${uploadingKeys['favicon'] ? 'bg-gray-100 border-gray-200 text-gray-400' : 'bg-white border-gray-200 focus:ring-2 focus:ring-primary/20'}`} />
+                                            <button type="button" onClick={() => copyToClipboard(siteMedia.favicon?.url)} className="absolute right-2 top-2 p-1 text-gray-400 hover:text-primary transition-colors bg-white rounded shadow-sm" title="Copiar Link"><Copy size={14}/></button>
                                         </div>
                                     </div>
                                     {siteMedia.favicon?.url && (
-                                        <div className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl w-fit">
-                                            <img src={siteMedia.favicon.url} alt="Favicon Preview" className="w-8 h-8 object-contain" />
+                                        <div className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl w-fit cursor-pointer group hover:bg-gray-50 transition-colors" onClick={() => setPreviewImage(siteMedia.favicon.url)}>
+                                            <div className="relative">
+                                              <img src={siteMedia.favicon.url} alt="Favicon Preview" className="w-8 h-8 object-contain" />
+                                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded">
+                                                <Maximize2 size={12} className="text-white" />
+                                              </div>
+                                            </div>
                                             <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Prévia Ícone Aba</span>
                                         </div>
                                     )}
@@ -1615,6 +1694,21 @@ const renderMediaInput = (label, chave, placeholderImg = '') => (
                     </FadeIn>
                 )}
             </main>
+
+            {/* Modal de Zoom/Preview da Mídia */}
+            {previewImage && (
+                <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 cursor-zoom-out" onClick={() => setPreviewImage(null)}>
+                    <button onClick={() => setPreviewImage(null)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2 bg-black/50 rounded-full">
+                        <X size={28} />
+                    </button>
+                    <img 
+                        src={previewImage} 
+                        alt="Zoomed Media" 
+                        className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-fade-in"
+                        onClick={(e) => e.stopPropagation()} 
+                    />
+                </div>
+            )}
         </div>
     );
 };
