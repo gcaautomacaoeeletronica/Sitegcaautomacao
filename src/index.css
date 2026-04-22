@@ -138,14 +138,15 @@
     filter: blur(0);
   }
 
-  /* Filtro Premium de Marca para mídias genéricas */
-  .image-filter-premium {
-    mix-blend-mode: luminosity;
-    filter: grayscale(10%) contrast(1.1) sepia(15%) hue-rotate(185deg);
-  }
-  .group:hover .group-hover\:image-filter-premium-off {
-    mix-blend-mode: normal;
-    filter: none;
+  /* Filtro Premium de Marca para mídias genéricas (Apenas Desktop) */
+  @media (hover: hover) {
+    .image-filter-premium {
+      filter: saturate(0.4) contrast(1.15) sepia(20%) hue-rotate(190deg);
+      transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .group:hover .group-hover\:image-filter-premium-off {
+      filter: saturate(1) contrast(1) sepia(0) hue-rotate(0);
+    }
   }
 
   /* Custom Focus Ring para Acessibilidade */
