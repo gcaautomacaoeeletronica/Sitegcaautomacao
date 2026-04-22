@@ -25,7 +25,7 @@ const About = () => {
   const bannerContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#070b14] overflow-hidden">
       <motion.div
-        className="absolute inset-0 bg-cover bg-center opacity-50 contrast-125 grayscale-[20%]"
+        className="absolute inset-0 bg-cover bg-center"
         style={{ y: yImage, backgroundImage: `url(${siteMedia.about?.url})` }}
       />
       {/* Precision Gradient Overlay */}

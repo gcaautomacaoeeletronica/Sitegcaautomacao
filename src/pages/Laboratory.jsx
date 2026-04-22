@@ -30,10 +30,10 @@ const Laboratory = () => {
 
   const heroContent = (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#0a111a] overflow-hidden">
-      {/* Background Image with improved blend and contrast */}
+      {/* Background Image colorido e vibrante */}
       <motion.div 
         style={{ y: yImage }}
-        className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity scale-110" 
+        className="absolute inset-0 bg-cover bg-center opacity-80" 
         style={{ backgroundImage: `url(${siteMedia.laboratory?.url})` }}
       />
       {/* Dynamic Gradient Overlay for better text focus */}
@@ -98,7 +98,7 @@ const Laboratory = () => {
                <div className="order-1 lg:order-2 w-full aspect-square md:aspect-video lg:aspect-square bg-[#0a111a] rounded-sm border border-gray-200 flex items-center justify-center shadow-sm relative overflow-hidden group">
                    <span className="text-gray-400 font-bold uppercase tracking-widest text-sm text-center px-4 z-10 relative">
                       {siteMedia.laboratory?.url ? (
-                        <SmartImage src={siteMedia.laboratory.url} alt="Lab" className="absolute inset-0 image-filter-premium group-hover:image-filter-premium-off" />
+                        <SmartImage src={siteMedia.laboratory.url} alt="Lab" className="absolute inset-0" />
                       ) : "Área Restrita (Laboratório)"}
                    </span>
                </div>

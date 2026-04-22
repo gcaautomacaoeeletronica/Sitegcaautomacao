@@ -358,7 +358,7 @@ const Services = () => {
                       <SmartImage 
                         src={media.url} 
                         alt={media.title || `Projeto ${idx + 1}`}
-                        className="group-hover:scale-110 image-filter-premium group-hover:image-filter-premium-off"
+                        className="group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                     </div>
@@ -436,7 +436,7 @@ const Services = () => {
                         <SmartImage 
                           src={siteMedia.servicesLab?.url || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"} 
                           alt="Laboratório Eletrônico GCA Automação" 
-                          className="group-hover:scale-105 image-filter-premium group-hover:image-filter-premium-off"
+                          className="group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
                         {/* Lab badge */}
