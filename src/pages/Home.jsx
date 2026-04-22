@@ -151,12 +151,11 @@ const Home = () => {
                 index === currentSlide ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'
               }`}
             >
-              {/* Background Parallax Pattern e Noise Premium */}
+              {/* Background Parallax Pattern Premium */}
               <motion.div 
                 style={{ y: yPattern }}
                 className="absolute inset-0 pattern-grid opacity-10 pointer-events-none"
               />
-              <div className="noise-overlay"></div>
               
               <img 
                 src={siteMedia[`home_${index + 1}`]?.url || siteMedia.home?.url}
@@ -167,7 +166,7 @@ const Home = () => {
                   index === currentSlide ? 'opacity-50 scale-105' : 'opacity-0 scale-100'
                 }`}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/60 to-transparent backdrop-blur-[2px]"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/60 to-transparent"></div>
               
               <motion.div 
                 style={{ y: yHero, opacity: opacityHero, scale: scaleHero }}
